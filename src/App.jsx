@@ -1,13 +1,23 @@
-import { useState } from 'react'
 import '@/styles/app.scss'
 
-function App() {
+import Login from '@/forms/Login/Login.jsx';
+import ErrorPage from '@/pages/ErrorPage';
 
-  return (
-    <div className='app'>
-      Hello
-    </div>
-  )
+import { Routes, Route } from 'react-router-dom';
+
+import { Provider } from 'react-redux';
+
+import { store } from '@/store/store'
+
+function App() {
+    return (
+        <Provider store={store}>
+            <Routes>
+                <Route path='/' element={<Login />} />
+                <Route path='*' element={<ErrorPage />} />
+            </Routes>
+        </Provider>
+    )
 }
 
 export default App

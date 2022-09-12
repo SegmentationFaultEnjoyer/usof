@@ -1,6 +1,9 @@
 @import 'reset';
+
+@import 'variables';
+
 @import 'global';
 
-.app {
-    border: 2px solid black;
-}
+@import '_mixins';
+@import '_functions';
+@import '_placeholders';

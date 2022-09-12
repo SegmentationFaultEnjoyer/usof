@@ -1,0 +1,16 @@
+@import '@/styles/_functions';
+
+.login-page {
+    padding: var(--app-padding-top) var(--app-padding-left);
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 30vw;
+        gap: toRem(20);
+
+        button {
+            width: toRem(120);
+        }
+    }
+}
