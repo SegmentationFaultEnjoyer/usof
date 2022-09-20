@@ -1,16 +1,19 @@
-@import '@/styles/_functions';
+.form-container {
+    animation: fade 0.3s ease-in;
 
-.login-page {
-    padding: var(--app-padding-top) var(--app-padding-left);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: toRem(30);
 
-    form {
-        display: flex;
-        flex-direction: column;
-        width: 30vw;
-        gap: toRem(20);
+    padding: toRem(30) var(--app-padding-left);
 
-        button {
-            width: toRem(120);
-        }
+    h1 {
+        text-align: center;
+
+    }
+
+    @include respond-to(tablet) {
+        max-width: toRem(400);
     }
 }

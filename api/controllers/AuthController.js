@@ -22,6 +22,7 @@ const {
 } = require('./requests/AuthRequests');
 
 const { LoginResponse } = require('./responses/AuthResponses');
+const { UserResponse } = require('./responses/UsersResponses');
 
 exports.LogIn = async function (req, resp) {
     try {
@@ -262,4 +263,20 @@ exports.CheckAuth = function (req, resp, next) {
     req.decoded = decoded;
 
     next();
+}
+
+exports.GetUserInfo = async function (req, resp) {
+    try {
+        const { id } = req.decoded;
+
+        let dbResp = await usersQ.New().Get().WhereID(id).Execute();
+
+        if (dbResp.error)  
+            throw new NotFoundError('No such user');
+
+        resp.json(UserResponse(dbResp));
+
+    } catch (error) {
+        ProcessError(resp, error);
+    }
 }

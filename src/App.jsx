@@ -1,21 +1,22 @@
-import '@/styles/app.scss'
+import '@styles/app.scss'
 
-import Login from '@/forms/Login/Login.jsx';
-import ErrorPage from '@/pages/ErrorPage';
-
-import { Routes, Route } from 'react-router-dom';
+import AppRoutes from '@/routes';
 
 import { Provider } from 'react-redux';
+
+import { ThemeProvider } from '@mui/material/styles';
+import GlobalMUIStyles from '@styles/UI_Themes'
+import { ToastContainer } from '@/common/main'
 
 import { store } from '@/store/store'
 
 function App() {
     return (
         <Provider store={store}>
-            <Routes>
-                <Route path='/' element={<Login />} />
-                <Route path='*' element={<ErrorPage />} />
-            </Routes>
+            <ThemeProvider theme={GlobalMUIStyles}>
+               <AppRoutes />
+            </ThemeProvider>
+            <ToastContainer theme='dark'/>
         </Provider>
     )
 }

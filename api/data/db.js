@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-const e = require("express");
 const client = require('./connectionClient');
 
 const DEFAULT_LIMIT_VALUE = 3;

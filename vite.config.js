@@ -5,19 +5,23 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [react()],
     resolve: {
+        extensions: ['.mjs', '.js', '.jsx', '.json', '.scss'],
+        dedupe: ['react'],
         alias: {
-            '@': '/src'
-        },
-        //TODO make this work
-        css: {
-            preprocessorOptions: {
-                scss: {
-                    additionalData: `
-                    @import "@/styles/_functions.scss";
-                    @import "@/styles/_placeholders.scss";
-                    @import "@/styles/_mixins.scss";
-                    `,
-                }
+            '@api': '/api',
+            '@': '/src',
+            '@branding': '/static/branding',
+            '@styles': '/src/styles'
+        }
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `
+                @import "@styles/_functions.scss";
+                @import "@styles/_placeholders.scss";
+                @import "@styles/_mixins.scss";
+                `,
             }
         }
     }

@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { roles } from '@/types/main';
 
 const initialState = {
     info: {
         name: 'undefined',
         email: '',
-        id: ''
+        id: '',
+        rating: -1,
+        role: roles.PEASANT
     }
-   
 }
 
 export const userSlice = createSlice({
@@ -15,6 +17,12 @@ export const userSlice = createSlice({
     reducers: {
         setUser(state, action) {
             state.info = {...state.info, ...action.payload};
+        },
+        increaseRating(state) {
+            state.info.rating++;
+        },
+        decreaseRating(state) {
+            state.info.rating--;
         }
     }
 })

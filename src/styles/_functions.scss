@@ -14,3 +14,7 @@
 @function hexToRGB($color) {
   @return red($color) + ', ' + green($color) + ', ' + blue($color);
 }
+
+@function hexToRGBA($color, $alpha) {
+  @return red($color) + ', ' + green($color) + ', ' + blue($color) + ', ' + $alpha;
+}
