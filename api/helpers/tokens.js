@@ -43,7 +43,15 @@ async function UpdateTokens(accessTokenData, refreshTokenData) {
 
     const tokenLifeSpan = addHours(new Date(), hours);
 
-    return { access_token, refresh_token, tokenLifeSpan: tokenLifeSpan.toISOString() };
+    const minutes = Number(process.env.JWT_ACCESS_TOKEN_LIFESPAN.split(' ')[0]);
+
+    return { 
+        access_token, 
+        refresh_token, 
+        tokenLifeSpan: tokenLifeSpan.toISOString(),
+        access_life: minutes * 60 * 1000,
+        refresh_life: hours * 60 * 60 * 1000
+    };
 }
 
 module.exports = {

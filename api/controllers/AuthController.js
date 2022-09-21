@@ -7,8 +7,10 @@ const refreshQ = require('../data/pg/RefreshQ');
 const { hash, isMatch } = require('../helpers/hashing');
 const { UpdateTokens } = require('../helpers/tokens');
 const { verifyLink } = require('../helpers/verifyResetLink');
+
 const sendToMail = require('../helpers/sendToMail');
 const type = require('../helpers/types/roles');
+const status = require('../helpers/types/httpStatus');
 
 const { BadRequestError, UnauthorizedError, NotFoundError } = require('./errors/components/classes');
 const ProcessError = require('./errors/handler');
@@ -41,7 +43,12 @@ exports.LogIn = async function (req, resp) {
         if (!isCorrectPas) 
             throw new UnauthorizedError('Login or password are incorrect');
 
-        const { access_token, refresh_token, tokenLifeSpan } = await UpdateTokens({ email, role, id }, { id });
+        const { 
+            access_token, 
+            refresh_token, 
+            tokenLifeSpan, 
+            access_life, 
+            refresh_life } = await UpdateTokens({ email, role, id }, { id });
 
         dbResp = await refreshQ.New().Get().WhereOwnerID(id).Execute();
 
@@ -77,10 +84,8 @@ exports.LogIn = async function (req, resp) {
                 throw new Error(`Error updating refresh token: ${dbResp.error_message}`);
         }
 
-        
-
-        resp.cookie("refresh", refresh_token);
-        resp.cookie("token", access_token);
+        resp.cookie("refresh", refresh_token, { maxAge: refresh_life});
+        resp.cookie("token", access_token, { maxAge: access_life});
 
         resp.json(LoginResponse({ access_token, refresh_token }));
 
@@ -98,8 +103,8 @@ exports.LogOut = async function (req, resp) {
         if(dbResp.error) 
             throw new Error(`Error while deleting token: ${dbResp.error_message}`);
         
-        resp.cookie("refresh", '');
-        resp.cookie("token", '');
+        resp.clearCookie("refresh");
+        resp.clearCookie("token");
 
         resp.end();
     } catch (error) {
@@ -107,6 +112,7 @@ exports.LogOut = async function (req, resp) {
     }
 }
 
+//TODO: email confirmation
 exports.Register = async function (req, resp) {
     try {
         const { name, email, password } = parseRegisterRequest(req.body);
@@ -128,14 +134,18 @@ exports.Register = async function (req, resp) {
         if (dbResp.error)  
             throw new Error(`Error while adding user to data base: ${dbResp.error_message}`);
 
-        const { role, id } = dbResp;
+        // const { role, id } = dbResp;
+        
+        // const { 
+        //     access_token, 
+        //     refresh_token, 
+        //     access_life, 
+        //     refresh_life } = await UpdateTokens({ email, role, id }, { id });
 
-        const { access_token, refresh_token } = await UpdateTokens({ email, role, id }, { id });
+        // resp.cookie("refresh", refresh_token, { maxAge: refresh_life});
+        // resp.cookie("token", access_token, { maxAge: access_life});
 
-        resp.cookie("refresh", refresh_token);
-        resp.cookie("token", access_token);
-
-        resp.json(LoginResponse({ access_token, refresh_token }));
+        resp.status(status.CREATED).end();
 
     } catch (error) {
         ProcessError(resp, error);

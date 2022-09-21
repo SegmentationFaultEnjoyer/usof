@@ -8,7 +8,7 @@ export default function AppRoutes() {
     const ErrorPage = lazy(() => import('@/pages/ErrorPage'))
 
     const location = useLocation();
-    //TODO Loader
+    
     return (
         <Suspense fallback={<></>}>
             <AnimatePresence mode='wait'>

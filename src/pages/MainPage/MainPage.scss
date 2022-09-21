@@ -1,4 +1,20 @@
 .main-page {
-    border: 1px solid black;
     height: 100vh;
+}
+
+.main-page__loader-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+
+    gap: toRem(20);
+
+    p {
+        font-weight: bold;
+        font-size: toRem(20);
+        letter-spacing: toRem(1.5);
+        color: var(--secondary-dark);
+    }
 }

@@ -37,7 +37,7 @@ export default function LoginPage() {
 				</AnimatedBackground>
 			</section>
 			<div className='login-page_actions'>
-				{!isRegistering ? <LoginForm /> : <RegisterForm />}
+				{!isRegistering ? <LoginForm /> : <RegisterForm afterActionCallback={handleRegClick}/>}
 				<p onClick={handleRegClick} >{regButtonLabel}</p>
 			</div>
 		</div>

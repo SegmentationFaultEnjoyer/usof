@@ -4,19 +4,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Notificator } from '@/common/main'
 
-import { useDispatch } from 'react-redux'
-import { setUser } from '@/store/slices/userSlice';
-
 import { useForm, useFormValidation } from '@/hooks/main';
-import { maxLength, minLength } from '@/helpers/main';
+import { maxLength, minLength, ErrorHandler } from '@/helpers/main';
 
 import { api } from '@/api/main';
-import { useNavigate } from 'react-router-dom';
 
-export default function RegisterForm() {
-    const dispatch = useDispatch();
-	const navigate = useNavigate();
-
+export default function RegisterForm({ afterActionCallback }) {
 	const [login, setLogin] = useState('')
 	const [password, setPassword] = useState('')
 	const [name, setName] = useState('');
@@ -50,21 +43,12 @@ export default function RegisterForm() {
 				  }
 			})
 
-			Notificator.success('Welcome!');
+			Notificator.success('Succesfuly registered');
+			afterActionCallback();
 			cleanForm();
-
-			navigate('/main');
 			
 		} catch (error) {
-			let error_msg = error.message;
-
-			if(error.response) {
-				const { title, detail } = error.response.data.errors;
-				console.error(title, detail, error);
-				error_msg = detail;
-			}
-			
-			Notificator.error(error_msg);
+			ErrorHandler.process(error);
 		}
 
 		enableForm()

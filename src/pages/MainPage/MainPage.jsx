@@ -1,62 +1,46 @@
 import './MainPage.scss';
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 
-import { useDispatch } from 'react-redux'
-import { setUser } from '@/store/slices/userSlice';
-
-import { getCookie, setCookie } from '@/helpers/main';
+import { getCookie } from '@/helpers/main';
 
 import { api } from '@/api/main';
-import { Notificator } from '@/common/main'
+import { Notificator } from '@/common/main';
+
+import { useUserInfo } from '@/hooks/main';
+import { TriangleLoader, Modal } from '@/common/main';
+
+import NavBar from '@/components/NavBar/NavBar';
 
 
 export default function MainPage() {
     const token = getCookie('token');
+    const { isLoading, getUserInfo } = useUserInfo();
+   
+    useEffect(getUserInfo, [token]);
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    // const modalRef = useRef(null);
+    // const [isModalShown, setIsModalShown] = useState(false);
 
-    useEffect(() => {
-        if (!token) navigate('/');
-
-        else {
-            const fetchInfo = async () => {
-                try {
-                    let resp = await api.get('/auth');
-
-                    dispatch(setUser({
-                        ...resp.data.data.attributes,
-                        id: resp.data.data.id
-                    }));
-
-                } catch (error) {
-                    let error_msg = error.message;
-
-                    if (error.response) {
-                        const { title, detail } = error.response.data.errors;
-                        console.error(title, detail, error);
-                        error_msg = detail;
-                    }
-
-                    Notificator.error(error_msg);
-
-                    setCookie('token', '', 0);
-                    setCookie('refresh_token', '', 0);
-
-                    navigate('/');
-                }
-
-            }
-            fetchInfo();
-        }
-
-    }, [token])
+    // const modalExample = <Modal
+    // ref={modalRef}
+    // isShown={isModalShown}
+    // setIsShown={setIsModalShown}
+    // >
+    //     <p>modal contains</p>
+    // </Modal>
 
 return (
-    <div className="main-page">
-        MAIN PAGE
-    </div>
+    <section className="main-page">
+        {isLoading ? 
+        <div className="main-page__loader-container">
+            <p>Loading...</p>
+            <TriangleLoader /> 
+        </div>
+       : 
+        <div>
+            <NavBar />
+        </div>}
+    </section>
 )
 }

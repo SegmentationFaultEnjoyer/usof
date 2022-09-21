@@ -5,6 +5,10 @@ const theme = createTheme({
 		primary_light: {
 			main: 'var(--primary-light)',
 			contrastText: 'var(--text-primary-invert-main)'
+		},
+		tertiary_main: {
+			main: 'var(--tertiary-main)',
+			contrastText: 'var(--text-primary-main)'
 		}
 	}
 })

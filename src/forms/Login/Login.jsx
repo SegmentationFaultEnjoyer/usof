@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { Notificator } from '@/common/main'
 
 import { useForm, useFormValidation } from '@/hooks/main';
-import { maxLength, minLength } from '@/helpers/main';
+import { maxLength, minLength, ErrorHandler } from '@/helpers/main';
 
 import { api } from '@/api/main';
 import { useNavigate } from 'react-router-dom';
@@ -52,14 +52,7 @@ export default function SignIn() {
 			navigate('/main');
 			
 		} catch (error) {
-			let error_msg = error.message;
-
-			if(error.response) {
-				const { title, detail } = error.response.data.errors;
-				console.error(title, detail, error);
-				error_msg = detail;
-			}
-			Notificator.error(error_msg);
+			ErrorHandler.process(error);
 		}
 
 		enableForm()
