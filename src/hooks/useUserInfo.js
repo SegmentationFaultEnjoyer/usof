@@ -1,8 +1,8 @@
-import { setCookie, getCookie, ErrorHandler } from '@/helpers/main';
+import { ErrorHandler } from '@/helpers/main';
 import { useState } from 'react';
 
 import { api } from '@/api/main';
-import { Notificator } from '@/common/main';
+import Mutex from '@/api/mutex'
 
 import { useNavigate } from 'react-router-dom';
 
@@ -16,40 +16,37 @@ export function useUserInfo() {
     const [isLoading, setIsLoading] = useState(false);
 
     const getUserInfo = () => {
-        const token = getCookie('token');
+        const fetchInfo = async () => {
+            try {
+                const lockToken = new Date().toISOString();
 
-        if (!token) navigate('/');
+                Mutex.lock(lockToken);
+                let resp = await api.get('/auth', { lockToken });
+                Mutex.releaseLock(lockToken);
 
-        else {
-            const fetchInfo = async () => {
-                try {
-                    let resp = await api.get('/auth');
+                dispatch(setUser({
+                    ...resp.data.data.attributes,
+                    id: resp.data.data.id
+                }));
 
-                    dispatch(setUser({
-                        ...resp.data.data.attributes,
-                        id: resp.data.data.id
-                    }));
+            } catch (error) {
+                ErrorHandler.process(error);
+                ErrorHandler.clearTokens();
 
-                } catch (error) {
-                    ErrorHandler.process(error);
-                    ErrorHandler.clearTokens();
-
-                    navigate('/');
-                }
-
-                setIsLoading(false);
-
+                navigate('/');
             }
 
-            setIsLoading(true);
-            fetchInfo();
+            setIsLoading(false);
 
         }
+
+        setIsLoading(true);
+        fetchInfo();
     }
 
     return {
         isLoading,
         getUserInfo
     }
-    
+
 }

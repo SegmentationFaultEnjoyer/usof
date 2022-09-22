@@ -14,10 +14,9 @@ import NavBar from '@/components/NavBar/NavBar';
 
 
 export default function MainPage() {
-    const token = getCookie('token');
     const { isLoading, getUserInfo } = useUserInfo();
    
-    useEffect(getUserInfo, [token]);
+    useEffect(getUserInfo, []);
 
     // const modalRef = useRef(null);
     // const [isModalShown, setIsModalShown] = useState(false);

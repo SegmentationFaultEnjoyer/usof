@@ -14,7 +14,7 @@ export default function NavBar() {
             await api.get('/auth/logout');
 
         } catch (error) {
-            ErrorHandler.process(error);
+            ErrorHandler.process(new Error('Your token expired, but anyway you leaving:)'));
             ErrorHandler.clearTokens();
         }
         
