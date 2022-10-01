@@ -213,7 +213,7 @@ exports.ResetPassword = async function (req, resp) {
 
         const link = `http://${process.env.HOST}:${process.env.PORT}/auth/reset-password/${id}/${token}`;
 
-        console.log(link);
+        // console.log(link);
 
         await sendToMail(email, "USOF password reset", link);
 
@@ -226,13 +226,13 @@ exports.ResetPassword = async function (req, resp) {
 
 exports.GetResetForm = async function (req, resp) {
     try {
-        const decoded = await verifyLink(req);
+        const { id } = await verifyLink(req);
+        const { token } = req.params;
 
-        //TODO on front sent form here
-        resp.send("<h1>HERE WILL BE RESET FORM</h1>")
+        resp.redirect(`/reset-page/${id}/${token}`);
 
     } catch (error) {
-        ProcessError(resp, error);
+        resp.redirect('/error-page')
     }
 }
 
@@ -241,6 +241,8 @@ exports.ChangePassword = async function (req, resp) {
         const { id } = await verifyLink(req);
 
         const { password } = parseNewPasswordRequest(req.body);
+
+        // console.log('new password ', password);
 
         const password_hash = await hash(password);
 

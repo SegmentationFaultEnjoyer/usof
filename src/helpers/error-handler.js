@@ -1,9 +1,11 @@
 import { AxiosError } from 'axios';
-import { Notificator } from '@/common/main';
-import { setCookie } from '@/helpers/main';
+import { Notificator } from '@/common';
+import { setCookie } from '@/helpers';
 
 function getErrorMessage(error) {
     if(error instanceof AxiosError) {
+        if(!error.response.data.errors) return error.message
+        
         const { title, detail } = error.response.data.errors;
         console.error(title, detail, error);
         return detail;

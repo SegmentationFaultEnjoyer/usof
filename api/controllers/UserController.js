@@ -32,7 +32,7 @@ exports.GetUser = async function (req, resp) {
         if (include !== undefined)
             includeResp = await includeHandler(include, { user_id });
 
-        resp.status(httpStatus.FOUND).json(UserResponse(dbResp, includeResp));
+        resp.status(httpStatus.OK).json(UserResponse(dbResp, includeResp));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -54,7 +54,7 @@ exports.GetUsersList = async function (req, resp) {
 
         const links = await GenerateLinks('users', usersQ);
 
-        resp.status(httpStatus.FOUND).json(UsersListResponse(dbResp, links));
+        resp.status(httpStatus.OK).json(UsersListResponse(dbResp, links));
 
     } catch (error) {   
         ProcessError(resp, error);

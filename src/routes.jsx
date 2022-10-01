@@ -3,9 +3,10 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 export default function AppRoutes() {
-    const LoginPage = lazy(() => import('@/pages/LoginPage/LoginPage'));
-    const MainPage = lazy(() => import('@/pages/MainPage/MainPage'));
-    const ErrorPage = lazy(() => import('@/pages/ErrorPage'))
+    const LoginPage = lazy(() => import('@/pages/LoginPage/LoginPage.jsx'));
+    const MainPage = lazy(() => import('@/pages/MainPage/MainPage.jsx'));
+    const ErrorPage = lazy(() => import('@/pages/ErrorPage/ErrorPage.jsx'));
+    const ResetPage = lazy(() => import('@/pages/ResetPasswordPage/ResetPassword.jsx'));
 
     const location = useLocation();
     
@@ -27,6 +28,14 @@ export default function AppRoutes() {
                             animate={{ opacity: 1}}
                             exit={{ opacity: 0}}>
                             <MainPage />
+                        </motion.div>
+                    } />
+                    <Route path='/reset-page/:id/:token' element={
+                        <motion.div 
+                            initial={{ opacity: 0}}
+                            animate={{ opacity: 1}}
+                            exit={{ opacity: 0}}>
+                            <ResetPage />
                         </motion.div>
                     } />
                     <Route path='/*' element={

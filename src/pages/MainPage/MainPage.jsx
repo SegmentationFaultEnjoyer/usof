@@ -2,21 +2,23 @@ import './MainPage.scss';
 
 import { useEffect, useRef, useState } from 'react';
 
-import { getCookie } from '@/helpers/main';
+import { getCookie } from '@/helpers';
 
-import { api } from '@/api/main';
-import { Notificator } from '@/common/main';
+import { api } from '@/api';
 
-import { useUserInfo } from '@/hooks/main';
-import { TriangleLoader, Modal } from '@/common/main';
 
-import NavBar from '@/components/NavBar/NavBar';
+import { useUserInfo } from '@/hooks';
+import { TriangleLoader, Modal, Notificator } from '@/common';
+
+import { NavBar, PostsList } from '@/components';
 
 
 export default function MainPage() {
     const { isLoading, getUserInfo } = useUserInfo();
    
     useEffect(getUserInfo, []);
+
+    console.log('render main');
 
     // const modalRef = useRef(null);
     // const [isModalShown, setIsModalShown] = useState(false);
@@ -39,6 +41,7 @@ return (
        : 
         <div>
             <NavBar />
+            <PostsList />
         </div>}
     </section>
 )

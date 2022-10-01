@@ -1,6 +1,6 @@
-import { api } from '@/api/main'
-import { getCookie } from '@/helpers/main'
-import { ErrorHandler } from '@/helpers/main'
+import { api } from '@/api'
+import { getCookie } from '@/helpers'
+import { ErrorHandler } from '@/helpers'
 import { AxiosError } from 'axios'
 
 import { isExcluded } from '@/api/helpers/urlMatch'

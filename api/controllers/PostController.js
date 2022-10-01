@@ -173,7 +173,7 @@ exports.GetPost = async function (req, resp) {
         if (include !== undefined)
             includeResp = await includeHandler(include, { post_id });
 
-        resp.status(httpStatus.FOUND).json(PostResponse(dbResp, includeResp));
+        resp.status(httpStatus.OK).json(PostResponse(dbResp, includeResp));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -186,6 +186,9 @@ exports.GetPostsList = async function (req, resp) {
         const { page, limit, sort, order, filter } = req.query;
 
         let Q = postsQ.New().Get();
+
+        if(role !== roles.ADMIN)
+            Q = Q.WhereStatus(true);
 
         let customStmt =  null;
         //TODO find out better solution for that
@@ -202,12 +205,11 @@ exports.GetPostsList = async function (req, resp) {
         if (dbResp.error)
             throw new NotFoundError(`No posts found: ${dbResp.error_message}`);
 
-        if(role !== roles.ADMIN)
-            dbResp = dbResp.filter(post => post.status)
+       
 
         const links = await GenerateLinks('posts', postsQ, customStmt);
         
-        resp.status(httpStatus.FOUND).json(PostListResponse(dbResp, links));
+        resp.status(httpStatus.OK).json(PostListResponse(dbResp, links));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -231,7 +233,7 @@ exports.GetCommentsList = async function (req, resp) {
 
         const links = await GenerateLinks(`posts/${post_id}/comments`, commentsQ, `WHERE post=${post_id}`);
         
-        resp.status(httpStatus.FOUND).json(CommentsListResponse(dbResp, links));
+        resp.status(httpStatus.OK).json(CommentsListResponse(dbResp, links));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -255,7 +257,7 @@ exports.GetLikesList = async function (req, resp) {
 
         const links = await GenerateLinks(`posts/${post_id}/like`, likesQ, `WHERE post_id=${post_id}`);
 
-        resp.status(httpStatus.FOUND).json(PostLikesListResponse(dbResp, links));
+        resp.status(httpStatus.OK).json(PostLikesListResponse(dbResp, links));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -284,7 +286,7 @@ exports.GetCategories = async function (req, resp) {
             categoriesList.push(dbResp);
         }
 
-        resp.status(httpStatus.FOUND).json(CategoriesListResponse(categoriesList))
+        resp.status(httpStatus.OK).json(CategoriesListResponse(categoriesList))
 
     } catch (error) {
         ProcessError(resp, error);

@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: toRem(50);
+    height: var(--nav-bar-height);
     width: 100%;
     padding: toRem(10);
 

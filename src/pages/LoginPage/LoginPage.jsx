@@ -1,13 +1,12 @@
 import './LoginPage.scss'
 
-import LoginForm from '@/forms/Login/Login'
-import RegisterForm from '@/forms/Register/Register'
+import { LoginForm, RegisterForm, ForgotPasswordForm } from '@/forms'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
-import { AnimatedBackground } from '@/common/main'
+import { AnimatedBackground, Modal } from '@/common'
 
-import { getCookie } from '@/helpers/main'
+import { getCookie } from '@/helpers'
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
@@ -16,11 +15,14 @@ export default function LoginPage() {
 	const [isRegistering, setIsRegistering] = useState(false);
 	const [regButtonLabel, setRegButtonLabel] = useState('Not registered yet?');
 
+	const remindPasswordModal = useRef(null);
+	const [isModalShown, setIsModalShown] = useState(false);
+
 	const token = getCookie('token');
 
 	useEffect(() => {
-		if(token) navigate('/main');
-	}, [token])
+		if (token) navigate('/main');
+	}, [])
 
 	const handleRegClick = () => {
 		setIsRegistering(!isRegistering);
@@ -29,17 +31,28 @@ export default function LoginPage() {
 		setRegButtonLabel(buttonText);
 	}
 
-    return (
-        <div className='login-page'>
+	
+
+	return (
+		<div className='login-page'>
 			<section className='background-container'>
 				<AnimatedBackground>
 					<h1>USOF</h1>
 				</AnimatedBackground>
 			</section>
 			<div className='login-page_actions'>
-				{!isRegistering ? <LoginForm /> : <RegisterForm afterActionCallback={handleRegClick}/>}
+				{!isRegistering ? <LoginForm /> : <RegisterForm afterActionCallback={handleRegClick} />}
 				<p onClick={handleRegClick} >{regButtonLabel}</p>
+				<p onClick={() => setIsModalShown(true)}>Forgot your password?</p>
 			</div>
+			
+			<Modal
+				ref={remindPasswordModal}
+				isShown={isModalShown}
+				setIsShown={setIsModalShown}
+			>
+				<ForgotPasswordForm closeModal={() => setIsModalShown(false)}/>
+			</Modal>
 		</div>
-    )
+	)
 }

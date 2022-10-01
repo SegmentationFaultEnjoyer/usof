@@ -8,6 +8,7 @@
     width: 100vw;
     height: vh(100);
     background: rgba(var(--black-rgb), 0.5);
+    z-index: 1;
 }
 
 .modal__pane {

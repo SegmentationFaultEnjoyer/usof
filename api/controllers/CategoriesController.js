@@ -50,7 +50,7 @@ exports.GetCategory = async function (req, resp) {
         if(dbResp.error)
             throw new NotFoundError(`No such category: ${dbResp.error_message}`);
 
-        resp.status(httpStatus.FOUND).json(CategoryResponse(dbResp));
+        resp.status(httpStatus.OK).json(CategoryResponse(dbResp));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -73,7 +73,7 @@ exports.GetCategoriesList = async function (req, resp) {
         
         const links = await GenerateLinks('categories', categoriesQ);
 
-        resp.status(httpStatus.FOUND).json(CategoriesListResponse(dbResp, links));
+        resp.status(httpStatus.OK).json(CategoriesListResponse(dbResp, links));
 
 
     } catch (error) {
@@ -144,7 +144,7 @@ exports.GetPostsList = async function (req, resp) {
         if(dbResp.error)
             throw new NotFoundError(`No posts found: ${dbResp.error_message}`);
 
-        resp.status(httpStatus.FOUND).json(PostListResponse(dbResp));
+        resp.status(httpStatus.OK).json(PostListResponse(dbResp));
 
     } catch (error) {
         ProcessError(resp, error);

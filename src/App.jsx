@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import { ThemeProvider } from '@mui/material/styles';
 import GlobalMUIStyles from '@styles/UI_Themes'
-import { ToastContainer } from '@/common/main'
+import { ToastContainer } from '@/common'
 
 import { store } from '@/store/store'
 

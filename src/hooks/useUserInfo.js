@@ -1,7 +1,7 @@
-import { ErrorHandler } from '@/helpers/main';
+import { ErrorHandler } from '@/helpers';
 import { useState } from 'react';
 
-import { api } from '@/api/main';
+import { api } from '@/api';
 import Mutex from '@/api/mutex'
 
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ export function useUserInfo() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const getUserInfo = () => {
         const fetchInfo = async () => {
@@ -40,7 +40,6 @@ export function useUserInfo() {
 
         }
 
-        setIsLoading(true);
         fetchInfo();
     }
 

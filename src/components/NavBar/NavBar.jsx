@@ -1,10 +1,10 @@
 import './NavBar.scss';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import { api } from '@/api/main';
+import { api } from '@/api';
 import { useNavigate } from 'react-router-dom';
-import { Notificator } from '@/common/main';
-import { ErrorHandler } from '@/helpers/main';
+import { Notificator } from '@/common';
+import { ErrorHandler } from '@/helpers';
 
 export default function NavBar() {
     const navigate = useNavigate();

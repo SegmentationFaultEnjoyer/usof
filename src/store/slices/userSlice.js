@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { roles } from '@/types/main';
+import { roles } from '@/types';
 
 const initialState = {
     info: {

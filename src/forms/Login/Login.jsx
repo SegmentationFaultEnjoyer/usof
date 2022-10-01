@@ -4,12 +4,12 @@ import { useState } from 'react';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Notificator } from '@/common/main'
+import { Notificator } from '@/common'
 
-import { useForm, useFormValidation } from '@/hooks/main';
-import { maxLength, minLength, ErrorHandler } from '@/helpers/main';
+import { useForm, useFormValidation } from '@/hooks';
+import { maxLength, minLength, ErrorHandler } from '@/helpers';
 
-import { api } from '@/api/main';
+import { api } from '@/api';
 import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {

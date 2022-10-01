@@ -1,5 +1,6 @@
 .main-page {
-    height: 100vh;
+    height: vh(100);
+    padding:  var(--app-padding-bottom) var(--app-padding-left);
 }
 
 .main-page__loader-container {

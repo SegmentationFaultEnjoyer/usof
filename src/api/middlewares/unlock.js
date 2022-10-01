@@ -6,5 +6,5 @@ export function onErrorUnlockMiddleware(error) {
     if(config.lockToken)
         Mutex.releaseLock(config.lockToken);
 
-    return Promise.reject(new Error(error.message));
+    return Promise.reject(error);
 }

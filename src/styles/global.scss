@@ -131,3 +131,11 @@ html {
     }
   }
   
+  ::-webkit-scrollbar {
+    background-color: var(--border-primary-main);
+    width: toRem(8);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+  }

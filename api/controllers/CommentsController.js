@@ -39,7 +39,7 @@ exports.GetComment = async function (req, resp) {
         if (include !== undefined)
             includeResp = await includeHandler(include, { comment_id });
 
-        resp.status(httpStatus.FOUND).json(CommentResponse(dbResp, includeResp));
+        resp.status(httpStatus.OK).json(CommentResponse(dbResp, includeResp));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -207,7 +207,7 @@ exports.GetLikesList = async function (req, resp) {
 
         const links = await GenerateLinks(`comments/${comment_id}/like`, likesQ, `WHERE comment_id=${comment_id}`);
 
-        resp.status(httpStatus.FOUND).json(CommentLikesListResponse(dbResp, links));
+        resp.status(httpStatus.OK).json(CommentLikesListResponse(dbResp, links));
 
     } catch (error) {
         ProcessError(resp, error);
