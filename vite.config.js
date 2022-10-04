@@ -18,6 +18,7 @@ export default defineConfig({
         preprocessorOptions: {
             scss: {
                 additionalData: `
+                @import "@styles/_animations.scss";
                 @import "@styles/_functions.scss";
                 @import "@styles/_placeholders.scss";
                 @import "@styles/_mixins.scss";

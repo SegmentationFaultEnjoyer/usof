@@ -1,17 +1,18 @@
 import './MainPage.scss';
 
 import { useEffect, useRef, useState } from 'react';
+import CookieConsent from 'react-cookie-consent';
 
 import { getCookie } from '@/helpers';
 
 import { api } from '@/api';
 
 
+
 import { useUserInfo } from '@/hooks';
 import { TriangleLoader, Modal, Notificator } from '@/common';
 
 import { NavBar, PostsList } from '@/components';
-
 
 export default function MainPage() {
     const { isLoading, getUserInfo } = useUserInfo();
@@ -39,10 +40,19 @@ return (
             <TriangleLoader /> 
         </div>
        : 
-        <div>
+        <>
             <NavBar />
             <PostsList />
-        </div>}
+            <CookieConsent
+                containerClasses='slide-top'
+                style={{ background: "var(--primary-main)" }}
+                buttonStyle={{ 
+                    backgroundColor: "var(--secondary-main)", 
+                    color: "var(--tertiary-main)",
+                    borderRadius: "5px" }}>
+                This website uses cookies to enhance the user experience.
+            </CookieConsent>
+        </>}
     </section>
 )
 }

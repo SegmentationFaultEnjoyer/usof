@@ -33,7 +33,7 @@ export async function refreshTokenMiddleWare(config) {
 
         } catch (error) {
             ErrorHandler.clearTokens();
-            return Promise.reject(new AxiosError(`Tokens are invalid: ${error.message}`, undefined, config))
+            return Promise.reject(error)
         }
     }
     else
