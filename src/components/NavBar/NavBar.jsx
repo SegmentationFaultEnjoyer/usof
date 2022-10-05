@@ -22,8 +22,8 @@ export default function NavBar() {
     }
 
     return (
-        <nav className='top_nav__bar'>
-            <div className='icon__container' onClick={LogOut}>
+        <nav className='nav-bar'>
+            <div className='nav-bar__icon' onClick={LogOut}>
                 <LogoutIcon color='tertiary_main'/>
             </div>
         </nav>

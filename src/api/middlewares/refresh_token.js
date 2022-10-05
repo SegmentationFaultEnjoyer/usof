@@ -18,7 +18,7 @@ export async function refreshTokenMiddleWare(config) {
         try {
             const refresh_token = getCookie('refresh');
 
-            if(!refresh_token) throw new Error('Tokens expired');
+            if(!refresh_token) throw new AxiosError('Tokens expired', null, config);
 
             await api.post('auth/refresh', {
                 data: {

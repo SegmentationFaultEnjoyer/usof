@@ -1,10 +1,10 @@
 import './PostsList.scss'
 
 import { useEffect, useState } from 'react'
-import { api } from '@/api'
 
 import { usePosts } from '@/hooks'
 import { TriangleLoader } from '@/common'
+import { Post } from '@/components'
 
 export default function PostsList() {
     const { isLoading, loadPosts } = usePosts();
@@ -13,8 +13,7 @@ export default function PostsList() {
     useEffect(() => {
         const getPosts = async () => {
             const posts = await loadPosts()
-            console.log(posts);
-            setPostsList(posts)
+            if(posts) setPostsList(posts)
         }
 
         getPosts()
@@ -22,18 +21,13 @@ export default function PostsList() {
 
     return (
         <section className='posts-list'>
-            {isLoading ? <TriangleLoader /> :
-                postsList.data.map(post => <Post title={post.attributes.title} key={post.id}/>)
+            {isLoading ? 
+            <div className="posts-list__loader-container">
+                <TriangleLoader />
+            </div> :
+                postsList.data.map(post => <Post post={post} key={post.id} />)
             }
+            <div className='post-list__end'>Blank space</div>
         </section>
-    )
-}
-
-
-function Post({ title }) {
-    return (
-        <article>
-            {title}
-        </article>
     )
 }

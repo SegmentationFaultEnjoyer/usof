@@ -148,7 +148,7 @@ class DataBase {
             
             return { error: false };
         } catch (error) {
-            console.log(`DB error ${error.message}`);
+            // console.log(`DB error ${error.message}`);
             return {
                 error: true,
                 error_message: error.message

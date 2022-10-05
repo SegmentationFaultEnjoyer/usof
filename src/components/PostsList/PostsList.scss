@@ -1,7 +1,24 @@
 .posts-list {
-    border: 1px solid black;
+    border-radius: toRem(5);
     
     width: 100%;
-    height: vh(85);
-    margin-top: calc(var(--nav-bar-height));
+    max-height: vh(85);
+    margin-top: var(--nav-bar-height);
+   
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: toRem(40);
+    padding: toRem(20) 0;
+}
+
+.posts-list__loader-container {
+    height: inherit;
+    display: grid;
+    place-content: center;
+}
+
+.post-list__end {
+    user-select: none;
+    visibility: hidden;
 }

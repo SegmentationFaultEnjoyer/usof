@@ -13,6 +13,14 @@ const theme = createTheme({
 		tertiary_main: {
 			main: 'var(--tertiary-main)',
 			contrastText: 'var(--text-primary-main)'
+		},
+		error_main: {
+			main: 'var(--error-main)',
+			contrastText: 'var(--text-primary-main)'
+		},
+		error_light: {
+			main: 'var(--error-light)',
+			contrastText: 'var(--text-primary-main)'
 		}
 	}
 })

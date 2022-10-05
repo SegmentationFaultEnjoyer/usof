@@ -12,7 +12,7 @@ export function usePosts() {
             const lockToken = new Date().toISOString();
 
             Mutex.lock(lockToken);
-            const resp = await api.get('/posts?limit=7', { lockToken });
+            const resp = await api.get('/posts?limit=20&sort=likes', { lockToken });
             Mutex.releaseLock(lockToken);
 
             setIsLoading(false);
@@ -21,7 +21,7 @@ export function usePosts() {
 
         } catch (error) {
             ErrorHandler.process(error);
-            setIsLoading(false);
+            // setIsLoading(false);
             return null;
         }
 
