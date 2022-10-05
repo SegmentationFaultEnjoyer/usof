@@ -1,7 +1,7 @@
 import './Post.scss'
 import { useEffect, useState } from 'react';
 import { api } from '@/api'
-import { ErrorHandler } from '@/helpers';
+import { ErrorHandler, handleRatingPoints, countLikes } from '@/helpers';
 import { useSelector } from 'react-redux';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
@@ -28,34 +28,28 @@ export default function Post({ post }) {
 
     const handleLikeClick = async (type) => {
         let like = false, dislike = false;
-        let likeSmashProp = null;
+        let dislikeSmashState = null;
 
         try {
             if (type === 'like') {
                 like = !ratingState.isLikeSmashed
-                if (like) likeSmashProp = false
+                if (like) dislikeSmashState = false
             }
             else {
                 dislike = !ratingState.isDisLikeSmashed
-                if(dislike) likeSmashProp = true
+                if(dislike) dislikeSmashState = true
             }
 
-            if(likeSmashProp !== null) {
+            if(dislikeSmashState !== null) {
                 await api.post(`/posts/${post.id}/like`, {
                     data: {
                         type: 'create-like',
                         attributes: {
                             liked_on: 'post',
-                            is_dislike: likeSmashProp
+                            is_dislike: dislikeSmashState
                         }
                     }
                 })
-                //TODO likes number showing
-                
-                // if(!likeSmashProp) //if it is like
-                //     setRating({...rating, likes: rating.likes + 1})
-                // else 
-                //     setRating({...rating, dislikes: rating.dislikes + 1})
             }
             else {
                 await api.delete(`/posts/${post.id}/like`)
@@ -64,18 +58,14 @@ export default function Post({ post }) {
             ErrorHandler.process(error)
         }
 
+        handleRatingPoints(like, dislike, dislikeSmashState, rating, ratingState, setRating)
+        
         setRatingState({
             isLikeSmashed: like,
             isDisLikeSmashed: dislike
         })
 
 
-    }
-
-    const countLikes = (likesEntitiesArr) => {
-        return likesEntitiesArr.reduce((prev, { attributes: { is_dislike } }) => {
-            return !is_dislike ? prev + 1 : prev;
-        }, 0)
     }
 
     const handleMyLikeExistance = (data) => {
@@ -100,8 +90,7 @@ export default function Post({ post }) {
                 likes = countLikes(data)
                 dislikes = data.length - likes
 
-                handleMyLikeExistance(data)
-                
+                handleMyLikeExistance(data)  
 
             } catch (error) {}
 
@@ -132,7 +121,6 @@ export default function Post({ post }) {
                                 <LikeIcon color='error_light' />
                             }
                         </div>
-
                     </div>
                     <div className='rating__container'>
                         <p className='rating__label'> {rating.dislikes}</p>
@@ -142,9 +130,7 @@ export default function Post({ post }) {
                                 :
                                 <DislikeIcon color='error_light' />
                             }
-
                         </div>
-
                     </div>
                 </section>
 
