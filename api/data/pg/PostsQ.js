@@ -28,8 +28,18 @@ class PostsQ extends DataBase {
     }
 
     WhereStatus(status) {
-        this.currentStmt.text = this.currentStmt.text + ' WHERE status=$1';
-        this.currentStmt.values = [status];
+        let clause;
+
+        if(this.currentStmt.text.includes('WHERE')) { 
+            clause = ' and status=$2';
+            this.currentStmt.values.push(status);
+        }
+        else {
+            clause = ' WHERE status=$1';
+            this.currentStmt.values = [status];
+        }
+
+        this.currentStmt.text = this.currentStmt.text + clause;
 
         return this;
     }

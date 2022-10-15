@@ -13,7 +13,6 @@ import { api } from '@/api';
 import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
-	// const testLabel = useSelector(state => state.user.info.name);
 	const navigate = useNavigate();
 
 	const [login, setLogin] = useState('')

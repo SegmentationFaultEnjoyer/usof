@@ -42,6 +42,7 @@
     "react-router-dom": "^6.3.0",
     "react-toastify": "^9.0.8",
     "react-use": "^17.4.0",
+    "uuid": "^9.0.0",
     "webp-converter": "^2.3.3"
   },
   "devDependencies": {

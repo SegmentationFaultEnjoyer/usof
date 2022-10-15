@@ -187,9 +187,6 @@ exports.GetPostsList = async function (req, resp) {
 
         let Q = postsQ.New().Get();
 
-        if(role !== roles.ADMIN)
-            Q = Q.WhereStatus(true);
-
         let customStmt =  null;
         //TODO find out better solution for that
         if(filter !== undefined) {
@@ -198,6 +195,16 @@ exports.GetPostsList = async function (req, resp) {
             Q = filterResp.Q;
         }
 
+        if(role !== roles.ADMIN) {
+            Q = Q.WhereStatus(true);
+            
+            if(customStmt === null)
+                customStmt = 'WHERE status=true'
+            else
+                customStmt = `${customStmt} and status=true`
+        }
+           
+
         if(sort !== undefined) Q = sortHandler(sort, order, Q);
 
         let dbResp = await Q.Paginate(limit, page).Execute(true);
@@ -205,9 +212,7 @@ exports.GetPostsList = async function (req, resp) {
         if (dbResp.error)
             throw new NotFoundError(`No posts found: ${dbResp.error_message}`);
 
-       
-
-        const links = await GenerateLinks('posts', postsQ, customStmt);
+        const links = await GenerateLinks('posts', postsQ, customStmt, filter, sort, order);
         
         resp.status(httpStatus.OK).json(PostListResponse(dbResp, links));
 

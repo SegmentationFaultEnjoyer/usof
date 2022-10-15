@@ -12,7 +12,7 @@ import { api } from '@/api';
 import { useUserInfo } from '@/hooks';
 import { TriangleLoader, Modal, Notificator } from '@/common';
 
-import { NavBar, PostsList } from '@/components';
+import { NavBar, PostsList, PostsFilter } from '@/components';
 
 export default function MainPage() {
     const { isLoading, getUserInfo } = useUserInfo();
@@ -42,6 +42,7 @@ return (
        : 
         <>
             <NavBar />
+            <PostsFilter />
             <PostsList />
             <CookieConsent
                 containerClasses='slide-top'
