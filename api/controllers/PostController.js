@@ -203,7 +203,6 @@ exports.GetPostsList = async function (req, resp) {
             else
                 customStmt = `${customStmt} and status=true`
         }
-           
 
         if(sort !== undefined) Q = sortHandler(sort, order, Q);
 

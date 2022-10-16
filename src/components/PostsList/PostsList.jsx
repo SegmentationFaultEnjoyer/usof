@@ -10,11 +10,15 @@ import Pagination from '@mui/material/Pagination';
 
 
 export default function PostsList() {
-    const { isLoading, loadPosts, loadPage } = usePosts();
+    const { loadPosts, loadPage } = usePosts();
+
+    console.log('post list render');
 
     const postsList = useSelector(state => state.posts)
 
     function getPagesAmount(link) {
+        if(!link) return
+
         const i = link.indexOf('page');
         return Number(link.charAt(i + 'page'.length + 1));
     }
@@ -26,7 +30,7 @@ export default function PostsList() {
         getPosts()
     }, [])
 
-    const handlePagination = async (_, value) => {
+    const handlePagination = async (e, value) => {
         await loadPage(value, postsList.links)
         
         window.scrollTo({
@@ -39,7 +43,7 @@ export default function PostsList() {
 
     return (
         <section className='posts-list'>
-            {isLoading ? 
+            {postsList.isLoading ? 
             <div className="posts-list__loader-container">
                 <TriangleLoader />
             </div> :

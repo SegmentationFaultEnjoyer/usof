@@ -7,7 +7,7 @@ import Mutex from '@/api/mutex'
 import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux'
-import { setUser } from '@/store/slices/userSlice';
+import { setUser } from '@/store';
 
 export function useUserInfo() {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ export function useUserInfo() {
                 Mutex.lock(lockToken);
                 let resp = await api.get('/auth', { lockToken });
                 Mutex.releaseLock(lockToken);
-
+    
                 dispatch(setUser({
                     ...resp.data.data.attributes,
                     id: resp.data.data.id

@@ -1,13 +1,18 @@
 import './Post.scss'
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { api } from '@/api'
 import { ErrorHandler, handleRatingPoints, countLikes } from '@/helpers';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { usePosts } from '@/hooks';
+import { setFilter } from '@/store';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
 import LikeToggledIcon from '@mui/icons-material/Favorite';
 import DislikeToggledIcon from '@mui/icons-material/HeartBroken';
 import DislikeIcon from '@mui/icons-material/HeartBrokenOutlined';
+import HiddenIcon from '@mui/icons-material/VisibilityOffOutlined';
+import EditedIcon from '@mui/icons-material/EditOutlined';
 
 export default function Post({ post }) {
     const {
@@ -24,7 +29,14 @@ export default function Post({ post }) {
         isDisLikeSmashed: false
     })
 
+    const dispatch = useDispatch()
+    const { filterPosts } = usePosts()
+
     const userID = useSelector(state => state.user.info.id)
+
+    const postClass = useMemo(() => userID !== post.relationships.author.id ? 
+    'post' : 'post post--my', [userID])
+   
 
     const handleLikeClick = async (type) => {
         let like = false, dislike = false;
@@ -100,20 +112,40 @@ export default function Post({ post }) {
         getPostInfo()
     }, [])
 
+    const handleOnCategoryClick = async (title) => {
+        await filterPosts(`[category]-->${title}`)
+        dispatch(setFilter(title))
+    }
+
 
     return (
-        <article className='post'>
-            <h2 className='post__title'>{title}</h2>
-            <p className='post__content'>{content}</p>
+        <article className={postClass}>
+            <div className='post__header'>
+                <h2 className='post__title'>{ title }</h2>
+                <p className='post__publish-date'>{ new Date(publish_date).toLocaleString() }</p>
+            </div>
+            {is_edited && <div className='post__label post__label--edited'> 
+                <EditedIcon color='primary_light'/>    
+            </div>}
+            {!status && <div className='post__label post__label--hidden'>
+                <HiddenIcon color='primary_light' />
+            </div>}
+            <p className='post__content'>{ content }</p>
             <div className='post__footer'>
                 <ul className='post__categories'>
                     {categories.map(
-                        (category, i) => <li className='categories__item' key={i}>{category}</li>
+                        (category, i) => 
+                        <li 
+                            className='categories__item' 
+                            key={i}
+                            onClick={ () => {handleOnCategoryClick(category) }}>
+                            { category }
+                        </li>
                     )}
                 </ul>
                 <section className='post__rating'>
                     <div className='rating__container'>
-                        <p className='rating__label'> {rating.likes} </p>
+                        <p className='rating__label'> { rating.likes } </p>
                         <div className='rating__icon' onClick={() => handleLikeClick('like')}>
                             {ratingState.isLikeSmashed ?
                                 <LikeToggledIcon color='error_light' />
@@ -123,7 +155,7 @@ export default function Post({ post }) {
                         </div>
                     </div>
                     <div className='rating__container'>
-                        <p className='rating__label'> {rating.dislikes}</p>
+                        <p className='rating__label'> { rating.dislikes }</p>
                         <div className='rating__icon' onClick={() => handleLikeClick('dislike')}>
                             {ratingState.isDisLikeSmashed ?
                                 <DislikeToggledIcon color='error_light' />

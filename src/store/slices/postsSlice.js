@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
    posts: [],
-   links: {}
+   links: {},
+   isLoading: true,
+   filter: ''
 }
 
 export const postsSlice = createSlice({
@@ -14,9 +16,22 @@ export const postsSlice = createSlice({
             state.posts = data
             state.links = links
         },
+        startLoading(state) {
+            state.isLoading = true
+        },
+        finishLoading(state) {
+            state.isLoading = false
+        },
+        setFilter(state, action) {
+            state.filter = action.payload
+        }
     }
 })
 
-export const { setList } = postsSlice.actions;
+export const { 
+    setList, 
+    startLoading, 
+    finishLoading,
+    setFilter } = postsSlice.actions;
 
 export default postsSlice.reducer;

@@ -5,15 +5,15 @@ import { api } from '@/api';
 import Mutex from '@/api/mutex'
 
 import { useDispatch } from 'react-redux';
-import { setList } from '@/store/slices/postsSlice';
+import { setList, startLoading, finishLoading } from '@/store';
 
 const LIMIT = 6
 
 export function usePosts() {
-    const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch()
 
     const loadPosts = async () => {
+        dispatch(startLoading())
         try {
             const lockToken = new Date().toISOString();
 
@@ -26,13 +26,13 @@ export function usePosts() {
         } catch (error) {
             ErrorHandler.process(error);
         }
-        setIsLoading(false);
+        dispatch(finishLoading())
     }
 
     const loadPage = async (page, links) => {
         let link = null;
         for (let [key, value] of Object.entries(links)) {
-            if(value.includes(`page=${page}`)) {
+            if (value.includes(`page=${page}`)) {
                 link = links[key]
                 break;
             }
@@ -40,22 +40,20 @@ export function usePosts() {
 
         if (!link) return
 
-        try {   
+        try {
             const resp = await api.get(link)
 
             dispatch(setList(resp.data))
-            
+
         } catch (error) {
             ErrorHandler.process(error);
         }
-        
     }
 
     const filterPosts = async (filterValue) => {
-        setIsLoading(true)
         try {
             const lockToken = new Date().toISOString();
-            
+
             Mutex.lock(lockToken);
             const resp = await api.get(`/posts?limit=${LIMIT}&filter=${filterValue}`, { lockToken });
             Mutex.releaseLock(lockToken);
@@ -65,11 +63,9 @@ export function usePosts() {
         } catch (error) {
             ErrorHandler.process(error);
         }
-        setIsLoading(false)
     }
 
     return {
-        isLoading,
         loadPosts,
         loadPage,
         filterPosts

@@ -87,7 +87,7 @@ class PostsQ extends DataBase {
 
     //FUCKIN HELL 
     OrderByNumberOfLikes(orderType = "DESC") {
-        if(this.currentStmt.values.length < 1)
+        if(!this.currentStmt.values || this.currentStmt.values.length < 1)
             this.currentStmt.text = 'SELECT posts.*, count(case post_likes.is_dislike when false then 1 else null end)'
             + ` - count(case post_likes.is_dislike when true then 1 else null end) as count from ${this.table}`
             + ' LEFT JOIN post_likes on posts.id = post_likes.post_id GROUP BY posts.id ORDER BY count ' + orderType;
