@@ -72,7 +72,7 @@ exports.CreateComment = async function (req, resp) {
         const { post_id } = req.params;
         const { id } = req.decoded;
 
-        let dbResp = await commentsQ
+        let dbResp = await new commentsQ()
             .New()
             .Insert(
                 {
@@ -211,7 +211,7 @@ exports.GetPostsList = async function (req, resp) {
         if (dbResp.error)
             throw new NotFoundError(`No posts found: ${dbResp.error_message}`);
 
-        const links = await GenerateLinks('posts', postsQ, customStmt, filter, sort, order);
+        const links = await GenerateLinks('posts', Q, customStmt, filter, sort, order);
         
         resp.status(httpStatus.OK).json(PostListResponse(dbResp, links));
 
@@ -224,9 +224,9 @@ exports.GetPostsList = async function (req, resp) {
 exports.GetCommentsList = async function (req, resp) {
     try {
         const { post_id } = req.params;
-        const { page, limit, sort, order } = req.query;
+        const { page, filter, limit, sort, order } = req.query;
 
-        let Q = commentsQ.New().Get().WherePostID(post_id);
+        let Q = new commentsQ().New().Get().WherePostID(post_id);
 
         if(sort !== undefined) Q = sortHandler(sort, order, Q);
 
@@ -237,12 +237,12 @@ exports.GetCommentsList = async function (req, resp) {
 
         const links = await GenerateLinks(
             `posts/${post_id}/comments`, 
-            commentsQ, 
+            Q, 
             `WHERE post=${post_id}`,
-            null,
+            filter,
             sort,
             order);
-        
+
         resp.status(httpStatus.OK).json(CommentsListResponse(dbResp, links));
 
     } catch (error) {
@@ -265,7 +265,7 @@ exports.GetLikesList = async function (req, resp) {
         if (dbResp.error)
             throw new NotFoundError(`No likes found: ${dbResp.error_message}`);
 
-        const links = await GenerateLinks(`posts/${post_id}/like`, likesQ, `WHERE post_id=${post_id}`);
+        const links = await GenerateLinks(`posts/${post_id}/like`, Q, `WHERE post_id=${post_id}`);
 
         resp.status(httpStatus.OK).json(PostLikesListResponse(dbResp, links));
 

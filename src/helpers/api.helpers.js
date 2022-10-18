@@ -5,6 +5,7 @@ export function getPagesAmount(link) {
     if (!link) return
 
     const i = link.indexOf('page');
+    
     return Number(link.charAt(i + 'page'.length + 1));
 }
 
@@ -16,7 +17,7 @@ export async function loadPage(page, links, setFunction) {
             break;
         }
     }
-
+    
     if (!link) return
 
     try {

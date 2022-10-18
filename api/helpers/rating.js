@@ -18,7 +18,7 @@ async function handleRating(action, qType, id) {
 
             break;
         case 'comment':
-            dbResp = await commentsQ.New().Get().WhereID(id).Execute();
+            dbResp = await new commentsQ().New().Get().WhereID(id).Execute();
 
             if(dbResp.error)
                 throw new NotFoundError(`Unable to find author: ${dbResp.error_message}`);

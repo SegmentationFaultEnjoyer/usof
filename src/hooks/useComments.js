@@ -11,6 +11,7 @@ export function useComments() {
         try {   
             let resp = await api.get(`/posts/${postID}/comments?limit=5&sort=id`)
 
+            console.log(resp.data);
             setComments(resp.data)
             
         } catch (error) {}

@@ -31,7 +31,7 @@ exports.GetComment = async function (req, resp) {
 
         let includeResp = null;
 
-        let dbResp = await commentsQ.New().Get().WhereID(comment_id).Execute();
+        let dbResp = await new commentsQ().New().Get().WhereID(comment_id).Execute();
 
         if (dbResp.error)
             throw new NotFoundError(`No such comment: ${dbResp.error_message}`);
@@ -51,7 +51,7 @@ exports.DeleteComment = async function (req, resp) {
         const { comment_id } = req.params;
         const { id, role } = req.decoded;
 
-        let dbResp = await commentsQ.New().Get().WhereID(comment_id).Execute();
+        let dbResp = await new commentsQ().New().Get().WhereID(comment_id).Execute();
 
         if (dbResp.error)
             throw new NotFoundError(`No such comment: ${dbResp.error_message}`);
@@ -61,7 +61,7 @@ exports.DeleteComment = async function (req, resp) {
         if (id !== author && role !== roles.ADMIN)
             throw new UnauthorizedError(`No permission for that action`);
 
-        dbResp = await commentsQ.New().Delete().WhereID(comment_id).Execute();
+        dbResp = await new commentsQ().New().Delete().WhereID(comment_id).Execute();
 
         if (dbResp.error)
             throw new Error(`Error deleting comment: ${dbResp.error_message}`);
@@ -78,7 +78,7 @@ exports.UpdateComment = async function (req, resp) {
         const { comment_id } = req.params;
         const { id } = req.decoded;
 
-        let dbResp = await commentsQ.New().Get().WhereID(comment_id).Execute();
+        let dbResp = await new commentsQ().New().Get().WhereID(comment_id).Execute();
 
         if (dbResp.error)
             throw new NotFoundError(`No such comment: ${dbResp.error_message}`);
@@ -90,7 +90,7 @@ exports.UpdateComment = async function (req, resp) {
 
         const { content } = parseUpdateCommentRequest(req.body);
 
-        dbResp = await commentsQ
+        dbResp = await new commentsQ()
             .New()
             .Update(
                 {

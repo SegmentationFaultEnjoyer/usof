@@ -33,7 +33,6 @@ async function GenerateLinks(url, Q, customStmt = null, filter = undefined, sort
         prevLink = `http://${process.env.HOST}:${process.env.PORT}/${url}?page=${page - 1}&limit=${limit}${filter}${sort}${order}`
     }
     
-    
     return {
         first: firstLink,
         current: curLink,

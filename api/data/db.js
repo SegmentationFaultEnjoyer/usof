@@ -5,6 +5,8 @@ const client = require('./connectionClient');
 const DEFAULT_LIMIT_VALUE = 3;
 const DEFAULT_PAGE_VALUE = 1;
 
+//TODO all Q's must be refactored to new Q().new()... 
+
 class DataBase {
     constructor(table) {
         this.table = table;
@@ -74,6 +76,7 @@ class DataBase {
             offset, 
             page
         }
+
         return this;
     }
 
@@ -135,7 +138,7 @@ class DataBase {
     async Execute(multiple = false) {
         this.currentStmt.text += ';'
 
-        //console.log(this.currentStmt.text, this.currentStmt.values);
+        // console.log(this.currentStmt.text, this.currentStmt.values);
         
         try {
             let res = await this.client.query(this.currentStmt)

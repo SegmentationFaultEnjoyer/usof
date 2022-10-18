@@ -54,4 +54,4 @@ class CommentsQ extends DataBase {
     }
 }
 
-module.exports = new CommentsQ();
+module.exports = CommentsQ;

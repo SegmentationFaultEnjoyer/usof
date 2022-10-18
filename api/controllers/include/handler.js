@@ -13,7 +13,7 @@ async function IncludeHandler(include, additionalData) {
 
     switch (include) {
         case includeType.POST_COMMENTS:
-            includeResp = await commentsQ.New().Get().WherePostID(additionalData.post_id).Execute(true);
+            includeResp = await new commentsQ().New().Get().WherePostID(additionalData.post_id).Execute(true);
            
             if(includeResp.error) 
                 break
@@ -39,7 +39,7 @@ async function IncludeHandler(include, additionalData) {
             break;
 
         case includeType.USER_COMMENTS:
-            includeResp = await commentsQ.New().Get().WhereAuthor(additionalData.user_id).Execute(true);
+            includeResp = await new commentsQ().New().Get().WhereAuthor(additionalData.user_id).Execute(true);
 
             if(includeResp.error)
                 break;
