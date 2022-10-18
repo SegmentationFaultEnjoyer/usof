@@ -43,9 +43,21 @@ export function useUserInfo() {
         fetchInfo();
     }
 
+    const loadUser = async (userID) => {
+        try {
+            const resp = await api.get(`/users/${userID}`)
+
+            return resp.data
+        } catch (error) {
+            ErrorHandler.process(error)
+            return null
+        }
+    }
+
     return {
         isLoading,
-        getUserInfo
+        getUserInfo,
+        loadUser
     }
 
 }

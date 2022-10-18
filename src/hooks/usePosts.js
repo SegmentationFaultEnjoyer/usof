@@ -29,6 +29,27 @@ export function usePosts() {
         dispatch(finishLoading())
     }
 
+    const loadPostLikes = async (id) => {
+        try {
+            const resp = await api.get(`posts/${id}/like?limit=1000`)
+
+            return resp.data
+        } catch (error) {
+            return null
+        }
+    }
+
+    const loadPost = async (id) => {
+        try {
+            const resp = await api.get(`posts/${id}?include=post_comments`)
+
+            return resp.data
+        } catch (error) {
+            ErrorHandler.process(error)
+            return null
+        }
+    }
+
     const loadPage = async (page, links) => {
         let link = null;
         for (let [key, value] of Object.entries(links)) {
@@ -67,6 +88,8 @@ export function usePosts() {
 
     return {
         loadPosts,
+        loadPost,
+        loadPostLikes,
         loadPage,
         filterPosts
     }

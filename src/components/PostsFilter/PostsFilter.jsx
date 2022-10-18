@@ -80,8 +80,6 @@ export default function PostsFilter() {
         dispatch(setCurrentFilter(status ? 'active' : 'inactive'))
     }
 
-    console.log(currentFilter, isFilterShown);
-
     return (
         <section className='posts-filter' ref={menuRef}>
             <AnimatePresence mode='wait'>

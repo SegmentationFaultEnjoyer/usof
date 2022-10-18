@@ -5,8 +5,8 @@ const likesQ = require('../../data/pg/PostLikesQ');
 const commentLikesQ = require('../../data/pg/CommentLikesQ');
 const postsQ = require('../../data/pg/PostsQ');
 
-const { CommentsListResponse, PostLikesListResponse, PostListResponse } = require('../responses/PostsResponses');
-const { CommentLikesListResponse } = require('../responses/CommentResponses');
+const { PostLikesListResponse, PostListResponse } = require('../responses/PostsResponses');
+const { CommentLikesListResponse, CommentsListResponse } = require('../responses/CommentResponses');
 
 async function IncludeHandler(include, additionalData) {
     let includeResp;
@@ -14,7 +14,7 @@ async function IncludeHandler(include, additionalData) {
     switch (include) {
         case includeType.POST_COMMENTS:
             includeResp = await commentsQ.New().Get().WherePostID(additionalData.post_id).Execute(true);
-
+           
             if(includeResp.error) 
                 break
             

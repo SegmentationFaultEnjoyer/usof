@@ -11,8 +11,33 @@ import LikeIcon from '@mui/icons-material/FavoriteBorder';
 import LikeToggledIcon from '@mui/icons-material/Favorite';
 import DislikeToggledIcon from '@mui/icons-material/HeartBroken';
 import DislikeIcon from '@mui/icons-material/HeartBrokenOutlined';
+
 import HiddenIcon from '@mui/icons-material/VisibilityOffOutlined';
 import EditedIcon from '@mui/icons-material/EditOutlined';
+
+import CommentIcon from '@mui/icons-material/MessageOutlined';
+
+import { CommentsList } from '@/components'
+
+import dayjs from 'dayjs';
+
+function formatDate(date) {
+    const days = dayjs(Date.now()).diff(date, 'days')
+
+    if(!days) return 'today'
+
+    if(days <= 31) 
+        return `${days} ${days > 1 ? 'days' : 'day'} ago`
+    
+    const months = dayjs(Date.now()).diff(date, 'months')
+
+    if(months <= 12)
+        return `more than ${months} months ago`
+
+    const years = dayjs(Date.now()).diff(date, 'years')
+    
+    return `more than ${years} years ago`
+}
 
 export default function Post({ post }) {
     const {
@@ -28,9 +53,11 @@ export default function Post({ post }) {
         isLikeSmashed: false,
         isDisLikeSmashed: false
     })
+    const [commentsAmount, setCommentsAmount] = useState(0)
+    const [isCommentsOpen, setIsCommentsOpen] = useState(false)
 
     const dispatch = useDispatch()
-    const { filterPosts } = usePosts()
+    const { filterPosts, loadPost, loadPostLikes } = usePosts()
 
     const userID = useSelector(state => state.user.info.id)
 
@@ -95,18 +122,24 @@ export default function Post({ post }) {
         const getPostInfo = async () => {
             let likes = 0, dislikes = 0;
 
-            try {
-                let resp = await api.get(`posts/${post.id}/like?limit=1000`)
-                const { data } = resp.data;
+            let resp = await loadPostLikes(post.id)
 
-                likes = countLikes(data)
-                dislikes = data.length - likes
+            if(!resp) return 
 
-                handleMyLikeExistance(data)  
+            const { data } = resp;
 
-            } catch (error) {}
+            likes = countLikes(data)
+            dislikes = data.length - likes
+
+            handleMyLikeExistance(data)  
 
             setRating({ likes, dislikes })
+
+            resp = await loadPost(post.id)
+
+            if(resp.include.error) return
+
+            setCommentsAmount(resp.include.length)
         }
 
         getPostInfo()
@@ -117,12 +150,11 @@ export default function Post({ post }) {
         dispatch(setFilter(title))
     }
 
-
     return (
         <article className={postClass}>
             <div className='post__header'>
                 <h2 className='post__title'>{ title }</h2>
-                <p className='post__publish-date'>{ new Date(publish_date).toLocaleString() }</p>
+                <p className='post__publish-date'>{ formatDate(publish_date) }</p>
             </div>
             {is_edited && <div className='post__label post__label--edited'> 
                 <EditedIcon color='primary_light'/>    
@@ -130,6 +162,14 @@ export default function Post({ post }) {
             {!status && <div className='post__label post__label--hidden'>
                 <HiddenIcon color='primary_light' />
             </div>}
+            <div 
+                className='post__label post__label--comments'
+                onClick={() => setIsCommentsOpen(prev => !prev)}>
+                {commentsAmount > 0 &&  <div className='post__label__comments-amount'>
+                    <span>{ commentsAmount }</span>
+                </div>}
+                <CommentIcon color='primary_light'/>
+            </div>
             <p className='post__content'>{ content }</p>
             <div className='post__footer'>
                 <ul className='post__categories'>
@@ -138,7 +178,7 @@ export default function Post({ post }) {
                         <li 
                             className='categories__item' 
                             key={i}
-                            onClick={ () => {handleOnCategoryClick(category) }}>
+                            onClick={ () => { handleOnCategoryClick(category) }}>
                             { category }
                         </li>
                     )}
@@ -165,9 +205,8 @@ export default function Post({ post }) {
                         </div>
                     </div>
                 </section>
-
             </div>
-
+            <CommentsList isOpen={ isCommentsOpen } postId={ post.id }/>
         </article>
     )
 }
