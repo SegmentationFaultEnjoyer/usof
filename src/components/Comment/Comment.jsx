@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useUserInfo } from '@/hooks'
 
 export default function Comment({ comment }) {
-    const { content, is_edited, publish_date } = comment.attributes
+    const { content, is_edited, publish_date, profile_picture } = comment.attributes
     const { author, post } = comment.relationships
 
     const [authorInfo, setAuthorInfo] = useState(null)

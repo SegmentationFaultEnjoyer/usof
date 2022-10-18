@@ -5,23 +5,21 @@ import { useSelector } from 'react-redux'
 import { usePosts } from '@/hooks'
 import { TriangleLoader } from '@/common'
 import { Post } from '@/components'
+import { getPagesAmount, loadPage } from '@/helpers'
 
 import Pagination from '@mui/material/Pagination';
 
+import { useDispatch } from 'react-redux';
+import { setList } from '@/store';
+
 
 export default function PostsList() {
-    const { loadPosts, loadPage } = usePosts();
+    const { loadPosts } = usePosts();
+    const dispatch = useDispatch()
 
     console.log('post list render');
 
     const postsList = useSelector(state => state.posts)
-
-    function getPagesAmount(link) {
-        if(!link) return
-
-        const i = link.indexOf('page');
-        return Number(link.charAt(i + 'page'.length + 1));
-    }
 
     useEffect(() => {
         const getPosts = async () => {
@@ -30,15 +28,18 @@ export default function PostsList() {
         getPosts()
     }, [])
 
+    const postSet = (data) => {
+        dispatch(setList(data))
+    }
+
     const handlePagination = async (e, value) => {
-        await loadPage(value, postsList.links)
+        await loadPage(value, postsList.links, postSet)
         
         window.scrollTo({
             left: 0,
             top: 0,
             behavior: 'smooth'
         })
-        
     }
 
     return (
@@ -49,10 +50,11 @@ export default function PostsList() {
             </div> :
                 <>
                 {postsList.posts.map(post => <Post post={post} key={post.id} />)}
+                { (postsList.links.next || postsList.links.prev) && 
                 <Pagination 
                     shape="rounded"
                     count={getPagesAmount(postsList.links.last)} 
-                    onChange={handlePagination}/>
+                    onChange={handlePagination}/>}
                 </>
             }   
             

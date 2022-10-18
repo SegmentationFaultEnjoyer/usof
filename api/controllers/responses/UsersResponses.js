@@ -1,5 +1,5 @@
 
-exports.UserResponse = function({ id, role, rating, email, name }, include = null) {
+exports.UserResponse = function({ id, role, rating, email, name, profile_picture }, include = null) {
     let response = {
         data: {
             id,
@@ -8,7 +8,8 @@ exports.UserResponse = function({ id, role, rating, email, name }, include = nul
                 role,
                 rating,
                 email,
-                name
+                name,
+                profile_picture
             }
         }
     }
@@ -29,6 +30,7 @@ exports.UsersListResponse = function(usersList, links = {}) {
                 rating: user.rating,
                 email: user.email,
                 name: user.name,
+                profile_picture: user.profile_picture
             }
         })),
         links

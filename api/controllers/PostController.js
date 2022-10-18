@@ -235,7 +235,13 @@ exports.GetCommentsList = async function (req, resp) {
         if (dbResp.error)
             throw new NotFoundError(`No comments found: ${dbResp.error_message}`);
 
-        const links = await GenerateLinks(`posts/${post_id}/comments`, commentsQ, `WHERE post=${post_id}`);
+        const links = await GenerateLinks(
+            `posts/${post_id}/comments`, 
+            commentsQ, 
+            `WHERE post=${post_id}`,
+            null,
+            sort,
+            order);
         
         resp.status(httpStatus.OK).json(CommentsListResponse(dbResp, links));
 

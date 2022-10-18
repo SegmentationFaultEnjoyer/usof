@@ -1,7 +1,7 @@
 import { api } from "@/api";
-import { ErrorHandler } from "@/helpers";
 
 import { useState } from "react";
+import { loadPage as pageLoader } from '@/helpers'
 
 export function useComments() {
     const [comments, setComments] = useState({})
@@ -9,19 +9,26 @@ export function useComments() {
 
     const loadComments = async (postID) => {
         try {   
-            let resp = await api.get(`/posts/${postID}/comments?limit=7`)
+            let resp = await api.get(`/posts/${postID}/comments?limit=5&sort=id`)
 
             setComments(resp.data)
-            console.log(resp.data);
             
         } catch (error) {}
 
         setIsLoading(false)
     }
 
+    const loadPage = async (page, links) => {
+        // setIsLoading(true)
+        await pageLoader(page, links, setComments)
+        // setIsLoading(false)
+    }
+
     return {
         comments,
         isLoading,
-        loadComments
+        loadComments,
+        loadPage,
+        setComments
     }
 }

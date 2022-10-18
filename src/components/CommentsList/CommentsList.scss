@@ -11,3 +11,9 @@
     width: 100%;
     place-content: center;
 }
+
+.comments-list__pages {
+    display: grid;
+    place-content: center;
+    margin-top: toRem(20);
+}

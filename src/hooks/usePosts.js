@@ -1,5 +1,4 @@
 import { ErrorHandler } from '@/helpers';
-import { useState } from 'react';
 
 import { api } from '@/api';
 import Mutex from '@/api/mutex'
@@ -50,27 +49,6 @@ export function usePosts() {
         }
     }
 
-    const loadPage = async (page, links) => {
-        let link = null;
-        for (let [key, value] of Object.entries(links)) {
-            if (value.includes(`page=${page}`)) {
-                link = links[key]
-                break;
-            }
-        }
-
-        if (!link) return
-
-        try {
-            const resp = await api.get(link)
-
-            dispatch(setList(resp.data))
-
-        } catch (error) {
-            ErrorHandler.process(error);
-        }
-    }
-
     const filterPosts = async (filterValue) => {
         try {
             const lockToken = new Date().toISOString();
@@ -90,7 +68,6 @@ export function usePosts() {
         loadPosts,
         loadPost,
         loadPostLikes,
-        loadPage,
         filterPosts
     }
 }

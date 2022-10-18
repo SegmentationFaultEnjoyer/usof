@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Notificator } from '@/common'
 
-import { useForm, } from '@/hooks';
+import { useForm } from '@/hooks';
 import { ErrorHandler } from '@/helpers';
 
 import { api } from '@/api';

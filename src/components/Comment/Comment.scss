@@ -18,8 +18,9 @@
 }
 
 .comment__publish-date {
+    user-select: none;
     font-weight: lighter;
-    font-size: toRem(15);
+    font-size: toRem(14);
     
     @include respond-to(small) {
         font-size: toRem(13);

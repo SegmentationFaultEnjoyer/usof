@@ -206,7 +206,10 @@ export default function Post({ post }) {
                     </div>
                 </section>
             </div>
-            <CommentsList isOpen={ isCommentsOpen } postId={ post.id }/>
+            <CommentsList 
+                isOpen={ isCommentsOpen } 
+                postId={ post.id } 
+                updateCounter={ setCommentsAmount } />
         </article>
     )
 }

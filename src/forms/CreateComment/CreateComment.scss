@@ -1,0 +1,20 @@
+.create-comment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: toRem(10);
+    margin-top: toRem(20);
+    width: 80%;
+}
+
+.create-comment__container {
+    width: 100%;
+    display: flex;
+    gap: toRem(20);
+    justify-content: center;
+    align-items: center;
+}
+
+.create-comment__button {
+    height: toRem(40);
+}

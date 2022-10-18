@@ -5,11 +5,19 @@ import { useEffect } from 'react'
 
 import { useComments } from '@/hooks'
 import { Comment } from '@/components'
+import { CreateCommentForm } from '@/forms'
 
-export default function Comments({ isOpen, postId }) {
-    const { comments, isLoading, loadComments } = useComments()
+import { getPagesAmount } from '@/helpers'
+import Pagination from '@mui/material/Pagination';
+
+export default function Comments({ isOpen, postId, updateCounter }) {
+    const { comments, isLoading, loadComments, loadPage } = useComments()
 
     useEffect(() => { loadComments(postId) }, [])
+
+    const handlePagination = async (e, value) => {
+        await loadPage(value, comments.links)
+    }
 
 
     return (
@@ -23,7 +31,21 @@ export default function Comments({ isOpen, postId }) {
                 comments.data && 
                 comments.data.map(comment => <Comment comment={ comment } key={comment.id}/>)
                 }
+                <CreateCommentForm 
+                    postID={ postId } 
+                    loadComments={ loadComments }
+                    updateCounter={ updateCounter }/>
             </div>}
+            
+            {comments.links && (comments.links.next || comments.links.prev) &&
+            <div className='comments-list__pages'>
+                <Pagination 
+                    shape="rounded"
+                    count={getPagesAmount(comments.links.last)} 
+                    onChange={handlePagination}/>
+            </div>
+           }
+           
         </Collapse>
         
     )
