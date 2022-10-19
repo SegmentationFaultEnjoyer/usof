@@ -49,6 +49,15 @@ export function usePosts() {
         }
     }
 
+    const deletePost = async (id) => {
+        try {
+            await api.delete(`posts/${id}`)
+            await loadPosts()
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     const filterPosts = async (filterValue) => {
         try {
             const lockToken = new Date().toISOString();
@@ -67,6 +76,7 @@ export function usePosts() {
     return {
         loadPosts,
         loadPost,
+        deletePost,
         loadPostLikes,
         filterPosts
     }

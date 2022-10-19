@@ -29,7 +29,13 @@
     position: absolute;
     right: 0;
     top: 0;
-    padding: toRem(15);
+    padding: toRem(5);
+    transform: scale(0.9);
+
+    @include respond-to(small) {
+        padding: toRem(15);
+        transform: scale(1);
+    }
 
     svg:hover {
         cursor: pointer;

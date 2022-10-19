@@ -4,6 +4,8 @@ import { useEffect, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useUserInfo, useComments } from '@/hooks'
 
+import { roles } from '@/types'
+
 import Avatar from '@mui/material/Avatar';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
@@ -37,6 +39,7 @@ export default function Comment({ comment, deleteComment, updateCounter }) {
 
     const userID = useSelector(state => state.user.info.id)
 
+    const isAdmin = useSelector(state => state.user.info.role === roles.ADMIN)
     const isBelongToMe = useMemo(() => author.id === userID, [userID])
 
     const handleMyLikeExistance = (data) => {
@@ -91,7 +94,7 @@ export default function Comment({ comment, deleteComment, updateCounter }) {
     }
 
     const handleCommentDelete = async () => { 
-        await deleteComment(comment.id)
+        await deleteComment(comment.id, post.id)
         updateCounter(prev => prev - 1)
     }
 
@@ -134,7 +137,7 @@ export default function Comment({ comment, deleteComment, updateCounter }) {
                     </div>}
                 <p className='comment__publish-date'>{ formatDate(publish_date) }</p>
             </div>
-            {isBelongToMe && <div className='comment__delete' onClick={ handleCommentDelete }>
+            {(isBelongToMe || isAdmin) && <div className='comment__delete' onClick={ handleCommentDelete }>
                 <DeleteIcon color='primary_light'/>
             </div>}
             <p className='comment__content'> {content}</p>

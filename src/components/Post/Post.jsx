@@ -14,10 +14,12 @@ import DislikeIcon from '@mui/icons-material/HeartBrokenOutlined';
 
 import HiddenIcon from '@mui/icons-material/VisibilityOffOutlined';
 import EditedIcon from '@mui/icons-material/EditOutlined';
+import DeleteIcon from '@mui/icons-material/HighlightOff';
 
 import CommentIcon from '@mui/icons-material/MessageOutlined';
 
 import { CommentsList } from '@/components'
+import { roles } from '@/types';
 
 export default function Post({ post }) {
     const {
@@ -37,12 +39,14 @@ export default function Post({ post }) {
     const [isCommentsOpen, setIsCommentsOpen] = useState(false)
 
     const dispatch = useDispatch()
-    const { filterPosts, loadPost, loadPostLikes } = usePosts()
+    const { filterPosts, loadPost, loadPostLikes, deletePost } = usePosts()
 
     const userID = useSelector(state => state.user.info.id)
+    const isAdmin = useSelector(state => state.user.info.role === roles.ADMIN)
 
-    const postClass = useMemo(() => userID !== post.relationships.author.id ? 
-    'post' : 'post post--my', [userID])
+    const isBelongToMe = useMemo(() => userID === post.relationships.author.id, [userID])
+
+    const postClass = useMemo(() => !isBelongToMe ? 'post' : 'post post--my', [userID])
    
 
     const handleLikeClick = async (type) => {
@@ -130,12 +134,18 @@ export default function Post({ post }) {
         dispatch(setFilter(title))
     }
 
+    const handlePostDelete = async () => { await deletePost(post.id) }
+
     return (
         <article className={postClass}>
             <div className='post__header'>
                 <h2 className='post__title'>{ title }</h2>
                 <p className='post__publish-date'>{ formatDate(publish_date) }</p>
             </div>
+            {(isBelongToMe || isAdmin) && 
+            <div className='post__delete' onClick={ handlePostDelete }>
+                <DeleteIcon color='primary_light'/>
+            </div>}
             {is_edited && <div className='post__label post__label--edited'> 
                 <EditedIcon color='primary_light'/>    
             </div>}

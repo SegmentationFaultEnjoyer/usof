@@ -98,8 +98,9 @@
     }
 }
 
+//TODO скрывать слишком много текста и на клик показывать фул
 .post__content {
-    @extend %text-ellipsis;
+    word-wrap: break-word;
 
     @include respond-to(small) {
         font-size: toRem(13);
@@ -107,10 +108,24 @@
 
 }
 
+.post__delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: toRem(7);
+    transform: scale(0.9);
+
+    svg:hover {
+        cursor: pointer;
+        fill: var(--primary-main)
+    }
+}
+
 .post__publish-date {
     font-weight: lighter;
     font-size: toRem(15);
     user-select: none;
+    margin-right: toRem(15);
     
     @include respond-to(small) {
         font-size: toRem(13);

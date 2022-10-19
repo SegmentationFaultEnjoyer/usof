@@ -36,14 +36,11 @@ export function useComments() {
         }
     }
 
-    const deleteComment = async (commentID) => {
+    const deleteComment = async (commentID, postID) => {
         try {
             await api.delete(`/comments/${commentID}`)
 
-            setComments(prev => ({
-                data: prev.data.filter(comment => comment.id !== commentID),
-                links: prev.links
-                }))
+            await loadComments(postID)
 
         } catch (error) {
             ErrorHandler.process(error)
