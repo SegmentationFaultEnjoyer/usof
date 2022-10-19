@@ -22,4 +22,4 @@ class RefreshQ extends DataBase {
     }
 }
 
-module.exports = new RefreshQ();
+module.exports = RefreshQ;

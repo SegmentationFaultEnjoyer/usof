@@ -6,7 +6,7 @@ const usersQ = require('../data/pg/UsersQ');
 async function verifyLink(req) {
     const { user_id, token } = req.params;
 
-    let dbResp = await usersQ.New().Get().WhereID(user_id).Execute();
+    let dbResp = await new usersQ().New().Get().WhereID(user_id).Execute();
 
     if(dbResp.error)
         throw new NotFoundError(`No such user: ${dbResp.error_message}`);

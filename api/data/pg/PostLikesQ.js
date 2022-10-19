@@ -91,4 +91,4 @@ class PostLikesQ extends DataBase {
     
 }
 
-module.exports = new PostLikesQ();
+module.exports = PostLikesQ;

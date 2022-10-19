@@ -11,7 +11,7 @@ async function handleRating(action, qType, id) {
 
     switch (qType) {
         case 'post':
-            dbResp = await postsQ.New().Get().WhereID(id).Execute();
+            dbResp = await new postsQ().New().Get().WhereID(id).Execute();
 
             if(dbResp.error)
                 throw new NotFoundError(`Unable to find author: ${dbResp.error_message}`);
@@ -31,14 +31,14 @@ async function handleRating(action, qType, id) {
         
     const user_id = dbResp.author;
 
-    dbResp = await usersQ.New().Get().WhereID(user_id).Execute();
+    dbResp = await new usersQ().New().Get().WhereID(user_id).Execute();
 
     if(dbResp.error)
         throw new NotFoundError(`No such user: ${dbResp.error_message}`);
 
     const { rating } = dbResp;
 
-    dbResp = await usersQ
+    dbResp = await new usersQ()
         .New()
         .Update(
             {

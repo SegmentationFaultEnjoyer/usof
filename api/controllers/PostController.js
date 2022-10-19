@@ -41,7 +41,7 @@ exports.CreatePost = async function (req, resp) {
         const { title, content, categories } = await parseCreatePostRequest(req.body);
         const { id } = req.decoded;
 
-        let dbResp = await postsQ
+        let dbResp = await new postsQ()
             .New()
             .Insert(
                 {
@@ -101,16 +101,16 @@ exports.CreateLike = async function (req, resp) {
         const { id } = req.decoded;
         const { is_dislike, liked_on } = parseCreateLikeRequest(req.body);
 
-        let dbResp = await likesQ.New().Get().WhereAuthor(id).WherePostID(post_id).Execute();
+        let dbResp = await new likesQ().New().Get().WhereAuthor(id).WherePostID(post_id).Execute();
 
         if (!dbResp.error && dbResp.is_dislike === is_dislike)
             throw new BadRequestError('You already did that action to this post');
 
 
-        await likesQ.Transaction(async () => {
+        await new likesQ().Transaction(async () => {
             //if no such like entity exists
             if (dbResp.error) {
-                dbResp = await likesQ.New().Insert(
+                dbResp = await new likesQ().New().Insert(
                     {
                         author: id,
                         publish_date: new Date().toISOString(),
@@ -129,7 +129,7 @@ exports.CreateLike = async function (req, resp) {
 
             //probably this will be triggered when you smashing dislike instead of like and vice versa
             else {
-                dbResp = await likesQ.New()
+                dbResp = await new likesQ().New()
                     .Update(
                         {
                             is_dislike: !dbResp.is_dislike,
@@ -165,7 +165,7 @@ exports.GetPost = async function (req, resp) {
         let includeResp = null;
 
 
-        let dbResp = await postsQ.New().Get().WhereID(post_id).Execute();
+        let dbResp = await new postsQ().New().Get().WhereID(post_id).Execute();
 
         if (dbResp.error)
             throw new BadRequestError(`Error getting post: ${dbResp.error_message}`);
@@ -185,7 +185,7 @@ exports.GetPostsList = async function (req, resp) {
         const { role } = req.decoded;
         const { page, limit, sort, order, filter } = req.query;
 
-        let Q = postsQ.New().Get();
+        let Q = new postsQ().New().Get();
 
         let customStmt =  null;
         //TODO find out better solution for that
@@ -256,7 +256,7 @@ exports.GetLikesList = async function (req, resp) {
         const { post_id } = req.params;
         const { page, limit, sort, order } = req.query;
 
-        let Q = likesQ.New().Get().WherePostID(post_id);
+        let Q = new likesQ().New().Get().WherePostID(post_id);
 
         if(sort !== undefined) Q = sortHandler(sort, order, Q);
         
@@ -278,7 +278,7 @@ exports.GetCategories = async function (req, resp) {
     try {
         const { post_id } = req.params;
 
-        let dbResp = await postsQ.New().Get().WhereID(post_id).Execute();
+        let dbResp = await new postsQ().New().Get().WhereID(post_id).Execute();
 
         if (dbResp.error)
             throw new NotFoundError(`No such post ${dbResp.error_message}`);
@@ -288,7 +288,7 @@ exports.GetCategories = async function (req, resp) {
         let categoriesList = [];
 
         for (let category of categories) {
-            dbResp = await categoriesQ.New().Get().WhereTitle(category).Execute();
+            dbResp = await new categoriesQ().New().Get().WhereTitle(category).Execute();
 
             if (dbResp.error)
                 throw new Error(`Such category doesn't seem to exist ${dbResp.error_message}`);
@@ -308,7 +308,7 @@ exports.UpdatePost = async function (req, resp) {
         const { post_id } = req.params;
         const { id, role } = req.decoded;
 
-        let dbResp = await postsQ.New().Get().WhereID(post_id).Execute();
+        let dbResp = await new postsQ().New().Get().WhereID(post_id).Execute();
 
         if (dbResp.error)
             throw new BadRequestError(`Error getting post: ${dbResp.error_message}`);
@@ -320,7 +320,7 @@ exports.UpdatePost = async function (req, resp) {
 
         const parsedReq = await parseUpdatePostRequest(req.body);
 
-        dbResp = await postsQ
+        dbResp = await new postsQ()
             .New()
             .Update(parsedReq)
             .WhereID(post_id)
@@ -342,7 +342,7 @@ exports.DeletePost = async function (req, resp) {
         const { post_id } = req.params;
         const { id, role } = req.decoded;
 
-        let dbResp = await postsQ.New().Get().WhereID(post_id).Execute();
+        let dbResp = await new postsQ().New().Get().WhereID(post_id).Execute();
 
         if (dbResp.error)
             throw new NotFoundError(`No such post: ${dbResp.error_message}`);
@@ -352,7 +352,7 @@ exports.DeletePost = async function (req, resp) {
         if (id !== author && role !== roles.ADMIN)
             throw new UnauthorizedError('No permission for deleting that post')
 
-        dbResp = await postsQ.New().Delete().WhereID(post_id).Execute();
+        dbResp = await new postsQ().New().Delete().WhereID(post_id).Execute();
 
         if (dbResp.error)
             throw new BadRequestError(`Error deleting post: ${dbResp.error_message}`);
@@ -369,7 +369,7 @@ exports.DeleteLike = async function (req, resp) {
         const { post_id } = req.params;
         const { id } = req.decoded;
 
-        let dbResp = await likesQ.New().Delete().WherePostID(post_id).WhereAuthor(id).Execute();
+        let dbResp = await new likesQ().New().Delete().WherePostID(post_id).WhereAuthor(id).Execute();
 
         if (dbResp.error)
             throw new Error(`Error deliting like: ${dbResp.error_message}`);

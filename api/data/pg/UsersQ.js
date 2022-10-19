@@ -49,4 +49,4 @@ class UsersQ extends DataBase {
     }
 }
 
-module.exports = new UsersQ();
+module.exports = UsersQ;

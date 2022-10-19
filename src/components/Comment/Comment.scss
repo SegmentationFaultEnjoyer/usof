@@ -26,3 +26,10 @@
         font-size: toRem(13);
     }
 }
+
+.comment__rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: toRem(5);
+}

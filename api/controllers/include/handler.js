@@ -21,7 +21,7 @@ async function IncludeHandler(include, additionalData) {
             includeResp = CommentsListResponse(includeResp).data;
             break;
         case includeType.POST_LIKES:
-            includeResp = await likesQ.New().Get().WherePostID(additionalData.post_id).Execute(true);
+            includeResp = await new likesQ().New().Get().WherePostID(additionalData.post_id).Execute(true);
 
             if(includeResp.error)
                 break;
@@ -29,7 +29,7 @@ async function IncludeHandler(include, additionalData) {
             includeResp = PostLikesListResponse(includeResp).data;
             break;
         case includeType.POSTS: 
-            includeResp = await postsQ.New().Get().WhereAuthor(additionalData.user_id).Execute(true);
+            includeResp = await new postsQ().New().Get().WhereAuthor(additionalData.user_id).Execute(true);
 
             if(includeResp.error)
                 break;
@@ -49,7 +49,7 @@ async function IncludeHandler(include, additionalData) {
             break;
         //TODO returns only likes under the posts; must fix;
         case includeType.USER_LIKES:
-            includeResp = await likesQ.New().Get().WhereAuthor(additionalData.user_id).Execute(true);
+            includeResp = await new likesQ().New().Get().WhereAuthor(additionalData.user_id).Execute(true);
 
             if(includeResp.error)
                 break;
@@ -59,7 +59,7 @@ async function IncludeHandler(include, additionalData) {
             break;
         
         case includeType.COMMENT_LIKES:
-            includeResp = await commentLikesQ.New().Get().WhereCommentID(additionalData.comment_id).Execute(true);
+            includeResp = await new commentLikesQ().New().Get().WhereCommentID(additionalData.comment_id).Execute(true);
 
             if(includeResp.error)
                 break;

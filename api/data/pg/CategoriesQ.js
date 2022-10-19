@@ -41,4 +41,4 @@ class CategoriesQ extends DataBase {
     }
 }
 
-module.exports = new CategoriesQ();
+module.exports = CategoriesQ;

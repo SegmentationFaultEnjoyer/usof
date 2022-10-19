@@ -24,7 +24,7 @@ exports.GetUser = async function (req, resp) {
 
         let includeResp = null;
 
-        let dbResp = await usersQ.New().Get().WhereID(user_id).Execute();
+        let dbResp = await new usersQ().New().Get().WhereID(user_id).Execute();
 
         if(dbResp.error)
             throw new NotFoundError(`No such user: ${dbResp.error_message}`);
@@ -43,7 +43,7 @@ exports.GetUsersList = async function (req, resp) {
     try {
         const { page, limit, sort, order } = req.query;
 
-        let Q = usersQ.New().Get();
+        let Q = new usersQ().New().Get();
 
         if(sort !== undefined) Q = sortHandler(sort, order, Q);
 
@@ -52,7 +52,7 @@ exports.GetUsersList = async function (req, resp) {
         if(dbResp.error)
             throw new NotFoundError(`No users found: ${dbResp.error_message}`);
 
-        const links = await GenerateLinks('users', usersQ);
+        const links = await GenerateLinks('users', Q);
 
         resp.status(httpStatus.OK).json(UsersListResponse(dbResp, links));
 
@@ -71,7 +71,7 @@ exports.CreateUser = async function (req, resp) {
         const { email, name, password, role: RoleType } = parseRegisterUserRequest(req.body);
 
         const hashed_password = await hash(password);
-        let dbResp = await usersQ
+        let dbResp = await new usersQ()
             .New()
             .Insert(
             {
@@ -98,7 +98,7 @@ exports.DeleteUser = async function (req, resp) {
         const { user_id } = req.params;
         const { id, role } = req.decoded;
 
-        let dbResp = await usersQ.New().Get().WhereID(user_id).Execute();
+        let dbResp = await new usersQ().New().Get().WhereID(user_id).Execute();
 
         if(dbResp.error)
             throw new NotFoundError(`No such user: ${dbResp.error_message}`);
@@ -108,7 +108,7 @@ exports.DeleteUser = async function (req, resp) {
         if(id !== user_id_from_db && role !== roleType.ADMIN)
             throw new UnauthorizedError('No permission for that action');
 
-        dbResp = await usersQ.New().Delete().WhereID(user_id).Execute();
+        dbResp = await new usersQ().New().Delete().WhereID(user_id).Execute();
 
         if(dbResp.error)
             throw new Error(`Error deleting user: ${dbResp.error_message}`);
@@ -125,7 +125,7 @@ exports.UpdateUser = async function (req, resp) {
         const { user_id } = req.params;
         const { id, role } = req.decoded;
 
-        let dbResp = await usersQ.New().Get().WhereID(user_id).Execute();
+        let dbResp = await new usersQ().New().Get().WhereID(user_id).Execute();
 
         if(dbResp.error)
             throw new NotFoundError(`No such user: ${dbResp.error_message}`);
@@ -154,7 +154,7 @@ exports.UpdateUser = async function (req, resp) {
 
         //TODO role changing
 
-        dbResp = await usersQ
+        dbResp = await new usersQ()
             .New()
             .Update(parsedReq)
             .WhereID(user_id)
@@ -183,7 +183,7 @@ exports.UploadUserAvatar = async function (req, resp) {
 
         const { id } = req.decoded;
 
-        let dbResp = await usersQ
+        let dbResp = await new usersQ()
             .New()
             .Update({profile_picture: join('user_data', 'avatars', newName)})
             .WhereID(id)

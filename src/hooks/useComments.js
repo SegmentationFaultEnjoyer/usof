@@ -1,7 +1,7 @@
 import { api } from "@/api";
 
 import { useState } from "react";
-import { loadPage as pageLoader } from '@/helpers'
+import { ErrorHandler, loadPage as pageLoader } from '@/helpers'
 
 export function useComments() {
     const [comments, setComments] = useState({})
@@ -25,10 +25,22 @@ export function useComments() {
         // setIsLoading(false)
     }
 
+    const loadCommentLikes = async (postID) => {
+        try {
+            const resp = await api.get(`/comments/${postID}/like`)
+            
+            return resp.data
+            
+        } catch (error) {
+            return null
+        }
+    }
+
     return {
         comments,
         isLoading,
         loadComments,
+        loadCommentLikes,
         loadPage,
         setComments
     }

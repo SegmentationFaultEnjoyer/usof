@@ -113,4 +113,4 @@ class PostsQ extends DataBase {
     }
 }
 
-module.exports = new PostsQ();
+module.exports = PostsQ;

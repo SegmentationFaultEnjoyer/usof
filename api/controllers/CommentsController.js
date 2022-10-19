@@ -118,16 +118,16 @@ exports.CreateLike = async function (req, resp) {
         const { id } = req.decoded;
         const { is_dislike, liked_on } = parseCreateLikeRequest(req.body);
 
-        let dbResp = await likesQ.New().Get().WhereAuthor(id).WhereCommentID(comment_id).Execute();
+        let dbResp = await new likesQ().New().Get().WhereAuthor(id).WhereCommentID(comment_id).Execute();
 
         if (!dbResp.error && dbResp.is_dislike === is_dislike)
             throw new BadRequestError('You already did that action to this post');
 
 
-        await likesQ.Transaction(async () => {
+        await new likesQ().Transaction(async () => {
             //if no such like entity exists
             if (dbResp.error) {
-                dbResp = await likesQ
+                dbResp = await new likesQ()
                     .New()
                     .Insert(
                         {
@@ -147,7 +147,7 @@ exports.CreateLike = async function (req, resp) {
 
             //probably this will be triggered when you smashing dislike instead of like and vice versa
             else {
-                dbResp = await likesQ.New()
+                dbResp = await new likesQ().New()
                     .Update(
                         {
                             is_dislike: !dbResp.is_dislike,
@@ -179,7 +179,7 @@ exports.DeleteLike = async function (req, resp) {
         const { comment_id } = req.params;
         const { id } = req.decoded;
 
-        let dbResp = await likesQ.New().Delete().WhereAuthor(id).WhereCommentID(comment_id).Execute();
+        let dbResp = await new likesQ().New().Delete().WhereAuthor(id).WhereCommentID(comment_id).Execute();
 
         if (dbResp.error)
             throw new Error(`Error deleting like: ${dbResp.error_message}`);
@@ -196,7 +196,7 @@ exports.GetLikesList = async function (req, resp) {
         const { comment_id } = req.params;
         const { page, limit, sort, order } = req.query;
 
-        let Q = likesQ.New().Get().WhereCommentID(comment_id);
+        let Q = new likesQ().New().Get().WhereCommentID(comment_id);
 
         if(sort !== undefined) Q = sortHandler(sort, order, Q);
 
@@ -205,7 +205,7 @@ exports.GetLikesList = async function (req, resp) {
         if (dbResp.error)
             throw new NotFoundError(`No likes found: ${dbResp.error_message}`);
 
-        const links = await GenerateLinks(`comments/${comment_id}/like`, likesQ, `WHERE comment_id=${comment_id}`);
+        const links = await GenerateLinks(`comments/${comment_id}/like`, Q, `WHERE comment_id=${comment_id}`);
 
         resp.status(httpStatus.OK).json(CommentLikesListResponse(dbResp, links));
 

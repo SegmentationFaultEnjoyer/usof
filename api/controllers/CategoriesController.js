@@ -23,7 +23,7 @@ exports.CreateCategory = async function (req, resp) {
 
         const { title, description } = parseCreateCategoryRequest(req.body);
 
-        let dbResp = await categoriesQ
+        let dbResp = await new categoriesQ()
             .New()
             .Insert(
                 {title, description}
@@ -45,7 +45,7 @@ exports.GetCategory = async function (req, resp) {
     try {
         const { category_id } = req.params;
 
-        let dbResp = await categoriesQ.New().Get().WhereID(category_id).Execute();
+        let dbResp = await new categoriesQ().New().Get().WhereID(category_id).Execute();
 
         if(dbResp.error)
             throw new NotFoundError(`No such category: ${dbResp.error_message}`);
@@ -61,7 +61,7 @@ exports.GetCategoriesList = async function (req, resp) {
     try {
         const { page, limit, sort, order } = req.query;
 
-        let Q = categoriesQ.New().Get();
+        let Q = new categoriesQ().New().Get();
 
         if(sort !== undefined) Q = sortHandler(sort, order, Q);
         
@@ -71,7 +71,7 @@ exports.GetCategoriesList = async function (req, resp) {
             throw new NotFoundError(`No categories found: ${dbResp.error_message}`);
 
         
-        const links = await GenerateLinks('categories', categoriesQ);
+        const links = await GenerateLinks('categories', Q);
 
         resp.status(httpStatus.OK).json(CategoriesListResponse(dbResp, links));
 
@@ -89,7 +89,7 @@ exports.DeleteCategory = async function (req, resp) {
         if(role !== roles.ADMIN)
             throw new UnauthorizedError('No permission for that action');
 
-        let dbResp = await categoriesQ.New().Delete().WhereID(category_id).Execute();
+        let dbResp = await new categoriesQ().New().Delete().WhereID(category_id).Execute();
 
         if(dbResp.error)
             throw new Error(`Error deleting category: ${dbResp.error_message}`);
@@ -111,7 +111,7 @@ exports.UpdateCategory = async function (req, resp) {
 
         const parsedReq = parseUpdateCategoryRequest(req.body);            
 
-        let dbResp = await categoriesQ
+        let dbResp = await new categoriesQ()
             .New()
             .Update(parsedReq)
             .WhereID(category_id)
@@ -132,14 +132,14 @@ exports.GetPostsList = async function (req, resp) {
     try {
         const { category_id } = req.params;
 
-        let dbResp = await categoriesQ.New().Get().WhereID(category_id).Execute();
+        let dbResp = await new categoriesQ().New().Get().WhereID(category_id).Execute();
 
         if(dbResp.error)
             throw new NotFoundError(`No such category: ${dbResp.error_message}`);
 
         const { title } = dbResp;
 
-        dbResp = await postsQ.New().Get().WhereCategory(title).Execute(true);
+        dbResp = await new postsQ().New().Get().WhereCategory(title).Execute(true);
 
         if(dbResp.error)
             throw new NotFoundError(`No posts found: ${dbResp.error_message}`);

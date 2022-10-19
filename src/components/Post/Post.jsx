@@ -183,6 +183,7 @@ export default function Post({ post }) {
                         </li>
                     )}
                 </ul>
+                {/* TODO: seperate rating component */}
                 <section className='post__rating'>
                     <div className='rating__container'>
                         <p className='rating__label'> { rating.likes } </p>

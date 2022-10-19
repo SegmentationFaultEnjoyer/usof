@@ -91,4 +91,4 @@ class CommentsLikesQ extends DataBase {
     
 }
 
-module.exports = new CommentsLikesQ();
+module.exports = CommentsLikesQ;

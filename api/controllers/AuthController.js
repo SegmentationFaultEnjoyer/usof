@@ -30,7 +30,7 @@ exports.LogIn = async function (req, resp) {
     try {
         const { email, password } = parseLoginRequest(req.body);
 
-        let dbResp = await usersQ.New().Get().WhereEmail(email).Execute();
+        let dbResp = await new usersQ().New().Get().WhereEmail(email).Execute();
 
         if (dbResp.error)  
             throw new UnauthorizedError('Login or password are incorrect');
@@ -50,11 +50,11 @@ exports.LogIn = async function (req, resp) {
             access_life, 
             refresh_life } = await UpdateTokens({ email, role, id }, { id });
 
-        dbResp = await refreshQ.New().Get().WhereOwnerID(id).Execute();
+        dbResp = await new refreshQ().New().Get().WhereOwnerID(id).Execute();
 
         //if no token found
         if(dbResp.error) {
-            dbResp = await refreshQ
+            dbResp = await new refreshQ()
             .New()
             .Insert(
                 {
@@ -69,7 +69,7 @@ exports.LogIn = async function (req, resp) {
         }
         //if token exists --> replacing it
         else {
-            dbResp = await refreshQ
+            dbResp = await new refreshQ()
                 .New()
                 .Update(
                     {
@@ -98,7 +98,7 @@ exports.LogOut = async function (req, resp) {
     try {
         const { id } = req.decoded;
         
-        let dbResp = await refreshQ.New().Delete().WhereOwnerID(id).Execute();
+        let dbResp = await new refreshQ().New().Delete().WhereOwnerID(id).Execute();
 
         if(dbResp.error) 
             throw new Error(`Error while deleting token: ${dbResp.error_message}`);
@@ -119,7 +119,7 @@ exports.Register = async function (req, resp) {
         
         const hashed_password = await hash(password);
         
-        let dbResp = await usersQ
+        let dbResp = await new usersQ()
             .New()
             .Insert(
             {
@@ -157,14 +157,14 @@ exports.Refresh = async function (req, resp) {
         const { token } = parseRefreshRequest(req.body);
         const { id } = jwt.verify(token, process.env.JWT_TOKEN, { subject: 'refresh-token' });
 
-        let dbResp = await usersQ.New().Get().WhereID(id).Execute();
+        let dbResp = await new usersQ().New().Get().WhereID(id).Execute();
 
         if (dbResp.error) 
             throw new BadRequestError(`No such user: ${dbResp.error_message}`);
 
         const { email, role } = dbResp;
 
-        dbResp = await refreshQ.New().Get().WhereOwnerID(id).Execute();
+        dbResp = await new refreshQ().New().Get().WhereOwnerID(id).Execute();
 
         if(dbResp.error) 
             throw new Error(`No token found: ${dbResp.error_message}`);
@@ -173,10 +173,10 @@ exports.Refresh = async function (req, resp) {
             throw new jwt.JsonWebTokenError();
         
 
-        await refreshQ.Transaction(async () => {
+        await new refreshQ().Transaction(async () => {
             const { access_token, refresh_token, tokenLifeSpan } = await UpdateTokens({ email, role, id }, { id });
 
-            dbResp = await refreshQ
+            dbResp = await new refreshQ()
                 .New()
                 .Update({ token: refresh_token, due_date: tokenLifeSpan })
                 .WhereOwnerID(id)
@@ -201,7 +201,7 @@ exports.ResetPassword = async function (req, resp) {
     try {
         const { email } = parseResetPasswordRequest(req.body);
 
-        let dbResp = await usersQ.New().Get().WhereEmail(email).Execute();
+        let dbResp = await new usersQ().New().Get().WhereEmail(email).Execute();
 
         if(dbResp.error)
             throw new NotFoundError(`No such user: ${dbResp.error_message}`);
@@ -246,7 +246,7 @@ exports.ChangePassword = async function (req, resp) {
 
         const password_hash = await hash(password);
 
-        let dbResp = await usersQ.New().Update({password_hash}).WhereID(id).Execute();
+        let dbResp = await new usersQ().New().Update({password_hash}).WhereID(id).Execute();
 
         if(dbResp.error)
             throw new Error(`Error changing password: ${dbResp.error_message}`);
@@ -281,7 +281,7 @@ exports.GetUserInfo = async function (req, resp) {
     try {
         const { id } = req.decoded;
 
-        let dbResp = await usersQ.New().Get().WhereID(id).Execute();
+        let dbResp = await new usersQ().New().Get().WhereID(id).Execute();
 
         if (dbResp.error)  
             throw new NotFoundError('No such user');
