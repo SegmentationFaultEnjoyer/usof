@@ -11,7 +11,7 @@ import { getPagesAmount } from '@/helpers'
 import Pagination from '@mui/material/Pagination';
 
 export default function Comments({ isOpen, postId, updateCounter }) {
-    const { comments, isLoading, loadComments, loadPage } = useComments()
+    const { comments, isLoading, loadComments, loadPage, deleteComment } = useComments()
 
     useEffect(() => { loadComments(postId) }, [])
 
@@ -29,7 +29,12 @@ export default function Comments({ isOpen, postId, updateCounter }) {
             <div className='comments-list'>
                 {
                 comments.data && 
-                comments.data.map(comment => <Comment comment={ comment } key={comment.id}/>)
+                comments.data.map(comment =>
+                     <Comment 
+                        comment={ comment } 
+                        key={ comment.id }
+                        deleteComment={ deleteComment }
+                        updateCounter={ updateCounter }/>)
                 }
                 <CreateCommentForm 
                     postID={ postId } 

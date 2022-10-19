@@ -1,18 +1,27 @@
 import './Comment.scss'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useUserInfo, useComments } from '@/hooks'
+
+import Avatar from '@mui/material/Avatar';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
 import LikeToggledIcon from '@mui/icons-material/Favorite';
 import DislikeToggledIcon from '@mui/icons-material/HeartBroken';
 import DislikeIcon from '@mui/icons-material/HeartBrokenOutlined';
 
-import { ErrorHandler, countLikes, handleRatingPoints } from '@/helpers'
+import DeleteIcon from '@mui/icons-material/DeleteForever';
+
+import { 
+    ErrorHandler, 
+    countLikes, 
+    handleRatingPoints, 
+    avatarFromString,
+    formatDate } from '@/helpers'
 import { api } from '@/api'
 
-export default function Comment({ comment }) {
+export default function Comment({ comment, deleteComment, updateCounter }) {
     const { content, is_edited, publish_date, profile_picture } = comment.attributes
     const { author, post } = comment.relationships
 
@@ -28,14 +37,16 @@ export default function Comment({ comment }) {
 
     const userID = useSelector(state => state.user.info.id)
 
+    const isBelongToMe = useMemo(() => author.id === userID, [userID])
+
     const handleMyLikeExistance = (data) => {
         const myLike = data.find(({ relationships: { author } }) => author.id === userID)
 
-        if(myLike) {
-            if(myLike.attributes.is_dislike)
-                setRatingState({...ratingState, isDisLikeSmashed: true})
+        if (myLike) {
+            if (myLike.attributes.is_dislike)
+                setRatingState({ ...ratingState, isDisLikeSmashed: true })
             else
-                setRatingState({...ratingState, isLikeSmashed: true})
+                setRatingState({ ...ratingState, isLikeSmashed: true })
         }
     }
 
@@ -50,10 +61,10 @@ export default function Comment({ comment }) {
             }
             else {
                 dislike = !ratingState.isDisLikeSmashed
-                if(dislike) dislikeSmashState = true
+                if (dislike) dislikeSmashState = true
             }
 
-            if(dislikeSmashState !== null) {
+            if (dislikeSmashState !== null) {
                 await api.post(`/comments/${comment.id}/like`, {
                     data: {
                         type: 'create-like',
@@ -72,11 +83,16 @@ export default function Comment({ comment }) {
         }
 
         handleRatingPoints(like, dislike, dislikeSmashState, rating, ratingState, setRating)
-        
+
         setRatingState({
             isLikeSmashed: like,
             isDisLikeSmashed: dislike
         })
+    }
+
+    const handleCommentDelete = async () => { 
+        await deleteComment(comment.id)
+        updateCounter(prev => prev - 1)
     }
 
     useEffect(() => {
@@ -91,12 +107,12 @@ export default function Comment({ comment }) {
 
             resp = await loadCommentLikes(comment.id)
 
-            if(!resp) return
+            if (!resp) return
 
             likes = countLikes(resp.data)
             dislikes = resp.data.length - likes
 
-            handleMyLikeExistance(resp.data)  
+            handleMyLikeExistance(resp.data)
 
             setRating({ likes, dislikes })
         }
@@ -106,32 +122,44 @@ export default function Comment({ comment }) {
     return (
         <section className='comment'>
             <div className='comment__header'>
-                {authorInfo && <h4 className='comment__author'>{authorInfo.attributes.name}</h4>}
-                <p className='comment__publish-date'>{new Date(publish_date).toLocaleString()}</p>
+                {authorInfo &&
+                    <div className='comment__author'>
+                        {profile_picture ? 
+                        //TODO picture showing
+                        <Avatar alt='avatar' src={`/api/user_data/avatars/${profile_picture}`} /> :
+                        <Avatar { ...avatarFromString(`${authorInfo.attributes.name.toUpperCase()} ${authorInfo.attributes.email.toUpperCase()}`)}/>
+                    }
+                        
+                        <h4>{authorInfo.attributes.name}</h4>
+                    </div>}
+                <p className='comment__publish-date'>{ formatDate(publish_date) }</p>
             </div>
+            {isBelongToMe && <div className='comment__delete' onClick={ handleCommentDelete }>
+                <DeleteIcon color='primary_light'/>
+            </div>}
             <p className='comment__content'> {content}</p>
             <section className='comment__rating'>
-                    <div className='rating__container'>
-                        <p className='rating__label'> { rating.likes } </p>
-                        <div className='rating__icon' onClick={() => handleLikeClick('like')} >
-                            {ratingState.isLikeSmashed ?
-                                <LikeToggledIcon color='error_light' />
-                                :
-                                <LikeIcon color='error_light' />
-                            }
-                        </div>
+                <div className='rating__container'>
+                    <p className='rating__label'> {rating.likes} </p>
+                    <div className='rating__icon' onClick={() => handleLikeClick('like')} >
+                        {ratingState.isLikeSmashed ?
+                            <LikeToggledIcon color='error_light' />
+                            :
+                            <LikeIcon color='error_light' />
+                        }
                     </div>
-                    <div className='rating__container'>
-                        <p className='rating__label'> { rating.dislikes }</p>
-                        <div className='rating__icon' onClick={() => handleLikeClick('dislike')}>
-                            {ratingState.isDisLikeSmashed ?
-                                <DislikeToggledIcon color='error_light' />
-                                :
-                                <DislikeIcon color='error_light' />
-                            }
-                        </div>
+                </div>
+                <div className='rating__container'>
+                    <p className='rating__label'> {rating.dislikes}</p>
+                    <div className='rating__icon' onClick={() => handleLikeClick('dislike')}>
+                        {ratingState.isDisLikeSmashed ?
+                            <DislikeToggledIcon color='error_light' />
+                            :
+                            <DislikeIcon color='error_light' />
+                        }
                     </div>
-                </section>
+                </div>
+            </section>
         </section>
     )
 }

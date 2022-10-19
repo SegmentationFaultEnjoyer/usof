@@ -1,7 +1,7 @@
 import './Post.scss'
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '@/api'
-import { ErrorHandler, handleRatingPoints, countLikes } from '@/helpers';
+import { ErrorHandler, handleRatingPoints, countLikes, formatDate } from '@/helpers';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { usePosts } from '@/hooks';
@@ -18,26 +18,6 @@ import EditedIcon from '@mui/icons-material/EditOutlined';
 import CommentIcon from '@mui/icons-material/MessageOutlined';
 
 import { CommentsList } from '@/components'
-
-import dayjs from 'dayjs';
-
-function formatDate(date) {
-    const days = dayjs(Date.now()).diff(date, 'days')
-
-    if(!days) return 'today'
-
-    if(days <= 31) 
-        return `${days} ${days > 1 ? 'days' : 'day'} ago`
-    
-    const months = dayjs(Date.now()).diff(date, 'months')
-
-    if(months <= 12)
-        return `more than ${months} months ago`
-
-    const years = dayjs(Date.now()).diff(date, 'years')
-    
-    return `more than ${years} years ago`
-}
 
 export default function Post({ post }) {
     const {

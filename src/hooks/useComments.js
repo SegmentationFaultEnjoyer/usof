@@ -8,13 +8,13 @@ export function useComments() {
     const [isLoading, setIsLoading] = useState(true)
 
     const loadComments = async (postID) => {
-        try {   
+        try {
             let resp = await api.get(`/posts/${postID}/comments?limit=5&sort=id`)
 
             console.log(resp.data);
             setComments(resp.data)
-            
-        } catch (error) {}
+
+        } catch (error) { }
 
         setIsLoading(false)
     }
@@ -25,14 +25,28 @@ export function useComments() {
         // setIsLoading(false)
     }
 
-    const loadCommentLikes = async (postID) => {
+    const loadCommentLikes = async (commentID) => {
         try {
-            const resp = await api.get(`/comments/${postID}/like`)
-            
+            const resp = await api.get(`/comments/${commentID}/like`)
+
             return resp.data
-            
+
         } catch (error) {
             return null
+        }
+    }
+
+    const deleteComment = async (commentID) => {
+        try {
+            await api.delete(`/comments/${commentID}`)
+
+            setComments(prev => ({
+                data: prev.data.filter(comment => comment.id !== commentID),
+                links: prev.links
+                }))
+
+        } catch (error) {
+            ErrorHandler.process(error)
         }
     }
 
@@ -41,6 +55,7 @@ export function useComments() {
         isLoading,
         loadComments,
         loadCommentLikes,
+        deleteComment,
         loadPage,
         setComments
     }
