@@ -1,7 +1,9 @@
 import './CommentsList.scss'
 
 import { Collapse, DotsLoader } from "@/common"
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
+
+import { PostContext } from '@/context'
 
 import { useComments } from '@/hooks'
 import { Comment } from '@/components'
@@ -10,15 +12,15 @@ import { CreateCommentForm } from '@/forms'
 import { getPagesAmount } from '@/helpers'
 import Pagination from '@mui/material/Pagination';
 
-export default function Comments({ isOpen, postId, updateCounter }) {
+export default function Comments({ isOpen }) {
     const { comments, isLoading, loadComments, loadPage, deleteComment } = useComments()
+    const { postID } = useContext(PostContext)
 
-    useEffect(() => { loadComments(postId) }, [])
+    useEffect(() => { loadComments(postID) }, [])
 
-    const handlePagination = async (e, value) => {
+    const handlePagination = async (_, value) => {
         await loadPage(value, comments.links)
     }
-
 
     return (
         <Collapse isOpen={ isOpen }>
@@ -33,13 +35,9 @@ export default function Comments({ isOpen, postId, updateCounter }) {
                      <Comment 
                         comment={ comment } 
                         key={ comment.id }
-                        deleteComment={ deleteComment }
-                        updateCounter={ updateCounter }/>)
+                        deleteComment={ deleteComment }/>)
                 }
-                <CreateCommentForm 
-                    postID={ postId } 
-                    loadComments={ loadComments }
-                    updateCounter={ updateCounter }/>
+                <CreateCommentForm loadComments={ loadComments }/>
             </div>}
             
             {comments.links && (comments.links.next || comments.links.prev) &&

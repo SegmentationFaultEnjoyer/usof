@@ -138,37 +138,6 @@
     gap: toRem(20)
 }
 
-.post__rating {
-    display: inherit;
-    width: 20%;
-    justify-content: space-around;
-    align-items: center;
-
-    @include respond-to(small) {
-        width: 30%;
-    }
-}
-
-.rating__container {
-    width: 30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: toRem(5);
-    
-}
-
-.rating__label {
-    user-select: none;
-}
-
-.rating__icon {
-    svg:hover {
-        cursor: pointer;
-        fill: var(--error-dark)
-    }
-}
-
 .post__categories {
     height: toRem(40);
     padding: toRem(5);

@@ -3,13 +3,15 @@ import { ErrorHandler } from '@/helpers';
 import { api } from '@/api';
 import Mutex from '@/api/mutex'
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector  } from 'react-redux';
 import { setList, startLoading, finishLoading } from '@/store';
+import { Notificator } from '@/common';
 
 const LIMIT = 6
 
 export function usePosts() {
     const dispatch = useDispatch()
+    const links = useSelector(state => state.posts.links)
 
     const loadPosts = async () => {
         dispatch(startLoading())
@@ -58,6 +60,33 @@ export function usePosts() {
         }
     }
 
+    const createPost = async (title, content, categories) => {
+        try {
+            await api.post('/posts', {
+                data: {
+                    type: 'create-post',
+                    attributes: {
+                        title, 
+                        content, 
+                        categories,
+                        status: true
+                    }
+                }
+            })
+
+            Notificator.success('Post created!')
+
+            await loadPosts()
+            // if(!links || !links.last) return 
+
+            // const { data } = await api.get(links.last)
+            // dispatch(setList(data))
+
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     const filterPosts = async (filterValue) => {
         try {
             const lockToken = new Date().toISOString();
@@ -77,6 +106,7 @@ export function usePosts() {
         loadPosts,
         loadPost,
         deletePost,
+        createPost,
         loadPostLikes,
         filterPosts
     }

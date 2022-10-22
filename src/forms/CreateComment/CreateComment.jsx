@@ -1,6 +1,7 @@
 import './CreateComment.scss'
 
-import { useState, useMemo } from 'react';
+import { useState, useContext } from 'react';
+import { PostContext } from '@/context';
 
 import { api } from '@/api';
 import { useForm } from '@/hooks';
@@ -14,10 +15,11 @@ import SendCommentIcon from '@mui/icons-material/Send'
 
 //TODO different color for my post
 
-export default function CreateComment({ postID, loadComments, updateCounter }) {
+export default function CreateComment({ loadComments }) {
     const [comment, setComment] = useState('')
 
-   
+    const { postID, updateCounter } = useContext(PostContext)
+
     const { isFormDisabled, disableForm, enableForm } = useForm()
 
     const handleSubmit = async (event) => {

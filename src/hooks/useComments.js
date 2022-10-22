@@ -14,7 +14,7 @@ export function useComments() {
             console.log(resp.data);
             setComments(resp.data)
 
-        } catch (error) { }
+        } catch (error) {  setComments({}) }
 
         setIsLoading(false)
     }
@@ -39,7 +39,7 @@ export function useComments() {
     const deleteComment = async (commentID, postID) => {
         try {
             await api.delete(`/comments/${commentID}`)
-
+            //TODO loading certain page not the first
             await loadComments(postID)
 
         } catch (error) {

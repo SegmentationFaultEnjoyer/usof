@@ -8,13 +8,13 @@
     width: 100vw;
     height: vh(100);
     background: rgba(var(--black-rgb), 0.5);
-    z-index: 1;
+    z-index: 99;
 }
 
 .modal__pane {
     position: relative;
     background: var(--app-bg);
-    padding: toRem(50) toRem(100);
+    padding: toRem(40) toRem(60);
     border-radius: toRem(10);
 }
 

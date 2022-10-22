@@ -1,0 +1,1 @@
+export { default as MultipleSelect } from './Select/Select.jsx'

@@ -1,16 +1,11 @@
 import './Post.scss'
 import { useEffect, useMemo, useState } from 'react';
-import { api } from '@/api'
-import { ErrorHandler, handleRatingPoints, countLikes, formatDate } from '@/helpers';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { formatDate } from '@/helpers';
 import { usePosts } from '@/hooks';
 import { setFilter } from '@/store';
-
-import LikeIcon from '@mui/icons-material/FavoriteBorder';
-import LikeToggledIcon from '@mui/icons-material/Favorite';
-import DislikeToggledIcon from '@mui/icons-material/HeartBroken';
-import DislikeIcon from '@mui/icons-material/HeartBrokenOutlined';
+import { PostContext } from '@/context';
 
 import HiddenIcon from '@mui/icons-material/VisibilityOffOutlined';
 import EditedIcon from '@mui/icons-material/EditOutlined';
@@ -18,7 +13,8 @@ import DeleteIcon from '@mui/icons-material/HighlightOff';
 
 import CommentIcon from '@mui/icons-material/MessageOutlined';
 
-import { CommentsList } from '@/components'
+import { CommentsList, Rating } from '@/components'
+import { ConfirmationModal } from '@/common';
 import { roles } from '@/types';
 
 export default function Post({ post }) {
@@ -30,13 +26,9 @@ export default function Post({ post }) {
         content,
         categories } = post.attributes;
 
-    const [rating, setRating] = useState({ likes: 0, dislikes: 0 })
-    const [ratingState, setRatingState] = useState({
-        isLikeSmashed: false,
-        isDisLikeSmashed: false
-    })
     const [commentsAmount, setCommentsAmount] = useState(0)
     const [isCommentsOpen, setIsCommentsOpen] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
 
     const dispatch = useDispatch()
     const { filterPosts, loadPost, loadPostLikes, deletePost } = usePosts()
@@ -47,81 +39,12 @@ export default function Post({ post }) {
     const isBelongToMe = useMemo(() => userID === post.relationships.author.id, [userID])
 
     const postClass = useMemo(() => !isBelongToMe ? 'post' : 'post post--my', [userID])
-   
-
-    const handleLikeClick = async (type) => {
-        let like = false, dislike = false;
-        let dislikeSmashState = null;
-
-        try {
-            if (type === 'like') {
-                like = !ratingState.isLikeSmashed
-                if (like) dislikeSmashState = false
-            }
-            else {
-                dislike = !ratingState.isDisLikeSmashed
-                if(dislike) dislikeSmashState = true
-            }
-
-            if(dislikeSmashState !== null) {
-                await api.post(`/posts/${post.id}/like`, {
-                    data: {
-                        type: 'create-like',
-                        attributes: {
-                            liked_on: 'post',
-                            is_dislike: dislikeSmashState
-                        }
-                    }
-                })
-            }
-            else {
-                await api.delete(`/posts/${post.id}/like`)
-            }
-        } catch (error) {
-            ErrorHandler.process(error)
-        }
-
-        handleRatingPoints(like, dislike, dislikeSmashState, rating, ratingState, setRating)
-        
-        setRatingState({
-            isLikeSmashed: like,
-            isDisLikeSmashed: dislike
-        })
-
-
-    }
-
-    const handleMyLikeExistance = (data) => {
-        const myLike = data.find(({ relationships: { author } }) => author.id === userID)
-
-        if(myLike) {
-            if(myLike.attributes.is_dislike)
-                setRatingState({...ratingState, isDisLikeSmashed: true})
-            else
-                setRatingState({...ratingState, isLikeSmashed: true})
-        }
-    }
 
     useEffect(() => {
         const getPostInfo = async () => {
-            let likes = 0, dislikes = 0;
+            const resp = await loadPost(post.id)
 
-            let resp = await loadPostLikes(post.id)
-
-            if(!resp) return 
-
-            const { data } = resp;
-
-            likes = countLikes(data)
-            dislikes = data.length - likes
-
-            handleMyLikeExistance(data)  
-
-            setRating({ likes, dislikes })
-
-            resp = await loadPost(post.id)
-
-            if(resp.include.error) return
+            if (resp.include.error) return
 
             setCommentsAmount(resp.include.length)
         }
@@ -136,71 +59,62 @@ export default function Post({ post }) {
 
     const handlePostDelete = async () => { await deletePost(post.id) }
 
+    const sharedData = useMemo(() => ({
+        updateCounter: setCommentsAmount,
+        postID: post.id
+    }), [post.id])
+
     return (
-        <article className={postClass}>
-            <div className='post__header'>
-                <h2 className='post__title'>{ title }</h2>
-                <p className='post__publish-date'>{ formatDate(publish_date) }</p>
-            </div>
-            {(isBelongToMe || isAdmin) && 
-            <div className='post__delete' onClick={ handlePostDelete }>
-                <DeleteIcon color='primary_light'/>
-            </div>}
-            {is_edited && <div className='post__label post__label--edited'> 
-                <EditedIcon color='primary_light'/>    
-            </div>}
-            {!status && <div className='post__label post__label--hidden'>
-                <HiddenIcon color='primary_light' />
-            </div>}
-            <div 
-                className='post__label post__label--comments'
-                onClick={() => setIsCommentsOpen(prev => !prev)}>
-                {commentsAmount > 0 &&  <div className='post__label__comments-amount'>
-                    <span>{ commentsAmount }</span>
+        <PostContext.Provider value={sharedData}>
+            <article className={postClass}>
+                <div className='post__header'>
+                    <h2 className='post__title'>{title}</h2>
+                    <p className='post__publish-date'>{formatDate(publish_date)}</p>
+                </div>
+                {(isBelongToMe || isAdmin) &&
+                    <div className='post__delete' onClick={() => setIsDeleting(true)}>
+                        <DeleteIcon color='primary_light' />
+                    </div>}
+                {is_edited && <div className='post__label post__label--edited'>
+                    <EditedIcon color='primary_light' />
                 </div>}
-                <CommentIcon color='primary_light'/>
-            </div>
-            <p className='post__content'>{ content }</p>
-            <div className='post__footer'>
-                <ul className='post__categories'>
-                    {categories.map(
-                        (category, i) => 
-                        <li 
-                            className='categories__item' 
-                            key={i}
-                            onClick={ () => { handleOnCategoryClick(category) }}>
-                            { category }
-                        </li>
-                    )}
-                </ul>
-                {/* TODO: seperate rating component */}
-                <section className='post__rating'>
-                    <div className='rating__container'>
-                        <p className='rating__label'> { rating.likes } </p>
-                        <div className='rating__icon' onClick={() => handleLikeClick('like')}>
-                            {ratingState.isLikeSmashed ?
-                                <LikeToggledIcon color='error_light' />
-                                :
-                                <LikeIcon color='error_light' />
-                            }
-                        </div>
-                    </div>
-                    <div className='rating__container'>
-                        <p className='rating__label'> { rating.dislikes }</p>
-                        <div className='rating__icon' onClick={() => handleLikeClick('dislike')}>
-                            {ratingState.isDisLikeSmashed ?
-                                <DislikeToggledIcon color='error_light' />
-                                :
-                                <DislikeIcon color='error_light' />
-                            }
-                        </div>
-                    </div>
-                </section>
-            </div>
-            <CommentsList 
-                isOpen={ isCommentsOpen } 
-                postId={ post.id } 
-                updateCounter={ setCommentsAmount } />
-        </article>
+                {!status && <div className='post__label post__label--hidden'>
+                    <HiddenIcon color='primary_light' />
+                </div>}
+                <div
+                    className='post__label post__label--comments'
+                    onClick={() => setIsCommentsOpen(prev => !prev)}>
+                    {commentsAmount > 0 && <div className='post__label__comments-amount'>
+                        <span>{commentsAmount}</span>
+                    </div>}
+                    <CommentIcon color='primary_light' />
+                </div>
+                <p className='post__content'>{content}</p>
+                <div className='post__footer'>
+                    <ul className='post__categories'>
+                        {categories.map(
+                            (category, i) =>
+                                <li
+                                    className='categories__item'
+                                    key={i}
+                                    onClick={() => { handleOnCategoryClick(category) }}>
+                                    {category}
+                                </li>
+                        )}
+                    </ul>
+                    <Rating 
+                        endpoint='post' 
+                        entity='post' 
+                        id={ post.id } 
+                        loadLikes={ loadPostLikes } />
+                </div>
+                <CommentsList isOpen={ isCommentsOpen } />
+                <ConfirmationModal 
+                    isOpen={ isDeleting } 
+                    setIsOpen={ setIsDeleting }
+                    action={ handlePostDelete }
+                    message='Post successfuly deleted'/>
+            </article>
+        </PostContext.Provider>
     )
 }

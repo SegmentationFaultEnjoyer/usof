@@ -15,27 +15,23 @@
 
 .comment__header {
     display: flex;
-    justify-content: space-between;
+    gap: toRem(15);
     align-items: center;
+}
 
-    @include respond-to(small) {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: toRem(15)
-    }
+.header__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: toRem(4);
 }
 
 .comment__delete {
     position: absolute;
     right: 0;
     top: 0;
-    padding: toRem(5);
-    transform: scale(0.9);
-
-    @include respond-to(small) {
-        padding: toRem(15);
-        transform: scale(1);
-    }
+    padding: toRem(10);
+    transform: scale(1);
 
     svg:hover {
         cursor: pointer;
@@ -54,26 +50,13 @@
     }
 }
 
-.comment__author {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: toRem(10)
-}
-
 .comment__publish-date {
     user-select: none;
     font-weight: lighter;
     font-size: toRem(14);
+    line-height: 1;
     
     @include respond-to(small) {
         font-size: toRem(13);
     }
-}
-
-.comment__rating {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: toRem(5);
 }
