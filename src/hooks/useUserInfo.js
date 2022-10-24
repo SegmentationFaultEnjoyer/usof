@@ -49,9 +49,26 @@ export function useUserInfo() {
         }
     }
 
+    const changePassword = async (userID, oldPass, newPass) => {
+        try {
+            await api.patch(`/users/${userID}`, {
+                data: {
+                    type: "update-user",
+                    attributes: {
+                        old_password: oldPass,
+                        new_password: newPass
+                    }
+                }
+            })
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     return {
         isLoading,
         getUserInfo,
+        changePassword,
         loadUser
     }
 

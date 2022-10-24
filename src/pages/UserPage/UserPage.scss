@@ -37,14 +37,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: fit-content;
     gap: toRem(20);
     background-color: var(--tertiary-main);
     border-radius: toRem(5);
     transform: translateX(toRem(50));
-
-    position: sticky;
-    top: toRem(80);
 
     @include respond-to(small) {
         transform: unset;
@@ -72,4 +68,37 @@
 .user-info__admin {
     fill: var(--info-dark) !important;
 
+}
+
+.user-page__main-wrapper {
+    position: sticky;
+    top: toRem(20);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+
+    @include respond-to(small) {
+        position: static;
+        
+    }
+}
+
+
+.user-page__actions {
+    background-color: var(--tertiary-main);
+    margin: var(--app-padding-top);
+    padding: toRem(25);
+    transform: translateX(toRem(50));
+    border-radius: toRem(5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: toRem(30);
+
+    @include respond-to(small) {
+        transform: unset;
+        width: 80%;
+        align-self: center;   
+        flex-direction: column;
+    }
 }
