@@ -1,4 +1,8 @@
-exports.PostResponse = function({ id, title, publish_date, status, content, categories, author, is_edited }, include = null) {
+exports.PostResponse = function({ id, title, publish_date, status, content, categories, author, is_edited }, 
+    include = null, 
+    owner) {
+    
+    if(!owner) owner = author
     let response = {
         data: {
             id, 
@@ -13,8 +17,12 @@ exports.PostResponse = function({ id, title, publish_date, status, content, cate
             },
             relationships: {
                 author: {
-                    id: author,
-                    type: 'user'
+                    type: 'user',
+                    id: owner.id,
+                    email: owner.email,
+                    name: owner.name,
+                    rating: owner.rating,
+                    profile_picture: owner.profile_picture
                 }
             }
         }

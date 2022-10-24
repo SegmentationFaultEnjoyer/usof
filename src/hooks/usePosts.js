@@ -3,15 +3,14 @@ import { ErrorHandler } from '@/helpers';
 import { api } from '@/api';
 import Mutex from '@/api/mutex'
 
-import { useDispatch, useSelector  } from 'react-redux';
-import { setList, startLoading, finishLoading } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { setList, startLoading, finishLoading, updatePostInfo } from '@/store';
 import { Notificator } from '@/common';
 
 const LIMIT = 6
 
 export function usePosts() {
     const dispatch = useDispatch()
-    const links = useSelector(state => state.posts.links)
 
     const loadPosts = async () => {
         dispatch(startLoading())
@@ -51,6 +50,25 @@ export function usePosts() {
         }
     }
 
+    const updatePost = async (id, newInfo) => {
+        try {
+            const { data } = await api.patch(`posts/${id}`, {
+                data: {
+                    type: "update-post",
+                    attributes: newInfo
+                }
+            })
+
+            console.log(data);
+            dispatch(updatePostInfo({id, newInfo: data.data}))
+
+            Notificator.success('Post updated!')
+
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     const deletePost = async (id) => {
         try {
             await api.delete(`posts/${id}`)
@@ -66,8 +84,8 @@ export function usePosts() {
                 data: {
                     type: 'create-post',
                     attributes: {
-                        title, 
-                        content, 
+                        title,
+                        content,
                         categories,
                         status: true
                     }
@@ -77,10 +95,6 @@ export function usePosts() {
             Notificator.success('Post created!')
 
             await loadPosts()
-            // if(!links || !links.last) return 
-
-            // const { data } = await api.get(links.last)
-            // dispatch(setList(data))
 
         } catch (error) {
             ErrorHandler.process(error)
@@ -107,6 +121,7 @@ export function usePosts() {
         loadPost,
         deletePost,
         createPost,
+        updatePost,
         loadPostLikes,
         filterPosts
     }

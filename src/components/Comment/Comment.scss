@@ -1,4 +1,6 @@
 .comment {
+    animation: fade 0.3s ease-in;
+
     display: flex;
     position: relative;
     flex-direction: column;
@@ -39,6 +41,26 @@
     }
 }
 
+.comment__toggle-edit {
+    display: flex;
+    align-items: center;
+    gap: toRem(7);
+}
+
+.comment__edit-icon {
+    svg {
+        transition-property: fill transform;
+        transition: .2s ease;
+        transform: scale(0.8);
+    }
+    
+    svg:hover {
+        cursor: pointer;
+        fill: var(--primary-light);
+        transform: scale(0.9);
+    }
+}
+
 .comment__content {
     font-size: toRem(14);
     margin-top: toRem(5);
@@ -58,5 +80,43 @@
     
     @include respond-to(small) {
         font-size: toRem(13);
+    }
+}
+
+.comment-edit {
+    animation: fade 0.3s ease-in;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: toRem(10);
+    margin-top: toRem(20);
+    width: 82%;
+
+    @include respond-to(small) {
+        width: 100%;
+    }
+}
+
+.comment-edit__container {
+    border: toRem(2) solid var(--secondary-light);
+    padding: toRem(20);
+    border-radius: toRem(5);
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: toRem(20);
+}
+
+.comment-edit__actions {
+    display: flex;
+    width: inherit;
+    justify-content: space-around;
+
+    @include respond-to(small) {
+        flex-direction: column;
+        gap: toRem(15);
     }
 }

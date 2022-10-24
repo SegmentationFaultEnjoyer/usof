@@ -118,8 +118,8 @@
         animation-delay: 0.5s;
 
         @include respond-to(small) {
-            top: toRem(-32);
-            left: toRem(-296);
+            top: toRem(40);
+            left: -75%;
 
             border: 1px solid var(--tertiary-dark)
         }

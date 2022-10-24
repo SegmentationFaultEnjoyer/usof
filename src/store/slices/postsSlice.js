@@ -19,6 +19,15 @@ export const postsSlice = createSlice({
         startLoading(state) {
             state.isLoading = true
         },
+        updatePostInfo(state, action) {
+            const { id, newInfo } = action.payload
+
+            const index = state.posts.findIndex(post => post.id === id)
+
+            if(!~index) return
+
+            state.posts[index] = newInfo
+        },
         finishLoading(state) {
             state.isLoading = false
         },
@@ -32,6 +41,7 @@ export const {
     setList, 
     startLoading, 
     finishLoading,
+    updatePostInfo,
     setFilter } = postsSlice.actions;
 
 export default postsSlice.reducer;

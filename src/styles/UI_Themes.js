@@ -17,6 +17,11 @@ const theme = createTheme({
 			darker: 'var(--secondary-dark)',
 			contrastText: 'var(--text-primary-invert-main)'
 		},
+		secondary_main: {
+			light: 'var(--secondary-main)',
+			main: 'var(--secondary-dark)',
+			contrastText: 'var(--text-primary-invert-main)'
+		},
 		tertiary_main: {
 			main: 'var(--tertiary-main)',
 			contrastText: 'var(--text-primary-main)'

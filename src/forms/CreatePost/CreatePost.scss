@@ -24,7 +24,7 @@
 
     @include respond-to(small) {
         flex-direction: column-reverse;
-        width: 60%;
+        width: 70%;
         gap: toRem(20);
     }
 }

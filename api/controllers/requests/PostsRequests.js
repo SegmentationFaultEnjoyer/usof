@@ -29,7 +29,8 @@ exports.parseUpdatePostRequest = async function(requestBody) {
         title: requestBody.data.attributes.title,
         content: requestBody.data.attributes.content,
         categories: requestBody.data.attributes.categories,
-        status: requestBody.data.attributes.status
+        status: requestBody.data.attributes.status,
+        is_edited: true
     }
 
     if(rawRequest.categories !== undefined)

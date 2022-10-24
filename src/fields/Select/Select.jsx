@@ -20,6 +20,7 @@ const MenuProps = {
             width: 250,
         },
     },
+    disableScrollLock: true
 };
 
 function getStyles(name, personName, theme) {

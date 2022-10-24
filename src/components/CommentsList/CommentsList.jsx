@@ -13,7 +13,7 @@ import { getPagesAmount } from '@/helpers'
 import Pagination from '@mui/material/Pagination';
 
 export default function Comments({ isOpen }) {
-    const { comments, isLoading, loadComments, loadPage, deleteComment } = useComments()
+    const { comments, isLoading, loadComments, loadPage, deleteComment, updateComment } = useComments()
     const { postID } = useContext(PostContext)
 
     useEffect(() => { loadComments(postID) }, [])
@@ -35,7 +35,8 @@ export default function Comments({ isOpen }) {
                      <Comment 
                         comment={ comment } 
                         key={ comment.id }
-                        deleteComment={ deleteComment }/>)
+                        deleteComment={ deleteComment }
+                        updateComment={ updateComment }/>)
                 }
                 <CreateCommentForm loadComments={ loadComments }/>
             </div>}

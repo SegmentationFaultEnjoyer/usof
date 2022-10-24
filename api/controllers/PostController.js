@@ -20,6 +20,7 @@ const { CommentResponse, CommentsListResponse } = require('./responses/CommentRe
 const { CategoriesListResponse } = require('./responses/CategoriesResponses');
 const GenerateLinks = require('./responses/Links');
 
+const usersQ = require('../data/pg/UsersQ');
 const postsQ = require('../data/pg/PostsQ');
 const commentsQ = require('../data/pg/CommentsQ');
 const categoriesQ = require('../data/pg/CategoriesQ');
@@ -173,7 +174,12 @@ exports.GetPost = async function (req, resp) {
         if (include !== undefined)
             includeResp = await includeHandler(include, { post_id });
 
-        resp.status(httpStatus.OK).json(PostResponse(dbResp, includeResp));
+        const owner = await new usersQ().New().Get().WhereID(dbResp.author).Execute()
+
+        if (owner.error)
+            throw new NotFoundError(`Error getting owner: ${owner.error_message}`);
+
+        resp.status(httpStatus.OK).json(PostResponse(dbResp, includeResp, owner));
 
     } catch (error) {
         ProcessError(resp, error);
@@ -307,7 +313,7 @@ exports.UpdatePost = async function (req, resp) {
     try {
         const { post_id } = req.params;
         const { id, role } = req.decoded;
-
+        console.log(post_id, id, role);
         let dbResp = await new postsQ().New().Get().WhereID(post_id).Execute();
 
         if (dbResp.error)
@@ -330,7 +336,12 @@ exports.UpdatePost = async function (req, resp) {
         if (dbResp.error)
             throw new Error(`Error updating post: ${dbResp.error_message}`);
 
-        resp.json(PostResponse(dbResp));
+        const owner = await new usersQ().New().Get().WhereID(dbResp.author).Execute()
+
+        if (owner.error)
+            throw new NotFoundError(`Error getting owner: ${owner.error_message}`);
+
+        resp.json(PostResponse(dbResp, null, owner));
 
     } catch (error) {
         ProcessError(resp, error);

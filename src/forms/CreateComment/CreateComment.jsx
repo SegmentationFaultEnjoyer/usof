@@ -3,17 +3,14 @@ import './CreateComment.scss'
 import { useState, useContext } from 'react';
 import { PostContext } from '@/context';
 
-import { api } from '@/api';
-import { useForm } from '@/hooks';
+import { useForm, useFormValidation, useComments } from '@/hooks';
 
-import { ErrorHandler } from '@/helpers';
+import { ErrorHandler, minLength, maxLength } from '@/helpers';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 import SendCommentIcon from '@mui/icons-material/Send'
-
-//TODO different color for my post
 
 export default function CreateComment({ loadComments }) {
     const [comment, setComment] = useState('')
@@ -21,21 +18,23 @@ export default function CreateComment({ loadComments }) {
     const { postID, updateCounter } = useContext(PostContext)
 
     const { isFormDisabled, disableForm, enableForm } = useForm()
+    const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
+        { comment },
+        {
+            comment: { minLength: minLength(3), maxLength: maxLength(600) },
+        },
+    )
+    const { createComment } = useComments()
 
     const handleSubmit = async (event) => {
+        if(!isFormValid()) return
+
         event.preventDefault();
 
         disableForm()
 
         try {
-            await api.post(`/posts/${postID}/comments`, {
-                data: {
-                    type: "create-comment",
-                    attributes: {
-                        content: comment
-                    }
-                }
-            })
+            await createComment(postID, comment)
 
         } catch (error) {
             ErrorHandler.process(error);
@@ -58,6 +57,9 @@ export default function CreateComment({ loadComments }) {
                     value={comment}
                     onChange={e => { setComment(e.target.value) }}
                     disabled={isFormDisabled}
+                    onBlur={() => touchField('comment')}
+                    error={getFieldErrorMessage('comment') !== ''}
+                    helperText={getFieldErrorMessage('comment')}
                     required
                     multiline
                 />

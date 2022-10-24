@@ -1,83 +1,18 @@
 import './Comment.scss'
 
 import { useEffect, useState, useMemo, useContext } from 'react'
-import { useSelector } from 'react-redux'
 
-import { useUserInfo, useComments } from '@/hooks'
-import { PostContext } from '@/context'
-import { roles } from '@/types'
+import CommentInfo from './CommentInfo'
+import CommentEdit from './CommentEdit'
 
-import { Rating } from '@/components'
-import { ConfirmationModal } from '@/common'
-
-import Avatar from '@mui/material/Avatar';
-
-import DeleteIcon from '@mui/icons-material/DeleteForever';
-
-import { avatarFromString, formatDate } from '@/helpers'
-
-export default function Comment({ comment, deleteComment }) {
-    const { content, is_edited, publish_date, profile_picture } = comment.attributes
-    const { author, post } = comment.relationships
-
-    const { updateCounter } = useContext(PostContext)
-
-    const [authorInfo, setAuthorInfo] = useState(null)
-    const [isDeleting, setIsDeleting] = useState(false)
-
-    const { loadUser } = useUserInfo()
-    const { loadCommentLikes } = useComments()
-
-    const userID = useSelector(state => state.user.info.id)
-
-    const isAdmin = useSelector(state => state.user.info.role === roles.ADMIN)
-    const isBelongToMe = useMemo(() => author.id === userID, [userID])
-
-    const handleCommentDelete = async () => {
-        await deleteComment(comment.id, post.id)
-        updateCounter(prev => prev - 1)
-    }
-
-    useEffect(() => {
-        const getUser = async () => {
-            let resp = await loadUser(author.id)
-
-            if (!resp) return
-
-            setAuthorInfo(resp.data)
-        }
-        getUser()
-    }, [])
+export default function Comment({ comment, deleteComment, updateComment }) {
+    const [isEditing, setIsEditing] = useState(false)
 
     return (
-        <section className='comment'>
-            {authorInfo &&
-                <div className='comment__header'>
-                    {profile_picture ?
-                        //TODO picture showing
-                        <Avatar alt='avatar' src={`/api/user_data/avatars/${profile_picture}`} /> :
-                        <Avatar {...avatarFromString(`${authorInfo.attributes.name.toUpperCase()} ${authorInfo.attributes.email.toUpperCase()}`)} />
-                    }
-                    <div className='header__info'>
-                        <h4>{authorInfo.attributes.name}</h4>
-                        <p className='comment__publish-date'>{formatDate(publish_date)}</p>
-                    </div>
-                </div>}
-            {(isBelongToMe || isAdmin) && <div className='comment__delete' onClick={() => setIsDeleting(true)}>
-                <DeleteIcon color='primary_light' />
-            </div>}
-            <p className='comment__content'> {content}</p>
-            <Rating
-                centered
-                endpoint='comments'
-                entity='comment'
-                id={ comment.id }
-                loadLikes={ loadCommentLikes } />
-            <ConfirmationModal 
-                isOpen={ isDeleting } 
-                setIsOpen={ setIsDeleting }
-                action={ handleCommentDelete }
-                message='Comment successfuly deleted'/>
-        </section>
+        <>
+         {!isEditing ? 
+            <CommentInfo comment={ comment } deleteComment={ deleteComment } toggleEdit={ setIsEditing }/> :
+            <CommentEdit comment={ comment } updateComment={ updateComment } toggleEdit={ setIsEditing }/>}
+        </>
     )
 }
