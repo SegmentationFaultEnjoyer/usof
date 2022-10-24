@@ -72,6 +72,7 @@ export default function PostInfo({ post, toggleEdit }) {
                 <div className='post__header'>
                     {author && <section className='post__author'>
                         <AuthorAvatar
+                            id={author.id}
                             name={author.name}
                             email={author.email}
                             profile_picture={author.profile_picture} />

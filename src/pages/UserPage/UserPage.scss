@@ -1,0 +1,75 @@
+.user-page__loader {
+    width: 100vw;
+    height: vh(100);
+    display: grid;
+    place-content: center;
+}
+
+.user-page__main {
+    margin-top: var(--nav-bar-height);
+    height: calc(vh(100) - var(--nav-bar-height));
+    display: grid;
+    grid-template-columns: 35% 65%;
+
+    @include respond-to(small) {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.user-page__posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: toRem(40);
+    padding: toRem(30) 0;
+
+    scroll-snap-type: y mandatory;
+
+    @include respond-to(small) {
+        padding: toRem(30);
+    }
+}
+
+.user-page__user-info {
+    margin: var(--app-padding-top);
+    padding: toRem(25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+    gap: toRem(20);
+    background-color: var(--tertiary-main);
+    border-radius: toRem(5);
+    transform: translateX(toRem(50));
+
+    position: sticky;
+    top: toRem(80);
+
+    @include respond-to(small) {
+        transform: unset;
+        width: 80%;
+        align-self: center;
+        
+    }
+}
+
+.user-info__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: toRem(10);
+
+    & > * {
+        color: var(--primary-main)
+    }
+
+    svg {
+        fill: var(--info-main)
+    }
+}
+
+.user-info__admin {
+    fill: var(--info-dark) !important;
+
+}

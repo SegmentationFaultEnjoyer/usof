@@ -29,9 +29,19 @@ export function usePosts() {
         dispatch(finishLoading())
     }
 
+    const loadUsersPosts = async (userID) => {
+        try {
+            const resp = await api.get(`/posts?limit=${LIMIT}&filter=[author]-->${userID}`)
+
+            dispatch(setList(resp.data))
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     const loadPostLikes = async (id) => {
         try {
-            const resp = await api.get(`posts/${id}/like?limit=1000`)
+            const resp = await api.get(`/posts/${id}/like?limit=1000`)
 
             return resp.data
         } catch (error) {
@@ -41,7 +51,7 @@ export function usePosts() {
 
     const loadPost = async (id) => {
         try {
-            const resp = await api.get(`posts/${id}?include=post_comments`)
+            const resp = await api.get(`/posts/${id}?include=post_comments`)
 
             return resp.data
         } catch (error) {
@@ -52,7 +62,7 @@ export function usePosts() {
 
     const updatePost = async (id, newInfo) => {
         try {
-            const { data } = await api.patch(`posts/${id}`, {
+            const { data } = await api.patch(`/posts/${id}`, {
                 data: {
                     type: "update-post",
                     attributes: newInfo
@@ -69,9 +79,10 @@ export function usePosts() {
         }
     }
 
+    //TODO fix loading all posts when on user page
     const deletePost = async (id) => {
         try {
-            await api.delete(`posts/${id}`)
+            await api.delete(`/posts/${id}`)
             await loadPosts()
         } catch (error) {
             ErrorHandler.process(error)
@@ -118,6 +129,7 @@ export function usePosts() {
 
     return {
         loadPosts,
+        loadUsersPosts,
         loadPost,
         deletePost,
         createPost,

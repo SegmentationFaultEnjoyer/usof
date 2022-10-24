@@ -51,6 +51,7 @@ export default function CommentInfo({ comment, deleteComment, toggleEdit }) {
             {authorInfo &&
                 <div className='comment__header'>
                     <AuthorAvatar
+                        id={authorInfo.id}
                         name={authorInfo.attributes.name}
                         email={authorInfo.attributes.email}
                         profile_picture={profile_picture} />

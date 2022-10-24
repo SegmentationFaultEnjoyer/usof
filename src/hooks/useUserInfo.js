@@ -15,32 +15,27 @@ export function useUserInfo() {
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const getUserInfo = () => {
-        const fetchInfo = async () => {
-            try {
-                const lockToken = new Date().toISOString();
+    const getUserInfo = async () => {
+        try {
+            const lockToken = new Date().toISOString();
 
-                Mutex.lock(lockToken);
-                let resp = await api.get('/auth', { lockToken });
-                Mutex.releaseLock(lockToken);
-    
-                dispatch(setUser({
-                    ...resp.data.data.attributes,
-                    id: resp.data.data.id
-                }));
+            Mutex.lock(lockToken);
+            let resp = await api.get('/auth', { lockToken });
+            Mutex.releaseLock(lockToken);
 
-            } catch (error) {
-                ErrorHandler.process(error);
-                ErrorHandler.clearTokens();
+            dispatch(setUser({
+                ...resp.data.data.attributes,
+                id: resp.data.data.id
+            }));
 
-                navigate('/');
-            }
+        } catch (error) {
+            ErrorHandler.process(error);
+            ErrorHandler.clearTokens();
 
-            setIsLoading(false);
-
+            navigate('/');
         }
 
-        fetchInfo();
+        setIsLoading(false);
     }
 
     const loadUser = async (userID) => {

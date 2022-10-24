@@ -3,10 +3,12 @@ export const prepareToAnimate = (ref, preStyle = ' ') => {
     void ref.current.offsetWidth
 }
 
-export function avatarFromString(name) {
+export function avatarFromString(name, size = null) {
     return {
         sx: {
           bgcolor: stringToColor(name),
+          width: size ?? 42,
+          height: size ?? 42,
         },
         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
       };

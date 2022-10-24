@@ -28,6 +28,11 @@ function FilterHandler(filter, Q) {
                 Q: Q.WherePublishDateGreaterThan(filterValue),
                 filterStmt: `WHERE publish_date >= (NOW() - '1 ${filterValue}'::interval)`
             }
+        case 'author':
+            return {
+                Q: Q.WhereAuthor(filterValue),
+                filterStmt: `WHERE author=${filterValue}`
+            }
         default:
             throw new BadRequestError('Invalid filter parametr');
     }
