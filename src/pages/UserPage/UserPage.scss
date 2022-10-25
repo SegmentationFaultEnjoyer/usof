@@ -78,7 +78,7 @@
     flex-direction: column;
 
     @include respond-to(small) {
-        position: static;
+        position: relative;
         
     }
 }
@@ -122,4 +122,8 @@
     place-content: center;
     position: absolute;
     top: toRem(25);
+
+    @include respond-to(small) {
+        top: toRem(49);
+    }
 }

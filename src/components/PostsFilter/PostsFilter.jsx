@@ -124,7 +124,7 @@ export default function PostsFilter() {
                         </div>
                         :
                         <ul className='posts-filter__categories'>
-                        {categories.map(category =>
+                        {categories?.data?.length && categories.data.map(category =>
                             <li key={category.id} className='filter-categories__item'>
                                 <FormControlLabel
                                     value={category.attributes.title}

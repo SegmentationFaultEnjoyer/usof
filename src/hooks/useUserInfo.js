@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/store';
-import { Notificator } from '@/common';
 
 export function useUserInfo() {
     const dispatch = useDispatch();
@@ -28,6 +27,10 @@ export function useUserInfo() {
                 ...resp.data.data.attributes,
                 id: resp.data.data.id
             }));
+
+            setIsLoading(false);
+
+            return resp.data.data.attributes.role
 
         } catch (error) {
             ErrorHandler.process(error);

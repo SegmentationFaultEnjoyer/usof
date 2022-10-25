@@ -75,11 +75,12 @@ export default function CreatePost({ closeForm }) {
                     required />
                 {isLoading ? <div className='create-post__loader'><DotsLoader /></div> :
                     <div className='create-post__categories'>
+                        {categories?.data?.length && 
                         <MultipleSelect 
                             label='Categories'
-                            choices={ categories }
+                            choices={ categories.data }
                             picked={ category }
-                            setPicked={ setCategory }/>
+                            setPicked={ setCategory }/>}
                     </div>}
             </section>
             <section className='create-post__actions'>
@@ -89,7 +90,7 @@ export default function CreatePost({ closeForm }) {
                     size="large"
                     color="primary_main"
                     disabled={isFormDisabled}
-                    onClick={ closeForm }>
+                    onClick={ closeModal }>
                     Cancel
                 </Button>
                 <Button

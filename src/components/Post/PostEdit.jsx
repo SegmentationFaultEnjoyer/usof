@@ -81,11 +81,12 @@ export default function PostEdit({ post, toggleEdit }) {
                         required />
                     {isLoading ? <div className='create-post__loader'><DotsLoader /></div> :
                         <div className='create-post__categories'>
-                            <MultipleSelect
+                              {categories?.data?.length && 
+                              <MultipleSelect
                                 label='Categories'
-                                choices={categories}
+                                choices={categories.data}
                                 picked={category}
-                                setPicked={setCategory} />
+                                setPicked={setCategory} />}
                         </div>}
                     <FormControlLabel
                         value="end"

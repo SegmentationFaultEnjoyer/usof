@@ -16,10 +16,15 @@
 
     display: flex;
     justify-content: flex-end;
-    gap: toRem(15);
+    gap: toRem(30);
 
     z-index: 3;
 
+    @include respond-to(small) {
+        justify-content: space-evenly;
+        gap: 0;
+    }
+ 
 }
 
 .nav-bar__icon {

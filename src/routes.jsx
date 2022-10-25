@@ -8,6 +8,7 @@ export default function AppRoutes() {
     const ErrorPage = lazy(() => import('@/pages/ErrorPage/ErrorPage.jsx'));
     const ResetPage = lazy(() => import('@/pages/ResetPasswordPage/ResetPassword.jsx'));
     const UserPage = lazy(() => import('@/pages/UserPage/UserPage.jsx'))
+    const AdminPage = lazy(() => import('@/pages/AdminPage/AdminPage.jsx'))
 
     const location = useLocation();
     
@@ -37,6 +38,14 @@ export default function AppRoutes() {
                             animate={{ opacity: 1}}
                             exit={{ opacity: 0}}>
                             <UserPage />
+                        </motion.div>
+                    } />
+                    <Route path='/admin' element={
+                        <motion.div 
+                            initial={{ opacity: 0}}
+                            animate={{ opacity: 1}}
+                            exit={{ opacity: 0}}>
+                            <AdminPage />
                         </motion.div>
                     } />
                     <Route path='/reset-page/:id/:token' element={
