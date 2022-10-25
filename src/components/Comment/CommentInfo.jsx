@@ -14,7 +14,7 @@ import StartEditIcon from '@mui/icons-material/BorderColorOutlined';
 import { formatDate } from '@/helpers'
 
 export default function CommentInfo({ comment, deleteComment, toggleEdit }) {
-    const { content, is_edited, publish_date, profile_picture } = comment.attributes
+    const { content, is_edited, publish_date } = comment.attributes
     const { author, post } = comment.relationships
 
     const { updateCounter } = useContext(PostContext)
@@ -54,7 +54,7 @@ export default function CommentInfo({ comment, deleteComment, toggleEdit }) {
                         id={authorInfo.id}
                         name={authorInfo.attributes.name}
                         email={authorInfo.attributes.email}
-                        profile_picture={profile_picture} />
+                        profile_picture={authorInfo.attributes.profile_picture} />
                     <div className='header__info'>
                         <div className='comment__toggle-edit'>
                             <h4>{authorInfo.attributes.name}</h4>

@@ -185,7 +185,7 @@ exports.UploadUserAvatar = async function (req, resp) {
 
         let dbResp = await new usersQ()
             .New()
-            .Update({profile_picture: join('user_data', 'avatars', newName)})
+            .Update({profile_picture: newName})
             .WhereID(id)
             .Execute();
 

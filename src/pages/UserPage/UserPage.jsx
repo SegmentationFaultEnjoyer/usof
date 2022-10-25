@@ -14,15 +14,18 @@ import { getPagesAmount, loadPage } from '@/helpers'
 import { setList } from '@/store'
 
 import Chip from '@mui/material/Chip';
-import StarIcon from '@mui/icons-material/Star';
-import AdminIcon from '@mui/icons-material/Fingerprint';
 import Pagination from '@mui/material/Pagination';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+
+import StarIcon from '@mui/icons-material/Star';
+import AdminIcon from '@mui/icons-material/Fingerprint';
+import CameraIcon from '@mui/icons-material/PhotoCamera';
 
 export default function UserPage() {
     const { id } = useParams()
 
-    const { loadUser, getUserInfo } = useUserInfo()
+    const { loadUser, getUserInfo, changeAvatar } = useUserInfo()
     const { loadUsersPosts } = usePosts()
 
     const [user, setUser] = useState(null)
@@ -65,6 +68,20 @@ export default function UserPage() {
         })
     }
 
+    const imageUpload = async (e) => {
+        const formData = new FormData(e.target);
+        await changeAvatar(formData)
+        window.location.reload(false);
+    }
+
+    const uploadForm = useRef()
+
+    const triggerForm = () => {
+        uploadForm.current.dispatchEvent(
+            new Event('submit', { bubbles: true, cancelable: true } )
+        )
+    }
+
     return (
         <div className='user-page'>
             <NavBar />
@@ -75,13 +92,34 @@ export default function UserPage() {
                 <div className='user-page__main'>
                     <div className='user-page__main-wrapper'>
                         <section className='user-page__user-info'>
-                            <AuthorAvatar
-                                id={id}
-                                name={user.name}
-                                email={user.email}
-                                profile_picture={user.profile_picture}
-                                size={80}
-                                disableClick />
+                            <div
+                                className='user-page__upload-trigger'>
+                                <AuthorAvatar
+                                    id={id}
+                                    name={user.name}
+                                    email={user.email}
+                                    profile_picture={user.profile_picture}
+                                    size={80}
+                                    disableClick />
+                            </div>
+                            
+                            {isBelongToMe &&
+                                <form 
+                                    className='user-page__upload-avatar' 
+                                    onSubmit={ imageUpload } 
+                                    ref={ uploadForm }>
+                                    <IconButton 
+                                        sx={{ color: 'var(--secondary-main)'}}
+                                        aria-label="upload picture" 
+                                        component="label">
+                                        <input 
+                                            hidden accept="image/*" 
+                                            type="file" 
+                                            name='img' 
+                                            onChange={ triggerForm }/>
+                                        <CameraIcon />
+                                    </IconButton>
+                                </form>}
                             <section className='user-info__header'>
                                 <h1>{user.name}</h1>
                                 <Chip
@@ -125,21 +163,21 @@ export default function UserPage() {
                         <div className='posts-list__end'>Blank space</div>
                     </section>
                 </div>}
-            <Modal 
-                ref={ changePassRef }
-                isShown={ isChangingPass } 
-                setIsShown={ setIsChangingPass }>
-                <ChangePasswordForm 
+            <Modal
+                ref={changePassRef}
+                isShown={isChangingPass}
+                setIsShown={setIsChangingPass}>
+                <ChangePasswordForm
                     closeModal={() => setIsChangingPass(false)}
-                    userID={ id } />
+                    userID={id} />
             </Modal>
-            <Modal 
-                ref={ changeEmailRef }
-                isShown={ isChangingEmail } 
-                setIsShown={ setIsChangingEmail }>
-                <ChangeEmailForm 
+            <Modal
+                ref={changeEmailRef}
+                isShown={isChangingEmail}
+                setIsShown={setIsChangingEmail}>
+                <ChangeEmailForm
                     closeModal={() => setIsChangingEmail(false)}
-                    userID={ id } />
+                    userID={id} />
             </Modal>
         </div>
     )

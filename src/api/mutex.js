@@ -41,7 +41,7 @@ class APILockService {
             setTimeout(() =>{
                 this.locked = false;
                 resolve();
-            }, 150000);// timeout after 2.5 mins
+            }, 5000);// timeout after 5 sec
         });
     }
 }

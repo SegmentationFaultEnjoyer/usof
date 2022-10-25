@@ -2,8 +2,10 @@
     transition-property: transform;
     transition: .2s ease;
 
-    &:hover {
-        cursor: pointer;
-        transform: scale(1.1);
+    &--hoverable {
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+        }
     }
 }

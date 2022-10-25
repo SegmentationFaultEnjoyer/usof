@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/store';
+import { Notificator } from '@/common';
 
 export function useUserInfo() {
     const dispatch = useDispatch();
@@ -80,11 +81,22 @@ export function useUserInfo() {
         }
     }
 
+    const changeAvatar = async (photo) => {
+        try {
+            await api.patch('/users/avatar', photo)
+            
+        } catch (error) {
+            ErrorHandler.process(error)
+            
+        }
+    }
+
     return {
         isLoading,
         getUserInfo,
         changePassword,
         changeEmail,
+        changeAvatar,
         loadUser
     }
 

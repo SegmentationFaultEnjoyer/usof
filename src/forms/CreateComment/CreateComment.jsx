@@ -3,9 +3,9 @@ import './CreateComment.scss'
 import { useState, useContext } from 'react';
 import { PostContext } from '@/context';
 
-import { useForm, useFormValidation, useComments } from '@/hooks';
+import { useForm, useComments } from '@/hooks';
 
-import { ErrorHandler, minLength, maxLength } from '@/helpers';
+import { ErrorHandler } from '@/helpers';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -18,12 +18,6 @@ export default function CreateComment({ loadComments }) {
     const { postID, updateCounter } = useContext(PostContext)
 
     const { isFormDisabled, disableForm, enableForm } = useForm()
-    const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
-        { comment },
-        {
-            comment: { minLength: minLength(3), maxLength: maxLength(600) },
-        },
-    )
     const { createComment } = useComments()
 
     const handleSubmit = async (event) => {
@@ -57,9 +51,6 @@ export default function CreateComment({ loadComments }) {
                     value={comment}
                     onChange={e => { setComment(e.target.value) }}
                     disabled={isFormDisabled}
-                    onBlur={() => touchField('comment')}
-                    error={getFieldErrorMessage('comment') !== ''}
-                    helperText={getFieldErrorMessage('comment')}
                     required
                     multiline
                 />

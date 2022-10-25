@@ -86,7 +86,7 @@
 
 .user-page__actions {
     background-color: var(--tertiary-main);
-    margin: var(--app-padding-top);
+    margin: 0 var(--app-padding-top);
     padding: toRem(25);
     transform: translateX(toRem(50));
     border-radius: toRem(5);
@@ -101,4 +101,25 @@
         align-self: center;   
         flex-direction: column;
     }
+}
+
+.user-page__upload-trigger {
+    border-radius: 100%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.user-page__upload-avatar {
+    animation: fade 0.3s ease-in;
+
+    background-color: rgba($color: black, $alpha: 0.1);
+    border-radius: 100%;
+    width: toRem(80);
+    height: toRem(80);
+    display: grid;
+    place-content: center;
+    position: absolute;
+    top: toRem(25);
 }

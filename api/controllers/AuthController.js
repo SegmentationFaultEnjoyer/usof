@@ -213,8 +213,6 @@ exports.ResetPassword = async function (req, resp) {
 
         const link = `http://${process.env.HOST}:${process.env.PORT}/auth/reset-password/${id}/${token}`;
 
-        // console.log(link);
-
         await sendToMail(email, "USOF password reset", link);
 
         resp.end();

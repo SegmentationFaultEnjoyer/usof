@@ -313,7 +313,7 @@ exports.UpdatePost = async function (req, resp) {
     try {
         const { post_id } = req.params;
         const { id, role } = req.decoded;
-        console.log(post_id, id, role);
+        
         let dbResp = await new postsQ().New().Get().WhereID(post_id).Execute();
 
         if (dbResp.error)
