@@ -20,9 +20,7 @@ export function useComments() {
     }
 
     const loadPage = async (page, links) => {
-        // setIsLoading(true)
         await pageLoader(page, links, setComments)
-        // setIsLoading(false)
     }
 
     const loadCommentLikes = async (commentID) => {
@@ -46,6 +44,7 @@ export function useComments() {
                     }
                 }
             })
+            await loadComments(postID)
         } catch (error) {
             ErrorHandler.process(error)
         }

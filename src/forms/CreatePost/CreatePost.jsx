@@ -90,7 +90,7 @@ export default function CreatePost({ closeForm }) {
                     size="large"
                     color="primary_main"
                     disabled={isFormDisabled}
-                    onClick={ closeModal }>
+                    onClick={ closeForm }>
                     Cancel
                 </Button>
                 <Button
