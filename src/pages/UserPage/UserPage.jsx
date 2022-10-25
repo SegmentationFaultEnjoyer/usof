@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useUserInfo, usePosts } from '@/hooks'
 import { Post, NavBar, AuthorAvatar } from '@/components'
 import { TriangleLoader, Modal } from '@/common'
-import { ChangePasswordForm } from '@/forms'
+import { ChangePasswordForm, ChangeEmailForm } from '@/forms'
 
 import { roles } from '@/types'
 import { getPagesAmount, loadPage } from '@/helpers'
@@ -36,7 +36,9 @@ export default function UserPage() {
     const isBelongToMe = useMemo(() => id === userID, [userID])
 
     const changePassRef = useRef(null)
+    const changeEmailRef = useRef(null)
     const [isChangingPass, setIsChangingPass] = useState(false)
+    const [isChangingEmail, setIsChangingEmail] = useState(false)
 
     useEffect(() => {
         const initPage = async () => {
@@ -105,7 +107,8 @@ export default function UserPage() {
                             <Button
                                 variant='contained'
                                 size="medium"
-                                color="primary_light">
+                                color="primary_light"
+                                onClick={() => setIsChangingEmail(true)}>
                                 Change email
                             </Button>
                         </section>}
@@ -128,6 +131,14 @@ export default function UserPage() {
                 setIsShown={ setIsChangingPass }>
                 <ChangePasswordForm 
                     closeModal={() => setIsChangingPass(false)}
+                    userID={ id } />
+            </Modal>
+            <Modal 
+                ref={ changeEmailRef }
+                isShown={ isChangingEmail } 
+                setIsShown={ setIsChangingEmail }>
+                <ChangeEmailForm 
+                    closeModal={() => setIsChangingEmail(false)}
                     userID={ id } />
             </Modal>
         </div>

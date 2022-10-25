@@ -65,10 +65,26 @@ export function useUserInfo() {
         }
     }
 
+    const changeEmail = async (userID, email) => {
+        try {
+            await api.patch(`/users/${userID}`, {
+                data: {
+                    type: 'update-user',
+                    attributes: {
+                        email
+                    }
+                }
+            })
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     return {
         isLoading,
         getUserInfo,
         changePassword,
+        changeEmail,
         loadUser
     }
 
