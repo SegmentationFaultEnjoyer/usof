@@ -108,7 +108,11 @@ function Category({ title, description, id, handleDelete, handleEdit }) {
                     label={title}
                     variant="outlined"
                     deleteIcon={<EditIcon />}
-                    onDelete={() => { setIsEditing(true) }} />
+                    onDelete={() => { setIsEditing(true) }} 
+                    sx={{
+                        borderColor: 'var(--secondary-light)',
+                        color: 'var(--primary-light)'
+                    }}/>
                 <p>{description}</p>
                 <div
                     className='categories-list__delete-icon'

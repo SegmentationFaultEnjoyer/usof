@@ -35,7 +35,7 @@ export function usePosts() {
 
             dispatch(setList(resp.data))
         } catch (error) {
-            ErrorHandler.process(error)
+            
         }
     }
 

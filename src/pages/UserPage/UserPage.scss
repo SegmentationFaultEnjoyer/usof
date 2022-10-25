@@ -50,6 +50,21 @@
     }
 }
 
+.user-page__empty {
+    font-weight: bold;
+
+    p {
+        font-size: toRem(25);
+    }
+
+    background-color: var(--tertiary-main);
+    border-radius: toRem(5);
+    width: 70%;
+    text-align: center;
+    margin-top: toRem(15);
+    
+}
+
 .user-info__header {
     display: flex;
     align-items: center;

@@ -1,9 +1,5 @@
 .admin-page__categories-list {
-    margin: var(--app-padding-top);
-    padding: toRem(25);
-    border-radius: toRem(5);
-    background-color: var(--tertiary-main);
-    height: fit-content;
+    @extend %page-module;
 }
 
 .categories-list__title {

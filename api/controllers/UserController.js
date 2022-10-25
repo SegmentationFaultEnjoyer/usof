@@ -52,7 +52,7 @@ exports.GetUsersList = async function (req, resp) {
         if(dbResp.error)
             throw new NotFoundError(`No users found: ${dbResp.error_message}`);
 
-        const links = await GenerateLinks('users', Q);
+        const links = await GenerateLinks('users', Q, null, null, sort, order);
 
         resp.status(httpStatus.OK).json(UsersListResponse(dbResp, links));
 

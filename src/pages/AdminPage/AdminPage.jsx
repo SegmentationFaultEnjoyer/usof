@@ -7,7 +7,7 @@ import { roles } from '@/types'
 import { useUserInfo } from '@/hooks';
 
 import { NavBar } from '@/components'
-import { CategoriesModule } from '@/pages/AdminPage/modules';
+import { CategoriesModule, UsersModule } from '@/pages/AdminPage/modules';
 
 export default function AdminPage() {
     const navigate = useNavigate()
@@ -29,6 +29,7 @@ export default function AdminPage() {
             <NavBar />
             <div className='admin-page'>
                 <CategoriesModule />
+                <UsersModule />
             </div>
         </>
     )

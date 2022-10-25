@@ -1,7 +1,7 @@
 import './UserPage.scss'
 
 import { useEffect, useState, useMemo, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { useUserInfo, usePosts } from '@/hooks'
@@ -29,8 +29,10 @@ export default function UserPage() {
     const { loadUsersPosts } = usePosts()
 
     const [user, setUser] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const userID = useSelector(state => state.user.info.id)
     const postsList = useSelector(state => state.posts)
@@ -47,9 +49,14 @@ export default function UserPage() {
         const initPage = async () => {
             await getUserInfo()
             const resp = await loadUser(id)
+
+            if(!resp) navigate('/main')
+
             await loadUsersPosts(id)
 
             setUser(resp.data.attributes)
+
+            setIsLoading(false)
         }
         initPage()
     }, [id])
@@ -85,7 +92,7 @@ export default function UserPage() {
     return (
         <div className='user-page'>
             <NavBar />
-            {!user || !postsList.posts.length ?
+            {isLoading ?
                 <div className='user-page__loader'>
                     <TriangleLoader />
                 </div> :

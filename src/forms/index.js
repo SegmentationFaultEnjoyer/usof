@@ -6,3 +6,4 @@ export { default as CreatePostForm } from './CreatePost/CreatePost';
 export { default as ChangePasswordForm } from './ChangePassword/ChangePassword';
 export { default as ChangeEmailForm } from './ChangeEmail/ChangeEmail';
 export { default as CreateCategoryForm } from './CreateCategory/CreateCategory';
+export { default as CreateUserForm } from './CreateUser/CreateUser';

@@ -1,0 +1,17 @@
+.create-user {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(35);
+    justify-content: center;
+    align-items: center;
+    width: toRem(300);
+
+    @include respond-to(small) {
+        width: toRem(250);
+    }
+}
+
+.create-user__actions {
+    display: flex;
+    gap: toRem(50);
+}
