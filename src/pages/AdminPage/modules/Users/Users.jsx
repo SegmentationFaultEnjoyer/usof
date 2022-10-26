@@ -2,7 +2,7 @@ import './Users.scss'
 
 import { useState, useEffect, useRef } from 'react'
 
-import { DotsLoader, ConfirmationModal, Modal } from '@/common'
+import { DotsLoader, ConfirmationModal, Modal, SwitchIOS } from '@/common'
 import { AuthorAvatar } from '@/components'
 import { CreateUserForm } from '@/forms'
 
@@ -13,13 +13,15 @@ import { getPagesAmount } from '@/helpers'
 
 import Chip from '@mui/material/Chip';
 import Pagination from '@mui/material/Pagination';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/AddBox';
 
 export default function Users() {
-    const { isLoading, loadUserList, users, deleteUser, loadPage, createUser } = useUserInfo()
+    const { isLoading, loadUserList, users, deleteUser, loadPage, createUser, changeRole } = useUserInfo()
 
     const [isCreatingUser, setIsCreatingUser] = useState(false);
     const createUserRef = useRef()
@@ -42,7 +44,8 @@ export default function Users() {
                             <User 
                                 user={user} 
                                 key={user.id} 
-                                handleDelete={ deleteUser }/>
+                                handleDelete={ deleteUser }
+                                handleRoleChange={ changeRole }/>
                         )}
                         <div className='users__add-icon' onClick={() => setIsCreatingUser(true)}>
                             <AddIcon fontSize='large'/>
@@ -73,10 +76,16 @@ export default function Users() {
     )
 }
 
-function User({ user, handleDelete }) {
+function User({ user, handleDelete, handleRoleChange }) {
     const { email, name, profile_picture, rating, role } = user.attributes
 
     const [isDeleting, setIsDeleting] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(role === roles.ADMIN)
+
+    const onSwitchClick = async (e) => {
+        setIsAdmin(e.target.checked)
+        await handleRoleChange(user.id, e.target.checked ? roles.ADMIN : roles.PEASANT)
+    }
 
     const roleString = useMemo(() => role === roles.ADMIN ? 'Admin' : 'Mortal', [role])
 
@@ -89,7 +98,13 @@ function User({ user, handleDelete }) {
                 profile_picture={ profile_picture }/>
             <p>{name}</p>
             <p>{email}</p>
-            <p>{roleString}</p>
+            <div className='users__admin-switch'>
+                <SwitchIOS 
+                    checked={ isAdmin }
+                    onChange={ onSwitchClick }/>
+                <p>{roleString}</p>
+            </div>
+            
             <Chip icon={<StarIcon />} label={rating} variant='outlined'
                 sx={{
                     borderColor: 'var(--secondary-light)',

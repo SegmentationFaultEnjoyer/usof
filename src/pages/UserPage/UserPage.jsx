@@ -154,7 +154,7 @@ export default function UserPage() {
                                 size="medium"
                                 color="primary_light"
                                 onClick={() => setIsChangingEmail(true)}>
-                                Change email
+                                Change info
                             </Button>
                         </section>}
                     </div>
@@ -183,8 +183,9 @@ export default function UserPage() {
                 isShown={isChangingEmail}
                 setIsShown={setIsChangingEmail}>
                 <ChangeEmailForm
-                    closeModal={() => setIsChangingEmail(false)}
-                    userID={id} />
+                    closeModal={() => setIsChangingEmail(false) }
+                    user={ user }
+                    userID={ id } />
             </Modal>
         </div>
     )

@@ -90,13 +90,14 @@ export function useUserInfo() {
         }
     }
 
-    const changeEmail = async (userID, email) => {
+    const changePersonalInfo = async (userID, email, name) => {
         try {
             await api.patch(`/users/${userID}`, {
                 data: {
                     type: 'update-user',
                     attributes: {
-                        email
+                        email,
+                        name
                     }
                 }
             })
@@ -108,10 +109,36 @@ export function useUserInfo() {
     const changeAvatar = async (photo) => {
         try {
             await api.patch('/users/avatar', photo)
-            
+
         } catch (error) {
             ErrorHandler.process(error)
             
+        }
+    }
+
+    const changeRole = async (id, role) => {
+        try {
+            const { data } = await api.patch(`/users/${id}`, {
+                data: {
+                    type: 'update-user',
+                    attributes: {
+                        role
+                    }
+                }
+            })
+
+            const index = userList.data.findIndex(user => user.id === id)
+
+            if(!~index) return
+
+            setUserList(prev => {
+                let newList = {...prev}
+                newList.data[index] = data.data
+                return newList
+            })
+
+        } catch (error) {
+            ErrorHandler.process(error)
         }
     }
 
@@ -156,7 +183,8 @@ export function useUserInfo() {
         users: userList,
         loadUserList,
         changePassword,
-        changeEmail,
+        changePersonalInfo,
+        changeRole,
         changeAvatar,
         loadUser,
         deleteUser,

@@ -4,22 +4,22 @@ import { useState } from 'react';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Notificator } from '@/common'
 
 import { useForm, useUserInfo } from '@/hooks';
 import { ErrorHandler } from '@/helpers';
 
-export default function ChangeEmail({ closeModal, userID }) {
-    const [email, setEmail] = useState('')
+export default function ChangeEmail({ closeModal, userID, user }) {
+    const [email, setEmail] = useState(user.email)
+    const [name, setName] = useState(user.name)
 
     const { isFormDisabled, disableForm, enableForm } = useForm();
-    const { changeEmail } = useUserInfo()
+    const { changePersonalInfo } = useUserInfo()
 
     const submit = async () => {
         disableForm()
 
         try {
-            await changeEmail(userID, email)
+            await changePersonalInfo(userID, email, name)
 
             closeModal()
         } catch (error) {
@@ -31,16 +31,24 @@ export default function ChangeEmail({ closeModal, userID }) {
 
     return (
         <form className='forgot-password-form' onSubmit={ submit }>
-            <h1 className='change-password__title'>Change email form</h1>
+            <h1 className='change-password__title'>Change personal info form</h1>
             <TextField
-                variant='outlined' label='email'
+                variant='outlined' label='name'
                 type='text' color="primary_light"
+                value={name}
+                onChange={e => { setName(e.target.value) }}
+                disabled={isFormDisabled}
+                required
+            />
+             <TextField
+                variant='outlined' label='email'
+                type='email' color="primary_light"
                 value={email}
                 onChange={e => { setEmail(e.target.value) }}
                 disabled={isFormDisabled}
                 required
             />
-            <div className='forgot-password-form__actions'>
+            <div className='change-email__actions'>
                 <Button
                     variant='contained'
                     type='reset'
@@ -57,7 +65,7 @@ export default function ChangeEmail({ closeModal, userID }) {
                     color="primary_light"
                     disabled={isFormDisabled}
                 >
-                    Change email
+                    Apply
                 </Button>
             </div>
 
