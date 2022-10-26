@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { usePosts } from '@/hooks'
 import { TriangleLoader, Modal } from '@/common'
-import { Post } from '@/components'
+import { Post, PostsSort } from '@/components'
 import { CreatePostForm } from '@/forms'
 
 import { getPagesAmount, loadPage } from '@/helpers'
@@ -56,9 +56,8 @@ export default function PostsList() {
                 <TriangleLoader />
             </div> :
                 <>
-                <div className='posts-list__create-post'>
+                <div className='posts-list__header'>
                     <Button
-                        fullWidth
                         variant='contained'
                         size="large"
                         color="primary_light"
@@ -66,6 +65,7 @@ export default function PostsList() {
                         onClick={() => setIsCreatingPost(true)}>
                         Create post
                     </Button>
+                    <PostsSort />
                 </div>
 
                 {postsList.posts.map(post => <Post post={post} key={post.id} />)}

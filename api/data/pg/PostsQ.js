@@ -73,6 +73,18 @@ class PostsQ extends DataBase {
         return this;
     }
 
+    OrderByAuthor(orderType = "DESC") {
+        this.currentStmt.text = this.currentStmt.text + ` ORDER BY author ${orderType}`;
+        
+        return this;
+    }
+
+    OrderByTitle(orderType = "DESC") {
+        this.currentStmt.text = this.currentStmt.text + ` ORDER BY title ${orderType}`;
+        
+        return this;
+    }
+
     OrderByPublishDate(orderType = "DESC") {
         this.currentStmt.text = this.currentStmt.text + ` ORDER BY publish_date ${orderType}`;
         

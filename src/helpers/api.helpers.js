@@ -29,3 +29,20 @@ export async function loadPage(page, links, setFunction) {
         ErrorHandler.process(error);
     }
 }
+
+export function formatQuery(queryParam) {
+    queryParam = queryParam.toLowerCase()
+    
+    switch (queryParam) {
+        case 'date':
+            return 'publish_date'
+        case 'rating':
+            return 'likes'
+        case 'alphabetic':
+            return 'title'
+        case 'status':
+        case 'author':
+        default:
+            return queryParam;
+    }
+}

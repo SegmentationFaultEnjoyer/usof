@@ -1,5 +1,13 @@
 .admin-page__categories-list {
     @extend %page-module;
+
+    @include respond-to(tablet) {
+        width: 90%;
+    } 
+
+    @include respond-to(small) {
+        width: unset;
+    }
 }
 
 .categories-list__title {
@@ -25,14 +33,14 @@
     justify-content: space-evenly;
     align-items: center;
     text-align: center;
-    grid-template-columns: toRem(100) toRem(300) toRem(20);
+    grid-template-columns: clamp(toRem(100), 20%, toRem(150)) clamp(toRem(80), 60%, toRem(400)) auto;
     
     @include respond-to(small) {
         grid-template-columns: toRem(95) toRem(150) toRem(20);
         gap: toRem(10);
         
         & > p {
-            font-size: toRem(14);
+            font-size: toRem(15);
         }
     }
 }
@@ -69,6 +77,8 @@
         transform: scale(1.1);
         cursor: pointer;
     }
+
+    padding-top: toRem(20);
 }
 
 .admin-page__categories-pages {

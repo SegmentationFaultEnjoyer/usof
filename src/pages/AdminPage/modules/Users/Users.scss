@@ -17,6 +17,13 @@
     flex-direction: column;
     margin-right: toRem(40);
     gap: toRem(15);
+    padding: toRem(10);
+    width: 100%;
+
+    @include respond-to(medium) {
+        margin-right: 0;
+        padding: toRem(20);
+    }
 }
 
 .users__item {
@@ -26,8 +33,32 @@
     text-align: center;
     align-items: center;
 
+    & > p {
+        @extend %text-ellipsis;
+    }
+
     svg {
         fill: var(--secondary-light)
+    }
+
+    @include respond-to(medium) {
+        grid-template-columns: 15% 20% 30% 20% 10%;
+        gap: toRem(10);
+
+        & > *:nth-child(3) {
+            display: none;
+        }
+    }
+
+    @include respond-to(small) {
+        justify-content: space-around;
+        gap: toRem(20);
+
+        grid-template-columns: 25% 35% 30% 10%;
+
+        & > *:nth-child(2) {
+            display: none;
+        }
     }
 }
 
@@ -65,6 +96,8 @@
         transform: scale(1.1);
         cursor: pointer;
     }
+
+    padding-top: toRem(20);
 }
 
 .users__admin-switch {

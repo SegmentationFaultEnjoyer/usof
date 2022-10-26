@@ -35,7 +35,7 @@ export function usePosts() {
 
             dispatch(setList(resp.data))
         } catch (error) {
-            
+            dispatch(setList({ data: [], links: {}}))
         }
     }
 
@@ -127,6 +127,16 @@ export function usePosts() {
         }
     }
 
+    const sortPosts = async (sort, order) => {
+        try {
+            const resp = await api.get(`/posts?limit=${LIMIT}&sort=${sort}&order=${order}`);
+
+            dispatch(setList(resp.data))
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     return {
         loadPosts,
         loadUsersPosts,
@@ -135,6 +145,7 @@ export function usePosts() {
         createPost,
         updatePost,
         loadPostLikes,
-        filterPosts
+        filterPosts,
+        sortPosts
     }
 }

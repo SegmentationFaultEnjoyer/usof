@@ -30,6 +30,7 @@ export default function AdminPage() {
             <div className='admin-page'>
                 <CategoriesModule />
                 <UsersModule />
+                <div className='posts-list__end'>Blank space</div>
             </div>
         </>
     )

@@ -15,7 +15,7 @@ export function useCategories() {
         setIsLoading(true)
 
         try {
-            let { data } = await api.get(`/categories?limit=${limit}`)
+            let { data } = await api.get(`/categories?limit=${limit}&sort=id`)
 
             setCategories(data)
 

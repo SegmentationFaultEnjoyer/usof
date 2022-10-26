@@ -20,11 +20,16 @@
     place-content: center;
 }
 
-.posts-list__create-post {
-    width: 15%;
+.posts-list__header {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     @include respond-to(small) {
-        width: 70%;
+        width: 90%;
+        flex-direction: column;
+        gap: toRem(15);
     }
 }
 
