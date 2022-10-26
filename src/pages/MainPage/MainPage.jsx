@@ -13,8 +13,6 @@ export default function MainPage() {
    
     useEffect(() => { getUserInfo() }, []);
 
-    console.log('render main');
-
     return (
         <section className="main-page">
             {isLoading ? 

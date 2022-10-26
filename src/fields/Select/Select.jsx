@@ -1,12 +1,14 @@
 import './Select.scss'
 
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Box from '@mui/material/Box';
-import Select from '@mui/material/Select';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import MenuItem from '@mui/material/MenuItem';
-import Chip from '@mui/material/Chip';
+import { 
+    FormControl, 
+    InputLabel, 
+    Box, 
+    Select, 
+    OutlinedInput, 
+    MenuItem, 
+    Chip
+} from '@mui/material'
 
 import { useTheme } from '@mui/material/styles';
 

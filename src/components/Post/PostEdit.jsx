@@ -5,10 +5,7 @@ import { maxLength, minLength, ErrorHandler } from '@/helpers';
 import { DotsLoader } from '@/common';
 import { MultipleSelect } from '@/fields';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import { TextField, Button, Checkbox, FormControlLabel } from '@mui/material'
 
 export default function PostEdit({ post, toggleEdit }) {
     const [title, setTitle] = useState(post.attributes.title)

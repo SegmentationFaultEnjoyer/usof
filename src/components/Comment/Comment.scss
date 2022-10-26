@@ -8,7 +8,7 @@
     padding: toRem(20);
     gap: toRem(10);
     border-radius: toRem(5);
-    border: toRem(2) solid var(--secondary-light);
+    border: toRem(2) dotted var(--secondary-light);
 
     @include respond-to(small) {
         width: 100%;
@@ -118,5 +118,22 @@
     @include respond-to(small) {
         flex-direction: column;
         gap: toRem(15);
+    }
+}
+
+.comment__label {
+    position: absolute;
+    background-color: inherit;
+    border: toRem(2) dashed var(--secondary-light);
+    padding: toRem(4);
+    border-radius: toRem(5) 0 0 toRem(5);
+    left: toRem(-36);
+
+    &--edited {
+        top: 15%;
+    }
+
+    @include respond-to(small) { 
+        transform: scale(0.9);
     }
 }

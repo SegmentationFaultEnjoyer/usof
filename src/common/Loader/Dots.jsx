@@ -1,4 +1,4 @@
-import { Circles, TailSpin, Oval, Bars, Grid, Triangle, MutatingDots } from 'react-loader-spinner';
+import { MutatingDots } from 'react-loader-spinner';
 
 export function DotsLoader() {
     return(

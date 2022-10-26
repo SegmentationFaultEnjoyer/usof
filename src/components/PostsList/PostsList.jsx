@@ -8,10 +8,8 @@ import { Post, PostsSort } from '@/components'
 import { CreatePostForm } from '@/forms'
 
 import { getPagesAmount, loadPage } from '@/helpers'
-
-import Pagination from '@mui/material/Pagination';
-import Button from '@mui/material/Button';
-import PostAddIcon from '@mui/icons-material/PostAdd';
+import { Pagination, Button } from '@mui/material'
+import { PostAdd as PostAddIcon } from '@mui/icons-material'
 
 import { useDispatch } from 'react-redux';
 import { setList } from '@/store';
@@ -24,13 +22,11 @@ export default function PostsList() {
     const createPostRef = useRef(null)
     const [isCreatingPost, setIsCreatingPost] = useState(false)
 
-    console.log('post list render');
-
     const postsList = useSelector(state => state.posts)
 
     useEffect(() => {
         const getPosts = async () => {
-            await loadPosts()
+            await loadPosts(true)
         }
         getPosts()
     }, [])

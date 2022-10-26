@@ -2,13 +2,10 @@ import './CreateUser.scss'
 
 import { useState } from 'react';
 
-import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Button from '@mui/material/Button';
+import { TextField, Button, Checkbox, FormControlLabel } from '@mui/material'
 
 import { useForm, useFormValidation } from '@/hooks';
-import { maxLength, minLength, ErrorHandler } from '@/helpers';
+import { maxLength, minLength } from '@/helpers';
 import { roles } from '@/types';
 
 export default function CreateUser({ closeForm, createUser }) {

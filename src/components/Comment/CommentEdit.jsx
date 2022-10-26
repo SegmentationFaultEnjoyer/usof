@@ -3,10 +3,8 @@ import { useState } from 'react';
 import { useForm, useFormValidation } from '@/hooks';
 import { maxLength, minLength, ErrorHandler } from '@/helpers';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import CheckIcon from '@mui/icons-material/Check';
-import ClearIcon from '@mui/icons-material/Clear';
+import { TextField, Button } from '@mui/material'
+import { Check as CheckIcon, Clear as ClearIcon } from '@mui/icons-material'
 
 export default function CommentEdit({ comment, toggleEdit, updateComment }) {
     const [content, setContent] = useState(comment.attributes.content)

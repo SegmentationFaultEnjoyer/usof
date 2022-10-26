@@ -1,8 +1,10 @@
 import './NavBar.scss';
-import LogoutIcon from '@mui/icons-material/Logout';
-import HomeIcon from '@mui/icons-material/Home';
-import PersonIcon from '@mui/icons-material/Person';
-import AdminPanel from '@mui/icons-material/AdminPanelSettings';
+
+import { 
+    Logout as LogoutIcon,
+    Person as PersonIcon,
+    AdminPanelSettings as AdminPanel
+} from '@mui/icons-material'
 
 import { api } from '@/api';
 import { useNavigate } from 'react-router-dom';
@@ -42,18 +44,19 @@ export default function NavBar() {
 
     return (
         <nav className='nav-bar'>
-            {isAdmin && <div className='nav-bar__icon' onClick={ toAdminPage }>
-                <AdminPanel color='tertiary_main'/>
-            </div>}
-            <div className='nav-bar__icon' onClick={ toUserPage }>
-                <PersonIcon color='tertiary_main'/>
-            </div>
-            <div className='nav-bar__icon' onClick={ toHomePage }>
-                <HomeIcon color='tertiary_main'/>
-            </div>
-            <div className='nav-bar__icon' onClick={ logOut }>
-                <LogoutIcon color='tertiary_main'/>
-            </div>
+            <h1 className='nav-bar__logo' onClick={ toHomePage }>USOF</h1>
+            <section className='nav-bar__actions'>
+                {isAdmin && <div className='nav-bar__icon' onClick={ toAdminPage }>
+                    <AdminPanel color='tertiary_main'/>
+                </div>}
+                <div className='nav-bar__icon' onClick={ toUserPage }>
+                    <PersonIcon color='tertiary_main'/>
+                </div>
+                <div className='nav-bar__icon' onClick={ logOut }>
+                    <LogoutIcon color='tertiary_main'/>
+                </div>
+            </section>
+            
         </nav>
     )
 }

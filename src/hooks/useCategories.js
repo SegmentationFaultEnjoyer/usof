@@ -19,8 +19,6 @@ export function useCategories() {
 
             setCategories(data)
 
-            console.log(data);
-
         } catch (error) {
             ErrorHandler.process(error)
         }

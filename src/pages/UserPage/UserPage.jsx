@@ -13,14 +13,13 @@ import { roles } from '@/types'
 import { getPagesAmount, loadPage } from '@/helpers'
 import { setList } from '@/store'
 
-import Chip from '@mui/material/Chip';
-import Pagination from '@mui/material/Pagination';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import { Chip, Pagination, Button, IconButton } from '@mui/material'
+import {
+    Star as StarIcon,
+    Fingerprint as AdminIcon,
+    PhotoCamera as CameraIcon
+} from '@mui/icons-material'
 
-import StarIcon from '@mui/icons-material/Star';
-import AdminIcon from '@mui/icons-material/Fingerprint';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
 
 export default function UserPage() {
     const { id } = useParams()
@@ -159,7 +158,7 @@ export default function UserPage() {
                         </section>}
                     </div>
                     <section className='user-page__posts'>
-                        {postsList.posts.map(post => <Post post={post} key={post.id} />)}
+                        {postsList.posts.map(post => <Post post={post} key={post.id} disabled/>)}
 
                         {(postsList.links.next || postsList.links.prev) &&
                             <Pagination

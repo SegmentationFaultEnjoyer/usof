@@ -8,8 +8,11 @@ import { roles } from '@/types'
 import { Rating, AuthorAvatar } from '@/components'
 import { ConfirmationModal } from '@/common'
 
-import DeleteIcon from '@mui/icons-material/DeleteForever';
-import StartEditIcon from '@mui/icons-material/BorderColorOutlined';
+import { 
+    DeleteForever as DeleteIcon,
+    BorderColorOutlined as StartEditIcon,
+    EditOutlined as EditedIcon
+} from '@mui/icons-material'
 
 import { formatDate } from '@/helpers'
 
@@ -68,6 +71,9 @@ export default function CommentInfo({ comment, deleteComment, toggleEdit }) {
                 </div>}
             {(isBelongToMe || isAdmin) && <div className='comment__delete' onClick={() => setIsDeleting(true)}>
                 <DeleteIcon color='primary_light' />
+            </div>}
+            {is_edited && <div className='comment__label comment__label--edited'>
+                <EditedIcon color='primary_light' />
             </div>}
             <p className='comment__content'> {content}</p>
             <Rating

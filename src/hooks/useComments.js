@@ -52,7 +52,7 @@ export function useComments() {
 
     const updateComment = async (commentID, content) => {
         try {
-            const { data } = await api.patch(`comments/${commentID}`, {
+            const { data } = await api.patch(`/comments/${commentID}`, {
                 data: {
                     type: "update-comment",
                     attributes: {
@@ -68,6 +68,7 @@ export function useComments() {
             setComments(prev => {
                 let newComments = {...prev}
                 newComments.data[index] = data.data
+
                 return newComments
             })
 

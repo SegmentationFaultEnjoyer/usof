@@ -6,18 +6,19 @@ import { usePosts } from '@/hooks';
 import { setFilter } from '@/store';
 import { PostContext } from '@/context';
 
-import HiddenIcon from '@mui/icons-material/VisibilityOffOutlined';
-import EditedIcon from '@mui/icons-material/EditOutlined';
-import DeleteIcon from '@mui/icons-material/HighlightOff';
-
-import CommentIcon from '@mui/icons-material/MessageOutlined';
-import StartEditIcon from '@mui/icons-material/BorderColorOutlined';
+import {
+    VisibilityOffOutlined as HiddenIcon,
+    EditOutlined as EditedIcon,
+    HighlightOff as DeleteIcon,
+    MessageOutlined as CommentIcon,
+    BorderColorOutlined as StartEditIcon
+} from '@mui/icons-material'
 
 import { CommentsList, Rating, AuthorAvatar } from '@/components'
 import { ConfirmationModal } from '@/common';
 import { roles } from '@/types';
 
-export default function PostInfo({ post, toggleEdit }) {
+export default function PostInfo({ post, toggleEdit, disabled }) {
     const {
         title,
         status,
@@ -55,8 +56,10 @@ export default function PostInfo({ post, toggleEdit }) {
     }, [])
 
     const handleOnCategoryClick = async (title) => {
+        if (disabled) return 
+        
         await filterPosts(`[category]-->${title}`)
-        dispatch(setFilter(title))
+        dispatch(setFilter({ param: 'category', value: title }))
     }
 
     const handlePostDelete = async () => { await deletePost(post.id) }

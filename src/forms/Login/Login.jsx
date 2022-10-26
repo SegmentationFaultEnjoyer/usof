@@ -2,8 +2,7 @@ import './Login.scss'
 
 import { useState } from 'react';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { TextField, Button } from '@mui/material'
 import { Notificator } from '@/common'
 
 import { useForm, useFormValidation } from '@/hooks';

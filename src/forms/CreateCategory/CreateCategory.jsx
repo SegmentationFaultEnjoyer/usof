@@ -2,8 +2,7 @@ import './CreateCategory.scss'
 
 import { useState } from 'react';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { TextField, Button } from '@mui/material'
 
 import { useForm, useFormValidation } from '@/hooks';
 import { maxLength, minLength } from '@/helpers';

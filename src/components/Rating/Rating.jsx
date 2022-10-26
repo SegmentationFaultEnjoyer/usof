@@ -3,14 +3,16 @@ import './Rating.scss'
 import { useState, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import LikeIcon from '@mui/icons-material/FavoriteBorder';
-import LikeToggledIcon from '@mui/icons-material/Favorite';
-import DislikeToggledIcon from '@mui/icons-material/HeartBroken';
-import DislikeIcon from '@mui/icons-material/HeartBrokenOutlined';
+import {
+    FavoriteBorder as LikeIcon,
+    Favorite as LikeToggledIcon,
+    HeartBroken as DislikeToggledIcon,
+    HeartBrokenOutlined as DislikeIcon
+
+} from '@mui/icons-material'
 
 import { api } from '@/api';
 import { ErrorHandler, handleRatingPoints, countLikes } from '@/helpers';
-
 
 export default function Rating({ endpoint, entity, id, loadLikes, centered }) {
     const [rating, setRating] = useState({ likes: 0, dislikes: 0 })

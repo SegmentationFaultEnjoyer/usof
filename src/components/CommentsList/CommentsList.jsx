@@ -10,7 +10,7 @@ import { Comment } from '@/components'
 import { CreateCommentForm } from '@/forms'
 
 import { getPagesAmount } from '@/helpers'
-import Pagination from '@mui/material/Pagination';
+import { Pagination } from '@mui/material';
 
 export default function Comments({ isOpen }) {
     const { 

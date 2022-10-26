@@ -1,6 +1,6 @@
 import './Comment.scss'
 
-import { useEffect, useState, useMemo, useContext } from 'react'
+import { useState } from 'react'
 
 import CommentInfo from './CommentInfo'
 import CommentEdit from './CommentEdit'

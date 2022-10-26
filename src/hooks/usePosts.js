@@ -4,21 +4,31 @@ import { api } from '@/api';
 import Mutex from '@/api/mutex'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setList, startLoading, finishLoading, updatePostInfo } from '@/store';
+import { setList, startLoading, finishLoading, updatePostInfo, setFilter } from '@/store';
 import { Notificator } from '@/common';
 
 const LIMIT = 6
 
 export function usePosts() {
     const dispatch = useDispatch()
+    const filter = useSelector(state => state.posts.filter)
 
-    const loadPosts = async () => {
+    const loadPosts = async (noFilter = false) => {
         dispatch(startLoading())
         try {
             const lockToken = new Date().toISOString();
 
+            let endpoint = `/posts?limit=${LIMIT}`
+
+            if (filter.param && !noFilter)
+                endpoint = endpoint.concat(`&filter=[${filter.param}]-->${filter.value}`)
+            else {
+                dispatch(setFilter({ param: '', value: '' }))
+                endpoint = endpoint.concat('&sort=likes')
+            }
+               
             Mutex.lock(lockToken);
-            const resp = await api.get(`/posts?limit=${LIMIT}&sort=likes`, { lockToken });
+            const resp = await api.get(endpoint, { lockToken });
             Mutex.releaseLock(lockToken);
 
             dispatch(setList(resp.data))
@@ -34,8 +44,10 @@ export function usePosts() {
             const resp = await api.get(`/posts?limit=${LIMIT}&filter=[author]-->${userID}`)
 
             dispatch(setList(resp.data))
+            dispatch(setFilter({ param: 'author', value: userID}))
+
         } catch (error) {
-            dispatch(setList({ data: [], links: {}}))
+            dispatch(setList({ data: [], links: {} }))
         }
     }
 
@@ -70,7 +82,7 @@ export function usePosts() {
             })
 
             console.log(data);
-            dispatch(updatePostInfo({id, newInfo: data.data}))
+            dispatch(updatePostInfo({ id, newInfo: data.data }))
 
             Notificator.success('Post updated!')
 
@@ -79,7 +91,6 @@ export function usePosts() {
         }
     }
 
-    //TODO fix loading all posts when on user page
     const deletePost = async (id) => {
         try {
             await api.delete(`/posts/${id}`)

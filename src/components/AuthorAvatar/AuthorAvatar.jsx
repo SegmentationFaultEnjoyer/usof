@@ -1,5 +1,5 @@
 import './AuthorAvatar.scss'
-import Avatar from '@mui/material/Avatar';
+import { Avatar } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 import { avatarFromString } from '@/helpers'

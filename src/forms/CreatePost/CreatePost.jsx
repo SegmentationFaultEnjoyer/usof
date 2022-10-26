@@ -2,8 +2,7 @@ import './CreatePost.scss'
 
 import { useState, useEffect } from 'react';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { TextField, Button } from '@mui/material'
 
 import { useForm, useFormValidation, useCategories, usePosts } from '@/hooks';
 import { maxLength, minLength, ErrorHandler } from '@/helpers';

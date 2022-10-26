@@ -4,7 +4,10 @@ const initialState = {
    posts: [],
    links: {},
    isLoading: true,
-   filter: ''
+   filter: {
+    param: '',
+    value: ''
+   }
 }
 
 export const postsSlice = createSlice({

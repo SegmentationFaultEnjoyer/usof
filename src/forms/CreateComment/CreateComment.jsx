@@ -7,10 +7,8 @@ import { useForm } from '@/hooks';
 
 import { ErrorHandler } from '@/helpers';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-
-import SendCommentIcon from '@mui/icons-material/Send'
+import { TextField, Button } from '@mui/material'
+import { Send as SendCommentIcon } from '@mui/icons-material'
 
 export default function CreateComment({ createComment }) {
     const [comment, setComment] = useState('')

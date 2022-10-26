@@ -7,16 +7,14 @@ import { useCategories, useForm, useFormValidation } from '@/hooks';
 import { DotsLoader, ConfirmationModal, Modal } from '@/common';
 import { CreateCategoryForm } from '@/forms';
 
-import Chip from '@mui/material/Chip';
-import Pagination from '@mui/material/Pagination';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-
-import CheckIcon from '@mui/icons-material/Check';
-import DeleteIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Settings';
-import ClearIcon from '@mui/icons-material/Clear';
-import AddIcon from '@mui/icons-material/AddBox';
+import { Chip, Pagination, TextField, IconButton  } from '@mui/material'
+import {
+    Check as CheckIcon,
+    DeleteForever as DeleteIcon,
+    Settings as EditIcon,
+    Clear as ClearIcon,
+    AddBox as AddIcon
+} from '@mui/icons-material'
 
 export default function CategoriesModule() {
     const { 

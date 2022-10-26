@@ -11,14 +11,12 @@ import { useMemo } from 'react'
 import { roles } from '@/types'
 import { getPagesAmount } from '@/helpers'
 
-import Chip from '@mui/material/Chip';
-import Pagination from '@mui/material/Pagination';
-import FormControlLabel from '@mui/material/FormControlLabel';
-
-
-import StarIcon from '@mui/icons-material/Star';
-import DeleteIcon from '@mui/icons-material/DeleteForever';
-import AddIcon from '@mui/icons-material/AddBox';
+import { Chip, Pagination } from '@mui/material'
+import { 
+    Star as StarIcon, 
+    DeleteForever as DeleteIcon, 
+    AddBox as AddIcon 
+} from '@mui/icons-material'
 
 export default function Users() {
     const { isLoading, loadUserList, users, deleteUser, loadPage, createUser, changeRole } = useUserInfo()

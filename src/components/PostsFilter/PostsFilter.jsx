@@ -12,16 +12,14 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { useCategories, usePosts } from '@/hooks'
 
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-
-import ArrowDown from '@mui/icons-material/KeyboardArrowDownOutlined';
-import ArrowUp from '@mui/icons-material/KeyboardArrowUpOutlined';
-import ArrowLeft from '@mui/icons-material/ChevronLeftOutlined';
-import ArrowRight from '@mui/icons-material/ChevronRightOutlined';
-import CloseIcon from '@mui/icons-material/ClearOutlined';
+import { Radio, RadioGroup, FormControl, FormControlLabel } from '@mui/material'
+import {
+    KeyboardArrowDownOutlined as ArrowDown,
+    KeyboardArrowUpOutlined as ArrowUp,
+    ChevronLeftOutlined as ArrowLeft,
+    ChevronRightOutlined as ArrowRight,
+    ClearOutlined as CloseIcon
+} from '@mui/icons-material'
 
 export default function PostsFilter() {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false)
@@ -67,17 +65,17 @@ export default function PostsFilter() {
 
     const pickCategory = async (title) => {
         await filterPosts(`[category]-->${title}`)
-        dispatch(setCurrentFilter(title))
+        dispatch(setCurrentFilter({ param: 'category', value: title }))
     }
 
     const pickDate = async (date) => {
         await filterPosts(`[date]-->${date}`)
-        dispatch(setCurrentFilter(date))
+        dispatch(setCurrentFilter({ param: 'date', value: date }))
     }
 
     const pickStatus = async (status) => {
         await filterPosts(`[status]-->${status}`)
-        dispatch(setCurrentFilter(status ? 'active' : 'inactive'))
+        dispatch(setCurrentFilter({ param: 'status', value: status ? 'active' : 'inactive' } ))
     }
 
     return (
@@ -98,12 +96,12 @@ export default function PostsFilter() {
                         </motion.div>}
                 </div>
             </AnimatePresence>
-            {currentFilter && <div className='posts-filter__current-filter'>
-                <FilterFolder currentFilter={ currentFilter }/>
+            {currentFilter.value && <div className='posts-filter__current-filter'>
+                <FilterFolder currentFilter={ currentFilter.value }/>
             </div>}
-            {currentFilter && !isFilterShown && 
+            {currentFilter.value && !isFilterShown && 
             <div className='posts-filter__current-filter posts-filter__current-filter--pop-up'>
-                <FilterFolder currentFilter={ currentFilter }/>
+                <FilterFolder currentFilter={ currentFilter.value }/>
             </div>}
             <FormControl>
                 <RadioGroup 
@@ -204,8 +202,8 @@ function FilterFolder({ currentFilter }) {
     const { loadPosts } = usePosts()
 
     const resetFilter = async () => {
-        await loadPosts()
-        dispatch(setCurrentFilter(''))
+        await loadPosts(true)
+        dispatch(setCurrentFilter({ param: '', value: ''}))
     }
         
     return (
