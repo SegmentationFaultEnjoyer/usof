@@ -8,6 +8,7 @@ import { PostContext } from '@/context';
 
 import {
     VisibilityOffOutlined as HiddenIcon,
+    VisibilityOutlined as ShownIcon,
     EditOutlined as EditedIcon,
     HighlightOff as DeleteIcon,
     MessageOutlined as CommentIcon,
@@ -34,7 +35,7 @@ export default function PostInfo({ post, toggleEdit, disabled }) {
     const [isFullDateShown, setIsFullDateShown] = useState(false)
 
     const dispatch = useDispatch()
-    const { filterPosts, loadPost, loadPostLikes, deletePost } = usePosts()
+    const { filterPosts, loadPost, loadPostLikes, deletePost, updatePost } = usePosts()
 
     const userID = useSelector(state => state.user.info.id)
     const isAdmin = useSelector(state => state.user.info.role === roles.ADMIN)
@@ -63,6 +64,10 @@ export default function PostInfo({ post, toggleEdit, disabled }) {
     }
 
     const handlePostDelete = async () => { await deletePost(post.id) }
+
+    const handleStatusChange = async () => {
+        await updatePost(post.id, { status: !status })
+    }
 
     const sharedData = useMemo(() => ({
         updateCounter: setCommentsAmount,
@@ -115,8 +120,10 @@ export default function PostInfo({ post, toggleEdit, disabled }) {
                     <EditedIcon color='primary_light' />
                 </div>}
 
-                {!status && <div className='post__label post__label--hidden'>
-                    <HiddenIcon color='primary_light' />
+                {isAdmin && <div className='post__label post__label--hidden' onClick={ handleStatusChange }>
+                    {!status ? 
+                    <HiddenIcon color='primary_light' /> : 
+                    <ShownIcon color='primary_light'/>}
                 </div>}
 
                 <div

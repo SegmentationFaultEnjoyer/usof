@@ -1,6 +1,13 @@
 import { ErrorHandler } from "./error-handler";
 import { api } from "@/api";
 
+export function isExcluded(url, excludeRoutes) {
+    return excludeRoutes.some(route => {
+        const pattern = new RegExp(`${route}?.`);
+        return pattern.test(url);
+    });
+}
+
 export function getPagesAmount(link) {
     if (!link) return
 

@@ -8,15 +8,15 @@ import { ThemeProvider } from '@mui/material/styles';
 import GlobalMUIStyles from '@styles/UI_Themes'
 import { ToastContainer } from '@/common'
 
-import { store } from '@/store/store'
+import { store } from '@/store'
 
 function App() {
     return (
         <Provider store={store}>
             <ThemeProvider theme={GlobalMUIStyles}>
-               <AppRoutes />
+                <AppRoutes />
             </ThemeProvider>
-            <ToastContainer theme='dark'/>
+            <ToastContainer theme='dark' />
         </Provider>
     )
 }

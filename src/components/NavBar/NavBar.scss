@@ -38,11 +38,6 @@
     display: flex;
     justify-content: flex-end;
     gap: toRem(20);
-
-    @include respond-to(small) {
-        justify-content: space-evenly;
-        gap: 0;
-    }
 }
 
 .nav-bar__icon {

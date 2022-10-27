@@ -2,7 +2,6 @@ import { ErrorHandler, loadPage as pageLoader } from '@/helpers'
 import { useState } from 'react';
 
 import { api } from '@/api';
-import Mutex from '@/api/mutex'
 
 import { useNavigate } from 'react-router-dom';
 
@@ -21,12 +20,8 @@ export function useUserInfo() {
 
     const getUserInfo = async () => {
         try {
-            const lockToken = new Date().toISOString();
-
-            // Mutex.lock(lockToken);
-            let resp = await api.get('/auth');
-            // Mutex.releaseLock(lockToken);
-
+            const resp = await api.get('/auth');
+          
             dispatch(setUser({
                 ...resp.data.data.attributes,
                 id: resp.data.data.id

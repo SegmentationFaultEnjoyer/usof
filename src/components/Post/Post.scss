@@ -102,6 +102,19 @@
     &--hidden {
         top: 40%;
         padding-bottom: toRem(2);
+
+        svg {
+            transition-property: fill;
+            transition: .2s ease;
+        }
+
+        &:hover {
+            cursor: pointer;
+            svg {
+                fill: var(--primary-dark);
+            }
+            
+        }
     }
 
     &--comments {
@@ -159,7 +172,6 @@
     justify-content: space-between;
 }
 
-//TODO скрывать слишком много текста и на клик показывать фул
 .post__content {
     word-wrap: break-word;
 
@@ -237,7 +249,7 @@
 }
 
 .post__categories {
-    height: toRem(40);
+    height: fit-content;
     padding: toRem(5);
     width: 50%;
     display: grid;
@@ -246,6 +258,7 @@
 
     @include respond-to(small) {
         grid-template-columns: repeat(auto-fill, minmax(toRem(50), 1fr));
+        width: 60%;
     }
 }
 

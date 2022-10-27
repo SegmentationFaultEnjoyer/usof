@@ -1,7 +1,6 @@
 import { ErrorHandler } from '@/helpers';
 
 import { api } from '@/api';
-import Mutex from '@/api/mutex'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setList, startLoading, finishLoading, updatePostInfo, setFilter } from '@/store';
@@ -16,8 +15,6 @@ export function usePosts() {
     const loadPosts = async (noFilter = false) => {
         dispatch(startLoading())
         try {
-            const lockToken = new Date().toISOString();
-
             let endpoint = `/posts?limit=${LIMIT}`
 
             if (filter.param && !noFilter)
@@ -27,9 +24,7 @@ export function usePosts() {
                 endpoint = endpoint.concat('&sort=likes')
             }
                
-            Mutex.lock(lockToken);
-            const resp = await api.get(endpoint, { lockToken });
-            Mutex.releaseLock(lockToken);
+            const resp = await api.get(endpoint);
 
             dispatch(setList(resp.data))
 
@@ -81,7 +76,6 @@ export function usePosts() {
                 }
             })
 
-            console.log(data);
             dispatch(updatePostInfo({ id, newInfo: data.data }))
 
             Notificator.success('Post updated!')
@@ -125,11 +119,7 @@ export function usePosts() {
 
     const filterPosts = async (filterValue) => {
         try {
-            const lockToken = new Date().toISOString();
-
-            Mutex.lock(lockToken);
-            const resp = await api.get(`/posts?limit=${LIMIT}&filter=${filterValue}`, { lockToken });
-            Mutex.releaseLock(lockToken);
+            const resp = await api.get(`/posts?limit=${LIMIT}&filter=${filterValue}`);
 
             dispatch(setList(resp.data))
 
