@@ -1,6 +1,9 @@
 const { BadRequestError, UnauthorizedError, NotFoundError } = require('./errors/components/classes');
 const ProcessError = require('./errors/handler');
 
+const { join } = require('path')
+const convertImg = require('../helpers/convertImage');
+
 const {
     parseCreatePostRequest,
     parseUpdatePostRequest,
@@ -25,6 +28,7 @@ const postsQ = require('../data/pg/PostsQ');
 const commentsQ = require('../data/pg/CommentsQ');
 const categoriesQ = require('../data/pg/CategoriesQ');
 const likesQ = require('../data/pg/PostLikesQ');
+const mediaQ = require('../data/pg/MediaQ');
 
 const includeHandler = require('./include/handler');
 const sortHandler = require('./sort/handler');
@@ -64,6 +68,37 @@ exports.CreatePost = async function (req, resp) {
 
     } catch (error) {
         ProcessError(resp, error);
+    }
+}
+
+exports.UploadPostMedia = async function (req, resp) {
+    try {
+        if(!req.file && !req.files)
+            throw new BadRequestError('File corrupted');
+
+        const filePath = join(__dirname, '..', 'user_data');
+        const pathToSavedPhoto = join(filePath, 'media');
+
+        const newName = await convertImg(filePath, req.file.filename, pathToSavedPhoto);
+
+        const { post_id } = req.params
+
+        let dbResp = await new mediaQ()
+            .New()
+            .Insert({ post_id, path: newName })
+            .Execute()
+
+        if(dbResp.error)
+            throw new Error(`Failed to add media path to db: ${dbResp.error_message}`);
+
+        //TODO normal response
+        resp.status(httpStatus.CREATED).json({
+            data: {
+                img_url: `/images/media/${newName}`
+            }
+        });
+    } catch (error) {
+        ProcessError(resp, error)
     }
 }
 
@@ -178,6 +213,11 @@ exports.GetPost = async function (req, resp) {
 
         if (owner.error)
             throw new NotFoundError(`Error getting owner: ${owner.error_message}`);
+
+        const media = await new mediaQ().New().Get().WherePostID(post_id).Execute()
+
+        if (!media.error)
+            Object.assign(dbResp, { media })
 
         resp.status(httpStatus.OK).json(PostResponse(dbResp, includeResp, owner));
 

@@ -25,10 +25,10 @@ router.use('/comments', commentsRouter);
 router.use('/categories', categoriesRouter);
 
 //test shit
-router.get('/images/avatar/:image_name', (req, resp) => {
-    const { image_name } = req.params;
+router.get('/images/:type/:image_name', (req, resp) => {
+    const { image_name, type } = req.params;
 
-    resp.sendFile(join(__dirname, '..', 'user_data', 'avatars', image_name));
+    resp.sendFile(join(__dirname, '..', 'user_data', type, image_name));
 })
 
 module.exports = router;

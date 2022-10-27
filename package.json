@@ -4,7 +4,7 @@
   "private": true,
   "description": "full-app",
   "scripts": {
-    "dev": "node api/main.js run service",
+    "dev": "clear && node api/main.js run service",
     "migrate": "node api/main.js migrate",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.js ",

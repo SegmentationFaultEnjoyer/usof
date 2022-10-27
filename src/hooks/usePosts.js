@@ -96,7 +96,7 @@ export function usePosts() {
 
     const createPost = async (title, content, categories) => {
         try {
-            await api.post('/posts', {
+            const { data } = await api.post('/posts', {
                 data: {
                     type: 'create-post',
                     attributes: {
@@ -110,10 +110,11 @@ export function usePosts() {
 
             Notificator.success('Post created!')
 
-            await loadPosts()
+            return data.data
 
         } catch (error) {
             ErrorHandler.process(error)
+            return null
         }
     }
 
@@ -138,10 +139,19 @@ export function usePosts() {
         }
     }
 
+    const uploadMedia = async (postID, media) => {
+        try {
+            await api.post(`/posts/${postID}/media`, media)
+        } catch (error) {
+            ErrorHandler.process(error)
+        }
+    }
+
     return {
         loadPosts,
         loadUsersPosts,
         loadPost,
+        uploadMedia,
         deletePost,
         createPost,
         updatePost,

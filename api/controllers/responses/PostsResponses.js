@@ -1,4 +1,4 @@
-exports.PostResponse = function({ id, title, publish_date, status, content, categories, author, is_edited }, 
+exports.PostResponse = function({ id, title, publish_date, status, content, categories, author, is_edited, media }, 
     include = null, 
     owner) {
     
@@ -13,7 +13,8 @@ exports.PostResponse = function({ id, title, publish_date, status, content, cate
                 status,
                 content,
                 categories,
-                is_edited
+                is_edited,
+                media
             },
             relationships: {
                 author: {

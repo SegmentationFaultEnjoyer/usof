@@ -1,11 +1,15 @@
 import './CreatePost.scss'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-import { TextField, Button } from '@mui/material'
+import { TextField, Button, IconButton, Portal } from '@mui/material'
+import { 
+    AddPhotoAlternateOutlined as AddPhotoIcon, 
+    DownloadDoneOutlined as PhotoChosenIcon 
+} from '@mui/icons-material'
 
 import { useForm, useFormValidation, useCategories, usePosts } from '@/hooks';
-import { maxLength, minLength, ErrorHandler } from '@/helpers';
+import { maxLength, minLength, ErrorHandler, useDidUpdateEffect } from '@/helpers';
 import { DotsLoader } from '@/common';
 import { MultipleSelect } from '@/fields';
 
@@ -13,6 +17,9 @@ export default function CreatePost({ closeForm }) {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [category, setCategory] = useState([])
+
+    const [postID, setPostID] = useState(null)
+    const [isPhotoChosen, setIsPhotoChosen] = useState(false)
 
     const { isFormDisabled, disableForm, enableForm } = useForm();
     const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
@@ -24,11 +31,15 @@ export default function CreatePost({ closeForm }) {
     )
 
     const { categories, isLoading, loadCategories } = useCategories()
-    const { createPost } = usePosts()
+    const { createPost, uploadMedia, loadPosts } = usePosts()
 
     useEffect(() => {
         loadCategories()
     }, [])
+
+    useDidUpdateEffect(() => {
+        triggerForm()
+    }, [postID])
 
     const onSubmit = async (event) => {
         if (!isFormValid()) return
@@ -36,15 +47,37 @@ export default function CreatePost({ closeForm }) {
         event.preventDefault();
         disableForm();
         try {
-            await createPost(title, content, category)
-            closeForm()
+            const { id } = await createPost(title, content, category)
+
+            setPostID(id)
+
         } catch (error) {
             ErrorHandler.process(error)
         }
         enableForm();
     }
 
+    const uploadForm = useRef()
+    const portalUploadFormRef = useRef()
+
+    const triggerForm = () => {
+        uploadForm.current.dispatchEvent(
+            new Event('submit', { bubbles: true, cancelable: true } )
+        )
+    }
+
+    const imageUpload = async (e) => {
+        const formData = new FormData(e.target);
+
+        if(formData.get('img'))
+            await uploadMedia(postID, formData)
+        
+        closeForm()
+        await loadPosts()
+    }
+
     return (
+        <>
         <form className='create-post' onSubmit={ onSubmit }>
             <h1>Create post form</h1>
             <section className='create-post__fields'>
@@ -81,6 +114,7 @@ export default function CreatePost({ closeForm }) {
                             picked={ category }
                             setPicked={ setCategory }/>}
                     </div>}
+                    <div ref={ portalUploadFormRef }/>
             </section>
             <section className='create-post__actions'>
                 <Button
@@ -102,5 +136,26 @@ export default function CreatePost({ closeForm }) {
                 </Button>
             </section>
         </form>
+
+        <Portal container={portalUploadFormRef.current}>
+            <form 
+                className='create-post__upload-media' 
+                onSubmit={ imageUpload } 
+                ref={ uploadForm }>
+                <IconButton 
+                    // disabled={ isPhotoChosen }
+                    sx={{ color: 'var(--primary-light)'}}
+                    aria-label="upload picture" 
+                    component="label">
+                    <input 
+                        hidden accept="image/*" 
+                        type="file" 
+                        onChange={() => setIsPhotoChosen(true)}
+                        name='img' />
+                    {isPhotoChosen ? <PhotoChosenIcon /> : <AddPhotoIcon />}
+                </IconButton>
+            </form>
+        </Portal>
+        </>
     )
 }

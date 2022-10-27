@@ -19,6 +19,12 @@ CREATE TABLE IF NOT EXISTS posts (
     is_edited boolean default false
 );
 
+CREATE TABLE IF NOT EXISTS media (
+    id bigserial primary key,
+    post_id bigserial REFERENCES posts(id) on delete cascade,
+    path text
+);
+
 CREATE TABLE IF NOT EXISTS categories (
     id bigserial primary key,
     title text not null unique,

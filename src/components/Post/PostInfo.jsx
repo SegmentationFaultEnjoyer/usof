@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material'
 
 import { CommentsList, Rating, AuthorAvatar } from '@/components'
-import { ConfirmationModal } from '@/common';
+import { ConfirmationModal, Image } from '@/common';
 import { roles } from '@/types';
 
 export default function PostInfo({ post, toggleEdit, disabled }) {
@@ -26,10 +26,12 @@ export default function PostInfo({ post, toggleEdit, disabled }) {
         publish_date,
         is_edited,
         content,
-        categories } = post.attributes;
+        categories} = post.attributes;
+
 
     const [commentsAmount, setCommentsAmount] = useState(0)
     const [author, setAuthor] = useState(null)
+    const [media, setMedia] = useState(null)
     const [isCommentsOpen, setIsCommentsOpen] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
     const [isFullDateShown, setIsFullDateShown] = useState(false)
@@ -44,9 +46,15 @@ export default function PostInfo({ post, toggleEdit, disabled }) {
 
     useEffect(() => {
         const getPostInfo = async () => {
-            const { data: { relationships: { author } }, include } = await loadPost(post.id)
+            const { 
+                data: { 
+                    relationships: { author }, 
+                    attributes: { media } }, 
+                    include 
+            } = await loadPost(post.id)
 
             setAuthor(author)
+            setMedia(media)
 
             if (include.error) return
 
@@ -136,6 +144,12 @@ export default function PostInfo({ post, toggleEdit, disabled }) {
                 </div>
 
                 <p className='post__content'>{content}</p>
+
+                {media && 
+                    <Image 
+                        url={`/images/media/${media.path}`} 
+                        alt='media'/>
+                }
 
                 <div className='post__footer'>
                     <ul className='post__categories'>

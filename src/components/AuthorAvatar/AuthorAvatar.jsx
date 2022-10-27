@@ -24,7 +24,7 @@ export default function AuthorAvatar({ id, name, email, profile_picture, size, d
             {profile_picture ?
             <Avatar 
                 alt='avatar' 
-                src={ `/images/avatar/${profile_picture}` } 
+                src={ `/images/avatars/${profile_picture}` } 
                 sx={{
                     width: size,
                     height: size
