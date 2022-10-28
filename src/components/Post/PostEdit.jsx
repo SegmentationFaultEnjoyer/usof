@@ -1,17 +1,36 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import { useForm, useFormValidation, useCategories, usePosts } from '@/hooks';
 import { maxLength, minLength, ErrorHandler } from '@/helpers';
 import { DotsLoader } from '@/common';
 import { MultipleSelect } from '@/fields';
 
-import { TextField, Button, Checkbox, FormControlLabel } from '@mui/material'
+import { TextField, Button, Checkbox, FormControlLabel, Portal, IconButton } from '@mui/material'
+import { 
+    CloseOutlined as DeleteImageIcon, 
+    AddBox as AddIcon,
+    CheckBox as AddedIcon 
+} from '@mui/icons-material';
 
-export default function PostEdit({ post, toggleEdit }) {
+export default function PostEdit({ post, toggleEdit, triggerChange }) {
     const [title, setTitle] = useState(post.attributes.title)
     const [content, setContent] = useState(post.attributes.content)
     const [category, setCategory] = useState(post.attributes.categories)
     const [isVisible, setIsVisible] = useState(post.attributes.status)
+    const [mediaList, setMediaList] = useState({
+        list: post.attributes.media,
+        toDelete: []
+    })
+
+    const [isAdded, setIsAdded] = useState(false)
+    const portalUploadFormRef = useRef()
+    const uploadForm = useRef()
+
+    const triggerForm = () => {
+        uploadForm.current.dispatchEvent(
+            new Event('submit', { bubbles: true, cancelable: true } )
+        )
+    }
 
     const { isFormDisabled, disableForm, enableForm } = useForm();
     const { isFormValid, getFieldErrorMessage, touchField } = useFormValidation(
@@ -23,28 +42,50 @@ export default function PostEdit({ post, toggleEdit }) {
     )
 
     const { categories, isLoading, loadCategories } = useCategories()
-    const { updatePost } = usePosts()
+    const { updatePost, uploadMedia } = usePosts()
 
     useEffect(() => { loadCategories() }, [])
+
+    const deletePicture = ({ id, path }) => {
+        setMediaList(({ list, toDelete }) => ({
+            list: list.filter(img => img.id !== id),
+            toDelete: [...toDelete, { id, path }]
+        }))
+    }
+
+    const imageUpload = async (e) => {
+        e.preventDefault()
+        
+        const formData = new FormData(e.target);
+
+        if(formData.get('img'))
+            await uploadMedia(post.id, formData)
+
+        enableForm()
+
+        toggleEdit(false)
+        triggerChange()
+    }
 
     const onSubmit = async (event) => {
         if (!isFormValid()) return
 
         event.preventDefault();
         disableForm();
+
         try {
             await updatePost(post.id, {
                 title, 
                 content, 
                 categories: category,
                 status: isVisible
-            })
-
-            toggleEdit(false)
+            }, mediaList.toDelete)
+            
+            triggerForm()
+           
         } catch (error) {
             ErrorHandler.process(error)
         }
-        enableForm();
     }
 
 
@@ -99,6 +140,20 @@ export default function PostEdit({ post, toggleEdit }) {
                         label="Visible"
                         labelPlacement="end"
                     />
+                    <section className='post-edit__media'>
+                        {mediaList.list && mediaList.list.map(img => 
+                            <div key={ img.id } className='media__container'>
+                                <img 
+                                    src={`/images/media/${img.path}`} 
+                                    alt='media'/>
+                                <div onClick={() => deletePicture(img)}>   
+                                    <DeleteImageIcon className='media__delete' fontSize='small'/>
+                                </div>
+                            </div>
+                           )}
+                        <div ref={ portalUploadFormRef } />
+                    </section>
+                    
                 </section>
                 <section className='create-post__actions'>
                     <Button
@@ -120,6 +175,25 @@ export default function PostEdit({ post, toggleEdit }) {
                     </Button>
                 </section>
             </form>
+            
+            <Portal container={portalUploadFormRef.current}>
+                <form className='media__add' onSubmit={ imageUpload } ref={ uploadForm }>
+                    <IconButton 
+                        sx={{ color: 'var(--primary-light)'}}
+                        aria-label="upload picture" 
+                        component="label">
+                        <input 
+                            hidden accept="image/*" 
+                            multiple
+                            type="file" 
+                            onChange={() => setIsAdded(true)}
+                            name='img' />
+                        {isAdded ? 
+                            <AddedIcon color='primary_light' fontSize='large'/> :
+                            <AddIcon color='primary_light' fontSize='large'/> }
+                    </IconButton> 
+                </form>
+            </Portal>
         </article>
     )
 }

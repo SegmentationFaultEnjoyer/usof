@@ -54,7 +54,6 @@ export default function CreatePost({ closeForm }) {
         } catch (error) {
             ErrorHandler.process(error)
         }
-        enableForm();
     }
 
     const uploadForm = useRef()
@@ -67,11 +66,14 @@ export default function CreatePost({ closeForm }) {
     }
 
     const imageUpload = async (e) => {
+        e.preventDefault()
+
         const formData = new FormData(e.target);
 
         if(formData.get('img'))
             await uploadMedia(postID, formData)
-        
+            
+        enableForm();
         closeForm()
         await loadPosts()
     }
@@ -149,6 +151,7 @@ export default function CreatePost({ closeForm }) {
                     component="label">
                     <input 
                         hidden accept="image/*" 
+                        multiple
                         type="file" 
                         onChange={() => setIsPhotoChosen(true)}
                         name='img' />

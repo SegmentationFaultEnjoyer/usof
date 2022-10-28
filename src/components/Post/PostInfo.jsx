@@ -19,50 +19,28 @@ import { CommentsList, Rating, AuthorAvatar } from '@/components'
 import { ConfirmationModal, Image } from '@/common';
 import { roles } from '@/types';
 
-export default function PostInfo({ post, toggleEdit, disabled }) {
+export default function PostInfo({ post, toggleEdit, disabled, commentsAmount, setCommentsAmount }) {
     const {
         title,
         status,
         publish_date,
         is_edited,
         content,
-        categories} = post.attributes;
+        categories,
+        author, 
+        media} = post.attributes;
 
-
-    const [commentsAmount, setCommentsAmount] = useState(0)
-    const [author, setAuthor] = useState(null)
-    const [media, setMedia] = useState(null)
     const [isCommentsOpen, setIsCommentsOpen] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
     const [isFullDateShown, setIsFullDateShown] = useState(false)
 
     const dispatch = useDispatch()
-    const { filterPosts, loadPost, loadPostLikes, deletePost, updatePost } = usePosts()
+    const { filterPosts, loadPostLikes, deletePost, updatePost } = usePosts()
 
     const userID = useSelector(state => state.user.info.id)
     const isAdmin = useSelector(state => state.user.info.role === roles.ADMIN)
 
     const isBelongToMe = useMemo(() => userID === post.relationships.author.id, [userID])
-
-    useEffect(() => {
-        const getPostInfo = async () => {
-            const { 
-                data: { 
-                    relationships: { author }, 
-                    attributes: { media } }, 
-                    include 
-            } = await loadPost(post.id)
-
-            setAuthor(author)
-            setMedia(media)
-
-            if (include.error) return
-
-            setCommentsAmount(include.length)
-        }
-
-        getPostInfo()
-    }, [])
 
     const handleOnCategoryClick = async (title) => {
         if (disabled) return 
@@ -146,9 +124,14 @@ export default function PostInfo({ post, toggleEdit, disabled }) {
                 <p className='post__content'>{content}</p>
 
                 {media && 
-                    <Image 
-                        url={`/images/media/${media.path}`} 
-                        alt='media'/>
+                    <section className='post__media'>
+                    { media.map(img =>  
+                        <Image 
+                            key={ img.id }
+                            url={`/images/media/${img.path}`} 
+                            alt='media'/>)}
+                    </section>
+                   
                 }
 
                 <div className='post__footer'>

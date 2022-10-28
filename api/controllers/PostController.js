@@ -2,6 +2,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require('./errors/
 const ProcessError = require('./errors/handler');
 
 const { join } = require('path')
+const { unlinkSync } = require('fs')
 const convertImg = require('../helpers/convertImage');
 
 const {
@@ -73,30 +74,27 @@ exports.CreatePost = async function (req, resp) {
 
 exports.UploadPostMedia = async function (req, resp) {
     try {
-        if(!req.file && !req.files)
+        if (!req.file && !req.files)
             throw new BadRequestError('File corrupted');
 
         const filePath = join(__dirname, '..', 'user_data');
         const pathToSavedPhoto = join(filePath, 'media');
 
-        const newName = await convertImg(filePath, req.file.filename, pathToSavedPhoto);
-
         const { post_id } = req.params
 
-        let dbResp = await new mediaQ()
-            .New()
-            .Insert({ post_id, path: newName })
-            .Execute()
+        for (let file of req.files) {
+            const newName = await convertImg(filePath, file.filename, pathToSavedPhoto);
 
-        if(dbResp.error)
-            throw new Error(`Failed to add media path to db: ${dbResp.error_message}`);
+            let dbResp = await new mediaQ()
+                .New()
+                .Insert({ post_id, path: newName })
+                .Execute()
 
-        //TODO normal response
-        resp.status(httpStatus.CREATED).json({
-            data: {
-                img_url: `/images/media/${newName}`
-            }
-        });
+            if (dbResp.error)
+                throw new Error(`Failed to add media path to db: ${dbResp.error_message}`);
+        }
+        
+        resp.status(httpStatus.CREATED).end();
     } catch (error) {
         ProcessError(resp, error)
     }
@@ -214,7 +212,7 @@ exports.GetPost = async function (req, resp) {
         if (owner.error)
             throw new NotFoundError(`Error getting owner: ${owner.error_message}`);
 
-        const media = await new mediaQ().New().Get().WherePostID(post_id).Execute()
+        const media = await new mediaQ().New().Get().WherePostID(post_id).Execute(true)
 
         if (!media.error)
             Object.assign(dbResp, { media })
@@ -233,24 +231,24 @@ exports.GetPostsList = async function (req, resp) {
 
         let Q = new postsQ().New().Get();
 
-        let customStmt =  null;
+        let customStmt = null;
         //TODO find out better solution for that
-        if(filter !== undefined) {
+        if (filter !== undefined) {
             const filterResp = filterHandler(filter, Q);
             customStmt = filterResp.filterStmt;
             Q = filterResp.Q;
         }
 
-        if(role !== roles.ADMIN) {
+        if (role !== roles.ADMIN) {
             Q = Q.WhereStatus(true);
-            
-            if(customStmt === null)
+
+            if (customStmt === null)
                 customStmt = 'WHERE status=true'
             else
                 customStmt = `${customStmt} and status=true`
         }
 
-        if(sort !== undefined) Q = sortHandler(sort, order, Q);
+        if (sort !== undefined) Q = sortHandler(sort, order, Q);
 
         let dbResp = await Q.Paginate(limit, page).Execute(true);
 
@@ -258,7 +256,7 @@ exports.GetPostsList = async function (req, resp) {
             throw new NotFoundError(`No posts found: ${dbResp.error_message}`);
 
         const links = await GenerateLinks('posts', Q, customStmt, filter, sort, order);
-        
+
         resp.status(httpStatus.OK).json(PostListResponse(dbResp, links));
 
     } catch (error) {
@@ -274,16 +272,16 @@ exports.GetCommentsList = async function (req, resp) {
 
         let Q = new commentsQ().New().Get().WherePostID(post_id);
 
-        if(sort !== undefined) Q = sortHandler(sort, order, Q);
+        if (sort !== undefined) Q = sortHandler(sort, order, Q);
 
         let dbResp = await Q.Paginate(limit, page).Execute(true);
-        
+
         if (dbResp.error)
             throw new NotFoundError(`No comments found: ${dbResp.error_message}`);
 
         const links = await GenerateLinks(
-            `posts/${post_id}/comments`, 
-            Q, 
+            `posts/${post_id}/comments`,
+            Q,
             `WHERE post=${post_id}`,
             filter,
             sort,
@@ -304,8 +302,8 @@ exports.GetLikesList = async function (req, resp) {
 
         let Q = new likesQ().New().Get().WherePostID(post_id);
 
-        if(sort !== undefined) Q = sortHandler(sort, order, Q);
-        
+        if (sort !== undefined) Q = sortHandler(sort, order, Q);
+
         let dbResp = await Q.Paginate(limit, page).Execute(true);
 
         if (dbResp.error)
@@ -353,7 +351,7 @@ exports.UpdatePost = async function (req, resp) {
     try {
         const { post_id } = req.params;
         const { id, role } = req.decoded;
-        
+
         let dbResp = await new postsQ().New().Get().WhereID(post_id).Execute();
 
         if (dbResp.error)
@@ -375,6 +373,18 @@ exports.UpdatePost = async function (req, resp) {
 
         if (dbResp.error)
             throw new Error(`Error updating post: ${dbResp.error_message}`);
+
+        //DELETING PHOTOS FROM POST
+        if(req.body.data.media) {
+            for(let img of req.body.data.media) {
+                let imgResp = await new mediaQ().New().Delete().WhereID(img.id).Execute()
+
+                if(imgResp.error)
+                    throw new Error(`Failed to delete photo: ${imgResp.error_message}`)
+                
+                unlinkSync(join(__dirname, '..', 'user_data', 'media', img.path))
+            }
+        }
 
         const owner = await new usersQ().New().Get().WhereID(dbResp.author).Execute()
 
@@ -402,6 +412,13 @@ exports.DeletePost = async function (req, resp) {
 
         if (id !== author && role !== roles.ADMIN)
             throw new UnauthorizedError('No permission for deleting that post')
+
+        dbResp = await new mediaQ().New().Get().WherePostID(post_id).Execute(true);
+
+        if(!dbResp.error) {
+            for (let img of dbResp)
+                unlinkSync(join(__dirname, '..', 'user_data', 'media', img.path))
+        }
 
         dbResp = await new postsQ().New().Delete().WhereID(post_id).Execute();
 

@@ -16,6 +16,7 @@ const GenerateLinks = require('./responses/Links');
 const { hash, isMatch } = require('../helpers/hashing');
 const convertImg = require('../helpers/convertImage');
 const { join } = require('path');
+const { unlinkSync } = require('fs')
 
 exports.GetUser = async function (req, resp) {
     try {
@@ -103,7 +104,7 @@ exports.DeleteUser = async function (req, resp) {
         if(dbResp.error)
             throw new NotFoundError(`No such user: ${dbResp.error_message}`);
         
-        const { id: user_id_from_db } = dbResp;
+        const { id: user_id_from_db, profile_picture } = dbResp;
 
         if(id !== user_id_from_db && role !== roleType.ADMIN)
             throw new UnauthorizedError('No permission for that action');
@@ -112,6 +113,9 @@ exports.DeleteUser = async function (req, resp) {
 
         if(dbResp.error)
             throw new Error(`Error deleting user: ${dbResp.error_message}`);
+
+        if(profile_picture)
+            unlinkSync(join(__dirname, '..', 'user_data', 'avatars', profile_picture))
 
         resp.status(httpStatus.NO_CONTENT).end();
 

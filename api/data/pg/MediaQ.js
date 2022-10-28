@@ -6,6 +6,13 @@ class MediaQ extends DataBase {
         this.valideKeys = new Set(['path']);
     }
 
+    WhereID(id) {
+        this.currentStmt.text = this.currentStmt.text + ' WHERE id=$1';
+        this.currentStmt.values = [id];
+
+        return this;
+    }
+
     WherePostID(post_id) {
         this.currentStmt.text = this.currentStmt.text + ' WHERE post_id=$1';
         this.currentStmt.values = [post_id];

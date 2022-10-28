@@ -67,12 +67,13 @@ export function usePosts() {
         }
     }
 
-    const updatePost = async (id, newInfo) => {
+    const updatePost = async (id, newInfo, media = null) => {
         try {
             const { data } = await api.patch(`/posts/${id}`, {
                 data: {
                     type: "update-post",
-                    attributes: newInfo
+                    attributes: newInfo,
+                    media,
                 }
             })
 

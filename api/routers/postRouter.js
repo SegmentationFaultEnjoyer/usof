@@ -5,7 +5,7 @@ const postRouter = Router();
 const AuthController = require('../controllers/AuthController');
 const PostController = require('../controllers/PostController');
 
-const { downloadSingle } = require('../helpers/fileDownloader');
+const { downloadMultiple } = require('../helpers/fileDownloader');
 
 
 postRouter.route('/:post_id')
@@ -26,7 +26,7 @@ postRouter.route('/:post_id/like')
     .delete(PostController.DeleteLike)
 
 postRouter.get('/:post_id/categories', AuthController.CheckAuth, PostController.GetCategories);
-postRouter.post('/:post_id/media', AuthController.CheckAuth, downloadSingle, PostController.UploadPostMedia)
+postRouter.post('/:post_id/media', AuthController.CheckAuth, downloadMultiple, PostController.UploadPostMedia)
 
 postRouter.route('/')
     .all(AuthController.CheckAuth)
