@@ -20,6 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Whole app with all functionality
 
 
-[Unreleased]: https://github.com/SegmentationFaultEnjoyer/usof/compare/v1.0.0...main
+[Unreleased]: https://github.com/SegmentationFaultEnjoyer/usof/compare/v1.0.1...main
 [1.0.1]: https://github.com/SegmentationFaultEnjoyer/usof/tree/v1.0.1
 [1.0.0]: https://github.com/SegmentationFaultEnjoyer/usof/tree/v1.0.0
