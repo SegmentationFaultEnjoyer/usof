@@ -1,15 +1,49 @@
 # USOF
 ---
 
-Whole USOF application with frontend and backend as a single app, that is question and answer service with social media interactions.
+Question and answer service with social media interactions.
 
-## Before start preparations
+## About app
+---
+Whole USOF application with frontend and backend as a single app.
+
+<h3>Technology stack:</h3>
+<ul>
+	<li><b>Backend</b>: 	<i>NodeJS</i>, <i>Express</i> </li>
+	<li><b>Database</b>: 	<i>Postgresql</i> </li>
+	<li><b>Frontend</b>: 	<i>React</i>, <i>SASS</i>, <i>MUI</i> </li>
+	<li><b>Bundler</b>: 	<i>Vite</i> </li>
+</ul>
+
+<h3>Architecture:<h3>
+<ul>
+	<li><b>Server-API:</b> 	<i>REST and JSON-API specifications, MVC pattern</i> </li>
+	<li><b>Database-API:</b> <i>builder pattern</i> </li>
+	<li><b>Styles:</b> <i> BEM specification</i> </li>
+	<li><b>Authentication:</b> <i> Access and refresh tokens model with JWT</i> </li>
+</ul>
+
+<h3>Features:<h3>
+<ul>	
+	<li>Authorization, registering, reseting password</li>
+	<li>User pages</li>
+	<li>All CRUD operations with posts and comments</li>
+	<li>Sorting, filtering, pagination</li>
+	<li>Likes, dislikes, user rating</li>
+	<li>Interactions with images</li>
+	<li>Admin panel</li>
+	<li>Mobile friendly and responsive layout</li>
+	<li>Smooth and convinient UI/UX </li>
+	<li>Incredible loaders, slow down your network just to face this beauty</li>
+</ul>
+<hr>
+<h2>Before start preparations</h2>
 
 ### 1. DataBase
 ---
     start postgresql server and create empty data base
     
-### 2 .Installing dependencies and preparing database
+### 2. Installing dependencies and preparing database
 ---
 	yarn install      
 	yarn migrate
@@ -26,5 +60,5 @@ Whole USOF application with frontend and backend as a single app, that is questi
 	- MAILGUN_DOMEN= #your mailgun domen
 ### 4. Starting server
 ---
-	yarn dev #for developing mode
-    yarn start #for production
+	yarn dev 	#for developing mode
+	yarn start 	#for production
