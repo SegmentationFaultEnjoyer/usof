@@ -1,0 +1,144 @@
+.user-page__loader {
+    width: 100vw;
+    height: vh(100);
+    display: grid;
+    place-content: center;
+}
+
+.user-page__main {
+    margin-top: var(--nav-bar-height);
+    height: calc(vh(100) - var(--nav-bar-height));
+    display: grid;
+    grid-template-columns: 35% 65%;
+
+    @include respond-to(small) {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.user-page__posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: toRem(40);
+    padding: toRem(45) 0;
+
+    scroll-snap-type: y mandatory;
+
+    @include respond-to(small) {
+        padding: toRem(30);
+    }
+}
+
+.user-page__user-info {
+    margin: var(--app-padding-top);
+    padding: toRem(25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: toRem(20);
+    background-color: var(--tertiary-main);
+    border-radius: toRem(5);
+    transform: translateX(toRem(50));
+
+    @include respond-to(small) {
+        transform: unset;
+        width: 80%;
+        align-self: center;
+        
+    }
+}
+
+.user-page__empty {
+    font-weight: bold;
+
+    p {
+        font-size: toRem(25);
+    }
+
+    background-color: var(--tertiary-main);
+    border-radius: toRem(5);
+    width: 70%;
+    text-align: center;
+    margin-top: toRem(15);
+    
+}
+
+.user-info__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: toRem(10);
+
+    & > * {
+        color: var(--primary-main)
+    }
+
+    svg {
+        fill: var(--info-main)
+    }
+}
+
+.user-info__admin {
+    fill: var(--info-dark) !important;
+
+}
+
+.user-page__main-wrapper {
+    position: sticky;
+    top: toRem(20);
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+
+    @include respond-to(small) {
+        position: relative;
+        
+    }
+}
+
+
+.user-page__actions {
+    background-color: var(--tertiary-main);
+    margin: 0 var(--app-padding-top);
+    padding: toRem(25);
+    transform: translateX(toRem(50));
+    border-radius: toRem(5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: toRem(30);
+
+    @include respond-to(small) {
+        transform: unset;
+        width: 80%;
+        align-self: center;   
+        flex-direction: column;
+    }
+}
+
+.user-page__upload-trigger {
+    border-radius: 100%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.user-page__upload-avatar {
+    animation: fade 0.3s ease-in;
+
+    background-color: rgba($color: black, $alpha: 0.1);
+    border-radius: 100%;
+    width: toRem(80);
+    height: toRem(80);
+    display: grid;
+    place-content: center;
+    position: absolute;
+    top: toRem(25);
+
+    @include respond-to(small) {
+        top: toRem(49);
+    }
+}

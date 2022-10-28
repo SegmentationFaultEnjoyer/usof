@@ -1,0 +1,19 @@
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: toRem(20)
+}
+
+.comments-list__loader {
+    display: grid;
+    width: 100%;
+    place-content: center;
+}
+
+.comments-list__pages {
+    display: grid;
+    place-content: center;
+    margin-top: toRem(20);
+}

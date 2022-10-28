@@ -1,0 +1,16 @@
+.create-category {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(30);
+    justify-content: center;
+    align-items: center;
+}
+
+.create-category__actions {
+    display: flex;
+    gap: toRem(20);
+
+    @include respond-to(small) {
+        flex-direction: column;
+    }
+}

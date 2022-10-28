@@ -1,0 +1,18 @@
+.admin-page {
+    margin-top: var(--nav-bar-height);
+    height: calc(vh(100) - var(--nav-bar-height));
+    display: grid;
+    grid-template-columns: 40% 60%;
+
+    @include respond-to(small) {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.admin-page__loader {
+    width: 100vw;
+    height: vh(90);
+    display: grid;
+    place-content: center;
+}

@@ -1,0 +1,19 @@
+.form-container {
+    animation: fade 0.3s ease-in;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: toRem(30);
+
+    padding: toRem(30) var(--app-padding-left);
+
+    h1 {
+        text-align: center;
+
+    }
+
+    @include respond-to(tablet) {
+        max-width: toRem(400);
+    }
+}

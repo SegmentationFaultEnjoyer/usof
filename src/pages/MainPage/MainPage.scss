@@ -1,0 +1,26 @@
+.main-page {
+    height: vh(100);
+    padding:  var(--app-padding-bottom) var(--app-padding-left);
+}
+
+.main-page__loader-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: vh(90);
+
+    gap: toRem(20);
+
+    p {
+        font-weight: bold;
+        font-size: toRem(20);
+        letter-spacing: toRem(1.5);
+        color: var(--secondary-dark);
+    }
+}
+
+.slide-top {
+    bottom: toRem(-100) !important;
+    animation: slide-top 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}

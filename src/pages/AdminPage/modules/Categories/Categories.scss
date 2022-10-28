@@ -1,0 +1,115 @@
+.admin-page__categories-list {
+    @extend %page-module;
+
+    @include respond-to(tablet) {
+        width: 90%;
+    } 
+
+    @include respond-to(small) {
+        width: unset;
+    }
+}
+
+.categories-list__title {
+    text-align: center;
+    margin-bottom: toRem(30);
+
+    @include respond-to(small) {
+        font-size: toRem(22);
+    }
+}
+
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(15);
+    justify-content: space-evenly;
+}
+
+.categories-list__item {
+    animation: fade 0.3s ease-in;
+
+    display: grid;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    grid-template-columns: clamp(toRem(100), 20%, toRem(150)) clamp(toRem(80), 60%, toRem(400)) auto;
+    
+    @include respond-to(small) {
+        grid-template-columns: toRem(95) toRem(150) toRem(20);
+        gap: toRem(10);
+        
+        & > p {
+            font-size: toRem(15);
+        }
+    }
+}
+
+.categories-list__delete-icon {
+    transition-property: fill transform;
+    transition: .2s ease;
+
+    svg {
+        fill: var(--primary-light)
+    }
+
+    svg:hover {
+        fill: var(--primary-main);
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+}
+
+.categories-list__add-icon {
+    display: grid;
+    place-content: center;
+    transform: scale(0.9);
+
+    transition-property: fill transform;
+    transition: .2s ease;
+
+    svg {
+        fill: var(--primary-light)
+    }
+
+    svg:hover {
+        fill: var(--primary-main);
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+    padding-top: toRem(20);
+}
+
+.admin-page__categories-pages {
+    margin-top: toRem(10);
+    display: grid;
+    place-content: center;
+}
+
+.category-edit {
+    animation: fade 0.3s ease-in;
+
+    display: flex;
+    gap: toRem(20);
+    justify-content: space-around;
+    align-items: center;
+    border: toRem(1) dashed var(--secondary-light);
+    border-radius: toRem(5);
+    padding: toRem(15);
+
+    @include respond-to(small) {
+        flex-direction: column;
+    }
+}
+
+.category-edit__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include respond-to(small) {
+        width: 80%;
+        justify-content: space-around;
+    }
+}

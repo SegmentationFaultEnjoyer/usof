@@ -1,0 +1,46 @@
+.login-page {
+    display: grid;
+    grid-template-columns: auto toRem(400);
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: toRem(30);
+
+        button {
+            width: toRem(120);
+        }
+    }
+
+    @include respond-to(tablet) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: toRem(60);
+    }
+}
+
+.background-container {
+    background: var(--primary-main);
+    height: 100vh;
+
+    @include respond-to(tablet) {
+        height: toRem(200) !important;
+        width: 100%;
+    }
+}
+
+.login-page_actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    p {
+        &:hover {
+            cursor: pointer;
+            color: var(--primary-light)
+        }
+    }
+}

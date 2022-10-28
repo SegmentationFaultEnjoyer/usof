@@ -1,0 +1,49 @@
+.create-post {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: toRem(30);
+
+    width: 30vw;
+
+    @include respond-to(small) {
+        width: 70vw;
+    }
+}
+
+.create-post__fields {
+    all: inherit;
+    width: 100%;
+}
+
+.create-post__actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    @include respond-to(small) {
+        flex-direction: column-reverse;
+        width: 70%;
+        gap: toRem(20);
+    }
+}
+
+.create-post__title {
+    width: 60% !important;
+    align-self: start;
+
+    @include respond-to(small) {
+        width: 100% !important;
+    }
+}
+
+.create-post__categories {
+    width: 100%;
+
+    @include respond-to(small) {
+       div:first-of-type {
+        width: 100%;
+       }
+    }
+}

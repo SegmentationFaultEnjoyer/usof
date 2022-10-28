@@ -1,0 +1,140 @@
+.posts-filter {
+    padding: toRem(15);
+    padding-left: toRem(40);
+    width: toRem(300);
+    min-height: toRem(160);
+    position: fixed;
+    right: toRem(-270);
+    top: vh(12);
+    border-radius: toRem(5) 0 0 toRem(5);
+    background-color: var(--tertiary-main);
+
+    display: flex;
+    flex-direction: column;
+    gap: toRem(15);
+
+    transition-property: transform;
+    transition-duration: .5s;
+
+    user-select: none;
+    z-index: 2;
+
+    &--shown {
+        animation: slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+
+    &--hidden {
+        animation: slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both reverse;
+    }
+}
+
+.posts-filter__switcher {
+    width: toRem(30);
+    min-height: inherit;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;
+
+        svg {
+            transform: scale(1.2);
+        }
+        
+    }
+}
+
+.switcher__delim {
+    width: toRem(1.5);
+    min-height: toRem(130);
+    border-radius: toRem(5);
+    background-color: var(--secondary-main);
+}
+
+.posts-filter__title {
+    text-align: center;
+}
+
+.posts-filter__type {
+    padding: toRem(5) toRem(15);
+    border-radius: toRem(5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition-property: background-color;
+    transition-duration: .2s;
+
+    &:hover {
+        cursor: pointer;
+        background-color: var(--tertiary-dark);
+    }
+}
+
+.posts-filter__categories {
+    padding-left: toRem(35);
+    transform: translateY(toRem(-2));
+}
+
+.posts-filter__loader {
+    display: grid;
+    place-content: center;
+}
+
+.filter-categories__item {
+    display: grid;
+    align-items: center;
+    grid-template-columns: toRem(50) toRem(30);
+}
+
+.posts-filter__current-filter {
+    position: absolute;
+    top: toRem(-28);
+    height: toRem(30);
+    background-color: var(--tertiary-main);
+    border-radius: toRem(5) toRem(5) 0 0;
+    width: toRem(100);
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    grid-template-columns: toRem(65) toRem(25);
+    padding: 0 toRem(5);
+
+    animation: slide-top-small .25s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+
+    &--pop-up {
+        position: absolute;
+        opacity: 0;
+        top: 35%;
+        left: toRem(-150);
+        border-radius: toRem(5);
+
+        animation: flip-scale-down-ver .4s linear both reverse;
+        animation-delay: 0.5s;
+
+        @include respond-to(small) {
+            top: toRem(40);
+            left: -75%;
+
+            border: 1px solid var(--tertiary-dark)
+        }
+    }
+}
+
+.current-filter__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: toRem(5);
+    transform: scale(0.8);
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(0.9);
+    }
+}
