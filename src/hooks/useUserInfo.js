@@ -61,7 +61,6 @@ export function useUserInfo() {
         try {
             const { data } = await api.get(`/users?limit=${DEFAULT_LIMIT}&sort=rating`)
 
-            console.log(data);
             setUserList(data)
         } catch (error) {
             ErrorHandler.process(error)
