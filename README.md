@@ -39,9 +39,9 @@ Whole USOF application with frontend and backend as a single app.
 <hr>
 <h2>Before start preparations</h2>
 
-### 1. DataBase
+### 1. Database
 ---
-    start postgresql server and create empty data base
+    start postgresql server and create empty data base 	#docker container probably the most convinient way
     
 ### 2. Setup the environment
 ---
