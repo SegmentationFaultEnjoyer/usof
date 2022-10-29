@@ -60,5 +60,5 @@ Whole USOF application with frontend and backend as a single app.
 	- MAILGUN_DOMEN= #your mailgun domen
 ### 4. Starting server
 ---
-	yarn dev 	#for developing mode
-	yarn start 	#for production
+	yarn dev 				#for developing mode
+	yarn build:client && yarn build:server 	#for production
