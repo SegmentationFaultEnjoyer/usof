@@ -8,7 +8,7 @@ const { hash, isMatch } = require('../helpers/hashing');
 const { UpdateTokens } = require('../helpers/tokens');
 const { verifyLink } = require('../helpers/verifyResetLink');
 
-const sendToMail = require('../helpers/sendToMail');
+const { sendMail } = require('../helpers/sendToMail');
 const type = require('../helpers/types/roles');
 const status = require('../helpers/types/httpStatus');
 
@@ -213,7 +213,7 @@ exports.ResetPassword = async function (req, resp) {
 
         const link = `http://${process.env.HOST}:${process.env.PORT}/auth/reset-password/${id}/${token}`;
 
-        await sendToMail(email, "USOF password reset", link);
+        await sendMail(email, "USOF password reset", link);
 
         resp.end();
 

@@ -58,6 +58,7 @@ Whole USOF application with frontend and backend as a single app.
 	- DB_URL= #postgres connection string exp: "postgresql://user:password@localhost:8889/db_name?sslmode=disable"
 	- MAILGUN_API_KEY= #your api key for mailgun service
 	- MAILGUN_DOMEN= #your mailgun domen
+	- DISABLE_MAILGUN = # 1 in case you want to disable it or 0 if not
 ### 4. Starting server
 ---
 	yarn dev 	#for developing mode

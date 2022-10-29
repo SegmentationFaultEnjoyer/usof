@@ -9,11 +9,6 @@ const categoriesRouter = require('./categoriesRouter');
 
 const {join} = require('path');
 
-// router.get('/', (_, resp) => {
-//     // resp.send("<h1>Client placeholder</h1>")
-//     resp.sendFile(join(__dirname, '..', 'index.html'));
-// })
-
 router.use('/auth', authRouter);
 
 router.use('/posts', postRouter);
@@ -24,7 +19,6 @@ router.use('/comments', commentsRouter);
 
 router.use('/categories', categoriesRouter);
 
-//test shit
 router.get('/images/:type/:image_name', (req, resp) => {
     const { image_name, type } = req.params;
 

@@ -1,4 +1,8 @@
+require("dotenv").config();
+
 const { runService } = require('./server');
+const { initMailGun } = require('./helpers/sendToMail')
+
 const injectViteMiddleWare = require('../vite');
 const migrate = require('./assets/migrate');
 
@@ -9,6 +13,9 @@ async function main() {
         if (myArgs[1] === 'service') {
             try {
                 await injectViteMiddleWare();
+
+                if(!Number(process.env.DISABLE_MAILGUN)) initMailGun()
+
                 runService()
             } catch (error) {
                 console.error('Error occured:', error.message);
