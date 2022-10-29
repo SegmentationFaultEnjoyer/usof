@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2022-10-29
+### Changed
+- Readme instruction now is way better
+
 ## [1.0.1] - 2022-10-28
 ### Added
 - Branding
@@ -21,5 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [Unreleased]: https://github.com/SegmentationFaultEnjoyer/usof/compare/v1.0.1...main
+[1.0.2]: https://github.com/SegmentationFaultEnjoyer/usof/tree/v1.0.2
 [1.0.1]: https://github.com/SegmentationFaultEnjoyer/usof/tree/v1.0.1
 [1.0.0]: https://github.com/SegmentationFaultEnjoyer/usof/tree/v1.0.0

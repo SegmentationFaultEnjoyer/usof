@@ -43,11 +43,7 @@ Whole USOF application with frontend and backend as a single app.
 ---
     start postgresql server and create empty data base
     
-### 2. Installing dependencies and preparing database
----
-	yarn install      
-	yarn migrate
-### 3. ENV
+### 2. Setup the environment
 ---
 #### Create ***.env*** file with following entries:
 	- PORT= #port
@@ -58,6 +54,13 @@ Whole USOF application with frontend and backend as a single app.
 	- DB_URL= #postgres connection string exp: "postgresql://user:password@localhost:8889/db_name?sslmode=disable"
 	- MAILGUN_API_KEY= #your api key for mailgun service
 	- MAILGUN_DOMEN= #your mailgun domen
+	- DISABLE_MAILGUN = # 1 in case you want to disable it or 0 if not
+
+### 3. Installing dependencies and preparing database
+---
+	yarn install      
+	yarn migrate
+
 ### 4. Starting server
 ---
 	yarn dev 				#for developing mode
