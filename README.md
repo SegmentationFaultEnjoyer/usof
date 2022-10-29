@@ -11,7 +11,7 @@ Whole USOF application with frontend and backend as a single app.
 <ul>
 	<li><b>Backend</b>: 	<i>NodeJS</i>, <i>Express</i> </li>
 	<li><b>Database</b>: 	<i>Postgresql</i> </li>
-	<li><b>Frontend</b>: 	<i>React</i>, <i>SASS</i>, <i>MUI</i> </li>
+	<li><b>Frontend</b>: 	<i>React</i>, <i>Redux></i>, <i>SASS</i>, <i>MUI</i> </li>
 	<li><b>Bundler</b>: 	<i>Vite</i> </li>
 </ul>
 
@@ -61,4 +61,4 @@ Whole USOF application with frontend and backend as a single app.
 ### 4. Starting server
 ---
 	yarn dev 	#for developing mode
-	yarn start 	#for production
+	yarn build:client && yarn build:server 	#for production

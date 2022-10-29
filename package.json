@@ -7,8 +7,8 @@
     "dev": "clear && node api/main.js run service",
     "migrate": "node api/main.js migrate",
     "build:client": "vite build --outDir dist/client",
-    "build:server": "vite build --outDir dist/server --ssr src/entry-server.js ",
-    "test": "vite"
+    "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx ",
+    "preview": "vite preview"
   },
   "author": "",
   "license": "ISC",
