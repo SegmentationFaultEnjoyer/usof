@@ -42,7 +42,7 @@ export default function CreatePost({ closeForm }) {
     }, [postID])
 
     const onSubmit = async (event) => {
-        if (!isFormValid()) return
+        if (!isFormValid()) return event.preventDefault();
 
         event.preventDefault();
         disableForm();

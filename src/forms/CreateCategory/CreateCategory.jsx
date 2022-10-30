@@ -21,7 +21,7 @@ export default function CreateCategory({ closeForm, createCategory }) {
     )
 
     const submit = async (e) => {
-        if (!isFormValid()) return
+        if (!isFormValid()) return e.preventDefault()
 
         e.preventDefault()
 

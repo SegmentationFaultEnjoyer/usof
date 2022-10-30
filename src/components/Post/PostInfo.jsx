@@ -19,7 +19,7 @@ import { CommentsList, Rating, AuthorAvatar } from '@/components'
 import { ConfirmationModal, Image } from '@/common';
 import { roles } from '@/types';
 
-export default function PostInfo({ post, toggleEdit, disabled, commentsAmount, setCommentsAmount }) {
+export default function PostInfo({ post, toggleEdit, triggerChange, disabled, commentsAmount, setCommentsAmount }) {
     const {
         title,
         status,
@@ -53,6 +53,8 @@ export default function PostInfo({ post, toggleEdit, disabled, commentsAmount, s
 
     const handleStatusChange = async () => {
         await updatePost(post.id, { status: !status })
+
+        triggerChange()
     }
 
     const sharedData = useMemo(() => ({

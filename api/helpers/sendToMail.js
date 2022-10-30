@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const formData = require('form-data');
 const Mailgun = require('mailgun.js');
 
@@ -30,8 +31,8 @@ async function sendMail(to, subject, text) {
                 html: `<a href="${text}">Reset Link</a>`
             })
     } catch (error) {
-        console.log(error.message);
-        throw error;
+        console.error(error.message);
+        throw new Error('Mail service currently unavailable');
     }
 }
 
