@@ -137,7 +137,7 @@ function CategoryEdit({ title, description, id, toggleEdit, handleEdit }) {
     )
 
     const submit = async (e) => {
-        if(!isFormValid()) return
+        if(!isFormValid()) return event.preventDefault();
 
         e.preventDefault()
 

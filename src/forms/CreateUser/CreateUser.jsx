@@ -25,7 +25,7 @@ export default function CreateUser({ closeForm, createUser }) {
 	)
 
     const submit = async (e) => {
-        if(!isFormValid()) return
+        if(!isFormValid()) return event.preventDefault();
 
         e.preventDefault()
 

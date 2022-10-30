@@ -18,7 +18,7 @@ export default function CommentEdit({ comment, toggleEdit, updateComment }) {
     )
 
     const handleSubmit = async (event) => {
-        if (!isFormValid()) return
+        if (!isFormValid()) return event.preventDefault();
 
         event.preventDefault();
 

@@ -39,6 +39,7 @@ export default function Post({ post, disabled }) {
                 <PostInfo 
                     post={postExtended}
                     commentsAmount={commentsAmount}
+                    triggerChange={() => setPostChanded(prev => !prev)}
                     setCommentsAmount={setCommentsAmount}
                     toggleEdit={setIsEditing} 
                     disabled={disabled} /> :
